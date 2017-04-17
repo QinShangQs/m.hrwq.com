@@ -1,0 +1,147 @@
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="my">
+                <div class="my_member_ordinary">
+                    <div class="mmo_top">
+                        <div class="mmo_portrait"><a href="<?php echo e(route('user.profile')); ?>"><img
+                                        src="<?php echo e(url($data['profileIcon'])); ?>" alt=""/></a></div>
+                        <div class="mmo_title"><?php echo e(isset($data['realname']) ? $data['realname'] : $data['nickname']); ?></div>
+                        <div class="mmo_identity">
+                            <a href="<?php echo e(route('article',['id'=>4])); ?>"><div class="mmo_identity_1">成长值:<?php echo e($data['grow']); ?></div></a><div class="mmo_identity_2"><?php if($data['role']=='1'&&$data['vip_flg']=='2'): ?>和会员<?php else: ?><?php echo e(config('constants.user_role')[$data['role']]); ?><?php endif; ?></div>
+                        </div>
+                    </div>
+                    <div class="mmo_top2"><span><img src="/images/my/mmo_top2_1.png" alt=""/> 已提问 <a
+                                    href="<?php echo e(route('user.question')); ?>"><?php echo e($ask_question_num); ?></a></span><span><img
+                                    src="/images/my/mmo_top2_2.png" alt=""/> 和贝 <a
+                                    href="<?php echo e(route('user.score')); ?>"><?php echo e($data['score']); ?></a></span></div>
+                    <ul class="mmo_list">
+                        <li><a href="<?php echo e(route('user.wallet')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的钱包<?php if($myWalletCount): ?>
+                                    <div><?php echo e($myWalletCount); ?></div><?php endif; ?></a>
+                        </li>
+                        <li><a href="<?php echo e(route('my.orders')); ?>"><span><img src="/images/public/select_right.jpg"
+                                                                        alt=""/></span>我的订单 <?php if($order_read_num>0): ?>
+                                    <div><?php echo e($order_read_num); ?></div><?php endif; ?></a></li>
+                        <li><a href="<?php echo e(route('my.courses')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的课程</a>
+                        </li>
+                        <li><a href="<?php echo e(route('my.notes')); ?>"><span><img src="/images/public/select_right.jpg"
+                                                                       alt=""/></span>作业&笔记</a></li>
+                        <li><a href="<?php echo e(route('user.question')); ?>"><span><img src="/images/public/select_right.jpg"
+                                                                            alt=""/></span>我的好问 <?php if($new_answer_questions_count>0): ?>
+                                    <div><?php echo e($new_answer_questions_count); ?></div><?php endif; ?></a></li>
+                        <li><a href="<?php echo e(route('user.talk')); ?>"><span><img src="/images/public/select_right.jpg"
+                                                                        alt=""/></span>我的帖子 <?php if($unreadTalkCommentCount): ?>
+                                    <div><?php echo e($unreadTalkCommentCount); ?></div><?php endif; ?></a></li>
+                        <?php if($data['role'] != 2 ): ?>
+                        <li><a href="<?php echo e(route('my.invite_user')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>推荐有奖</a></li>
+                         <?php endif; ?>
+                    </ul>
+                    <ul class="mmo_list">
+                        <?php if($data['vip_flg'] == 1 ): ?>
+                            <li><a href="<?php echo e(route('vip')); ?>"><span>与最优秀的父母一起学习 <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>成为和会员</a></li>
+                        <?php endif; ?>
+                        <?php if($data['role'] == 1 ): ?>
+                            <li id="tutor_apply"><a href="#"><span>加入智慧榜，帮助更多家庭 <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>成为指导师</a></li>
+                            <li id="partner_apply"><a href="<?php echo e(route('partner.apply')); ?>"><span>加盟合作，普及现代家庭教育 <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>成为合伙人</a></li>
+                        <?php elseif($data['role'] == 2): ?>
+                            <li data-value="0" data-state="false" class="mmo_list_button">
+                                <div class="mmo_list_button_1">+</div>
+                                <div class="mmo_list_button_2">-</div>
+                                指导师中心 <?php if($questions_to_answer_count): ?>
+                                    <div><?php echo e($questions_to_answer_count); ?></div><?php endif; ?>
+                            </li>
+                            <?php if($data['tutor_price']!=''): ?>
+                                <li data-value="0" class="mmo_list_li" style="display:none;"><a
+                                            href="<?php echo e(route('question.teacher', ['id'=>$data['id'], 'come_from'=>'tutor_center'])); ?>"><span><img
+                                                    src="/images/public/select_right.jpg"
+                                                    alt=""/></span>&nbsp;&nbsp;我的主页</a>
+                                </li>
+                                <li data-value="0" class="mmo_list_li" style="display:none;"><a
+                                            href="<?php echo e(route('tutor.answers')); ?>"><span><img
+                                                    src="/images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;我的回答 <?php if($questions_to_answer_count): ?><div><?php echo e($questions_to_answer_count); ?></div><?php endif; ?></a>
+                                </li>
+                            <?php endif; ?>
+                            <li data-value="0" class="mmo_list_li" style="display:none;"><a
+                                        href="<?php echo e(route('tutor.complete')); ?>"><span><img
+                                                src="/images/public/select_right.jpg"
+                                                alt=""/></span>&nbsp;&nbsp;完善资料</a>
+                            </li>
+                        <?php elseif($data['role'] == 3): ?>
+                            <li data-value="0" data-state="false" class="mmo_list_button">
+                                <div class="mmo_list_button_1">+</div>
+                                <div class="mmo_list_button_2">-</div>
+                                合伙人中心 <?php if($partnerNewOrderCount): ?><div><?php echo e($partnerNewOrderCount); ?></div><?php endif; ?>
+                            </li>
+                            <?php if($data['partner_city']!=''): ?>
+                                <li data-value="0" class="mmo_list_li" style="display:none;"><a href="<?php echo e(route('partner.operate')); ?>"><span><img
+                                                    src="images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;运营数据</a></li>
+                                <li data-value="0" class="mmo_list_li" style="display:none;"><a href="<?php echo e(route('partner.orders')); ?>"><span><img
+                                                    src="images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;订单管理 <?php if($partnerNewOrderCount): ?><div><?php echo e($partnerNewOrderCount); ?></div><?php endif; ?></a></li>
+                            <?php endif; ?>
+                            <li data-value="0" class="mmo_list_li" style="display:none;"><a
+                                        href="<?php echo e(route('partner.complete')); ?>"><span><img
+                                                src="images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;完善资料</a></li>
+                        <?php endif; ?>
+                        <li><a href="<?php echo e(route('article',['id'=>2])); ?>"><span><img src="/images/public/select_right.jpg"
+                                                                                alt=""/></span>关于我们</a></li>
+                        <li><a href="<?php echo e(route('article.helpcenter',['type'=>7])); ?>"><span><img
+                                            src="/images/public/select_right.jpg" alt=""/></span>帮助中心</a></li>
+                    </ul>
+                </div>
+            </div>
+            <?php echo $__env->make('element.nav', ['selected_item' => 'nav5'], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tutor_apply").click(function () {
+                <?php if($tutorCourse != null): ?>
+                    Popup.init({
+                    popTitle: '指导师申请',//此处标题随情况改变，需php调用
+                    popHtml: '<p>是否立即前往参加指导师培训课程？</p>',//此处信息会涉及到变动，需php调用
+                    popOkButton: {
+                        buttonDisplay: true,
+                        buttonName: "是",
+                        buttonfunction: function () {
+                            window.location.href = '<?php echo e(route('course.detail', ['id'=>$tutorCourse->id])); ?>';
+                        }
+                    },
+                    popCancelButton: {
+                        buttonDisplay: true,
+                        buttonName: "否",
+                        buttonfunction: function () {
+                        }
+                    },
+                    popFlash: {
+                        flashSwitch: false
+                    }
+                });
+                <?php else: ?>
+                    Popup.init({
+                    popHtml: '指导师培训课程暂未开设！',
+                    popFlash: {
+                        flashSwitch: true,
+                        flashTime: 2000
+                    }
+                });
+                <?php endif; ?>
+            });
+
+            $(".mmo_list_button").click(function () {//伸缩菜单
+                if ($(this).attr("data-state") == "false") {
+                    $(this).attr("data-state", "true");
+                    $(".mmo_list_li[data-value=" + $(this).attr("data-value") + "]").show();
+                } else {
+                    $(this).attr("data-state", "false");
+                    $(".mmo_list_li[data-value=" + $(this).attr("data-value") + "]").hide();
+                }
+            });
+        });
+    </script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

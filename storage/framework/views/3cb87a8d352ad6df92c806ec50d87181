@@ -1,0 +1,129 @@
+<?php $__env->startSection('content'); ?>
+<div id="subject">
+    <div id="main">
+        <div class="good_looking_list">
+            <div class="dll_title"><?php if($type=='1'): ?>免费课程<?php else: ?>畅销课程<?php endif; ?></div><!--内容随情况而定-->
+            <ul class="dll_list">
+                <?php if(count($vcourseList)>0): ?>
+                    <?php foreach($vcourseList as $item): ?>
+                    <li>
+                        <a href="<?php echo e(route('vcourse.detail',['id'=>$item->id])); ?>">
+                            <div class="gl_list2_xz"><?php echo e(mb_substr($item->agency->agency_name,0,4)); ?></div>
+                            <div class="dll_list_img">
+                            <?php if($item->cover): ?>
+                                <img src="<?php echo e(config('constants.admin_url').$item->cover); ?>" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                            <?php else: ?>
+                                <img src="<?php echo e(config('qiniu.DOMAIN').$item->video_tran); ?>?vframe/jpg/offset/<?php echo e(config('qiniu.COVER_TIME')); ?>" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                            <?php endif; ?>
+                            </div>
+                            <div class="dll_list_title"><?php echo e(@str_limit($item->title,20)); ?></div>
+                            <?php if($type=='2'): ?>
+                                <div class="dll_list_money">￥<?php echo e($item->price); ?></div>
+                            <?php else: ?>
+                                <div class="dll_list_money">免费</div>
+                            <?php endif; ?>
+                            <div class="dll_list_people"><?php echo e(isset($item->view_cnt) ? $item->view_cnt : 0); ?>人观看</div>
+                        </a>
+                    </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+            <?php if($vcourseList->hasMorePages()): ?>
+            <div class="gl_list2_more">点击加载更多...</div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"),false) ?>);
+            wx.ready(function(){
+                wx.onMenuShareAppMessage({
+                    title: '和润万青-让教育孩子变得简单', // 分享标题
+                    desc: '爱中管教，互联网时代中国父母的必修课', // 分享描述
+                    link: '<?php echo e(route('vcourse')); ?>?from=singlemessage', // 分享链接
+                    <?php if(@$carouselList[0]['image_url']): ?>
+                    imgUrl: '<?php echo e(config('constants.admin_url').$carouselList[0]['image_url']); ?>', // 分享图标
+                    <?php endif; ?>
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () { 
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title: '和润万青-让教育孩子变得简单', // 分享标题
+                    link: '<?php echo e(route('vcourse')); ?>?from=singlemessage', // 分享链接
+                    <?php if(@$carouselList[0]['image_url']): ?>
+                    imgUrl: '<?php echo e(config('constants.admin_url').$carouselList[0]['image_url']); ?>', // 分享图标
+                    <?php endif; ?>
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+
+            });
+    /*----------推荐课程加载更多----------*/
+     var current_page = 1, last_page = '<?php echo e($vcourseList->lastPage()); ?>';
+     $(".gl_list2_more").click(function(){//点击加载更多按钮
+         if(last_page > current_page)
+         {
+             var sheight = $('.gl_list2_more').offset().top;
+             current_page ++;
+             $.ajax({
+                 type: 'post',
+                 url: '<?php echo e(route('vcourse.more',['type'=>$type])); ?>',
+                 data: {page:current_page},
+                 dataType: 'json',
+                 success: function (res) {
+                    if(res)
+                    {
+                        var vcourse_data = res.data;
+                        var recommend_ul_li ='';
+                        $.each(vcourse_data,function(k,v){
+                            recommend_ul_li += '<li>';
+                            recommend_ul_li += '<a href="<?php echo e(route('vcourse.detail')); ?>/'+ v.id+'">';
+                            recommend_ul_li += '<div class="gl_list2_xz">'+v.agency.agency_name.substring(0,20)+'</div>';
+                            if(v.cover==''||v.cover==null){
+                                recommend_ul_li += '<div class="dll_list_img"><img src="<?php echo e(config("qiniu.DOMAIN")); ?>'+ v.video_tran+'?vframe/jpg/offset/<?php echo e(config("qiniu.COVER_TIME")); ?>" alt="" onerror="javascript:this.src=\'/images/error.jpg\'"/></div>';
+                            }else{
+                                recommend_ul_li += '<div class="dll_list_img"><img src="<?php echo e(config('constants.admin_url')); ?>'+ v.cover+'" alt=""/></div>';
+                            }
+                            recommend_ul_li += '<div class="dll_list_title">'+ v.title.substring(0,20)+'</div>';
+
+
+                            if(v.type=='1'){ 
+                                recommend_ul_li += '<div class="dll_list_money">免费</div>';
+                            }else{
+                                recommend_ul_li += '<div class="dll_list_money">￥'+v.price+'</div>';
+                            }
+                            if (v.view_cnt==''||v.view_cnt==null) {v.view_cnt=0};
+                            recommend_ul_li += '<div class="dll_list_people">'+v.view_cnt+'人观看</div>'
+                            recommend_ul_li += '</a></li>';
+                        })
+                        if(recommend_ul_li!='')
+                        {
+                            $('.dll_list').append(recommend_ul_li);
+                            $("html,body").animate({scrollTop:sheight}, 1000);
+                        }
+                    }
+                 }
+             });
+             if(current_page >= last_page){
+                 $(".gl_list2_more").hide();
+             }
+         }
+     });
+});
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

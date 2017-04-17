@@ -1,0 +1,67 @@
+<?php $__env->startSection('style'); ?>
+<style type="text/css">
+    .mbtd_button input { width: 48%; }
+</style>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="my">
+                <article class="my_integral_introduce">
+                    <?php echo $article->content; ?>
+
+                </article>
+            </div>
+            <?php if($article->type==6): ?>
+            <input type="hidden" name="requestUri" id="requestUri" value="<?php echo e($requestUri); ?>">
+                <div class="mbtd_button">
+                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="开通会员"></a>
+                    <a href="<?php echo e(route('vip.active')); ?>"><input type="button" class="mbtd_button" value="激活会员卡"></a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+<script>
+//向ta提问
+$("#vip_open").click(function(e){
+    e.preventDefault();
+    var session_mobile = '<?php echo e($session_mobile); ?>';
+    if (session_mobile == '') {
+        //ajax成功返回事件开始
+        //如果信息不完善执行开始（2选1）
+        Popup.init({
+            popHtml:'<p>您尚未注册，请先完成注册。</p>',
+            popOkButton:{
+                buttonDisplay:true,
+                buttonName:"去注册",
+                buttonfunction:function(){
+                    //此处填写信息不完善的时候的跳转信息
+                    var requestUri = $('#requestUri').val();
+                    window.location.href='/user/login?url='+requestUri;
+                }
+            },
+            popCancelButton:{
+                buttonDisplay:true,
+                buttonName:"否",
+                buttonfunction:function(){}
+            },
+            popFlash:{
+                flashSwitch:false
+            }
+        });
+        return false;
+        //如果信息不完善执行结束
+    }else{
+        <?php if($order): ?>
+            location.href="<?php echo e(route('wechat.vip_pay')); ?>";
+        <?php else: ?>
+            location.href="<?php echo e(route('vip.buy')); ?>";
+        <?php endif; ?>
+    }
+});
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

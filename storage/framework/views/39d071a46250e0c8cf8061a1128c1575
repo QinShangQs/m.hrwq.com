@@ -1,0 +1,23 @@
+
+<?php $__env->startSection('style'); ?>
+<style type="text/css">
+    img{width: 100%}
+</style>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+		<div id="main">
+	    	<div class="my">
+				<div class="my_help">
+					<div class="my_help_title">问题知识列表</div>
+					<ul class="my_help_list">
+					<?php foreach($data as $val): ?>
+						<li><a href="<?php echo e(route('article.helpcenterdetail',['id'=>$val->id])); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span><?php echo e($val->title); ?></a></li>
+					<?php endforeach; ?>	
+					</ul>
+				</div>
+	        </div>
+	    </div>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,130 @@
+
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="good_asking">
+
+                <ul class="ga_tab">
+                    <li id="ga_tab_1"  ga_div="ga_div_1" class="selected" >已提问</li>
+                    <li id="ga_tab_2"  ga_div="ga_div_2" >已旁听</li>
+                    <li id="ga_tab_3"  ga_div="ga_div_3"  >已关注</li>
+                </ul>
+                <div class="ga_div">
+
+                    <div class="ga_div_1 children_div"  >
+                        <ul class="mq_div_1_list" >
+                          		<?php foreach($no_answer_data as $item): ?>
+                                    <li>
+                                        <div class="mq_div_2_list_problem"><a href="<?php echo e(route('wechat.question').'?id='.$item->id); ?>">问题：<?php echo e($item->content); ?></a></div>
+                                        <div class="mq_div_2_list_price">￥<?php echo e($item->price); ?></div>
+                                        <div class="mq_div_2_list_date"><?php echo e($item->created_at); ?></div>
+                                        <div class="mq_div_2_list_div">
+                                            <div class="mq_div_2_list_div_img"><img src="<?php echo e(asset($item->answer_user->profileIcon)); ?>" alt=""/></div>
+                                            <div class="mq_div_2_list_div_name"><?php echo e(isset($item->answer_user->realname) ? $item->answer_user->realname : $item->answer_user->nickname); ?></div>
+                                            <div class="mq_div_2_list_div_post"><?php echo e($item->answer_user->tutor_honor); ?></div><span style="float: right;color: #ed6d11;font-size: 14px;">待回答</span>
+                                        </div>
+                                    </li>
+                                 <?php endforeach; ?>
+                                 <?php foreach($answer_data as $item): ?>
+                                    <li>
+                                        <div class="mq_div_1_list_problem"><a href="<?php echo e(route('wechat.question').'?id='.$item->id); ?>">问题：<?php echo e($item->content); ?></a></div>
+                                        <div class="mq_div_1_list_name"><?php echo e(isset($item->answer_user->realname) ? $item->answer_user->realname : $item->answer_user->nickname); ?> | <?php echo e($item->answer_user->tutor_honor); ?></div>
+                                        <div class="mq_div_1_list_answer">
+                                            <div class="mq_div_1_list_answer_img"><img src="<?php echo e(asset($item->answer_user->profileIcon)); ?>" alt=""/></div>
+
+                                            <div class="mq_div_1_list_answer_voice audio_can_play" style="cursor:pointer;" aid="<?php echo e($item->audio_type); ?>" qid="<?php echo e($item->id); ?>"><?php echo e($item->audio_msg); ?>
+
+                                                <audio data-src="<?php echo e(config('qiniu.DOMAIN').$item->answer_url); ?>"></audio>
+                                            </div>
+
+                                            <div class="mq_div_1_list_answer_time"><?php echo e($item->voice_long); ?>"</div>
+                                            <span style="float: right;color: #ed6d11;font-size: 14px;">已回答</span>
+                                        </div>
+                                        <div class="mq_div_1_list_date"><?php echo e($item->created_at); ?></div>
+                                    </li>
+                                <?php endforeach; ?>
+
+                        </ul>
+                    </div>
+                    <div class="ga_div_2 children_div"  style="display:none;">
+                        <ul class="mq_div_1_list" >
+                                 <?php foreach($questions as $item): ?>
+                                    <li>
+                                        <div class="mq_div_1_list_problem"><a href="<?php echo e(route('wechat.question')); ?>.'?id='.<?php echo e($item->question->id); ?>">问题：<?php echo e($item->question->content); ?></a></div>
+                                        <div class="mq_div_1_list_name"><?php echo e(isset($item->question->answer_user->realname) ? $item->question->answer_user->realname : $item->question->answer_user->nickname); ?> | <?php echo e($item->question->answer_user->tutor_honor); ?></div>
+                                        <div class="mq_div_1_list_answer">
+                                            <div class="mq_div_1_list_answer_img"><img src="<?php echo e(asset($item->question->answer_user->profileIcon)); ?>" alt=""/></div>
+
+                                            <div class="mq_div_1_list_answer_voice audio_can_play" style="cursor:pointer;" aid="<?php echo e($item->question->audio_type); ?>" qid="<?php echo e($item->question->id); ?>"><?php echo e($item->question->audio_msg); ?>
+
+                                                <audio data-src="<?php echo e(config('qiniu.DOMAIN').$item->question->answer_url); ?>"></audio>
+                                            </div>
+
+                                            <div class="mq_div_1_list_answer_time"><?php echo e($item->question->voice_long); ?>"</div>
+                                        </div>
+                                        <div class="mq_div_1_list_date"><?php echo e($item->question->created_at); ?></div>
+                                    </li>
+                                <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="ga_div_3 children_div" style="display:none;" >
+                        <ul class="mq_div_2_list" >
+                                <?php if(count($teachers)>0): ?>
+                                <?php foreach($teachers as $item): ?>
+                                    <li>
+                                        <a href="<?php echo e(route('question.teacher',['id'=>$item->favor_teacher->id])); ?>">
+                                            <div class="ga_div_1_list_img"><img src="<?php echo e(url($item->favor_teacher->profileIcon)); ?>" alt=""/></div>
+                                            <div style="padding-left: 65px;">
+                                                <div class="ga_div_1_list_title"><?php echo e(isset($item->favor_teacher->realname) ? $item->favor_teacher->realname : $item->favor_teacher->nickname); ?></div>
+                                                <div class="ga_div_1_list_post"><?php echo e($item->favor_teacher->tutor_honor); ?></div>
+                                                <ul class="ga_div_1_list_information">
+                                                    <li class="ga_div_1_list_information_1"><img src="/images/ask/ga_div_1_list_information_1.png" alt=""/> <?php echo e($item->favor_teacher->question->count()); ?></li>
+                                                    <li class="ga_div_1_list_information_2"><img src="/images/ask/ga_div_1_list_information_2.png" alt=""/> <?php echo e($item->favor_teacher->user_favor->count()); ?></li>
+                                                    <li class="ga_div_1_list_information_3"><span style="font-weight:bold">￥<?php echo e(isset($item->favor_teacher->tutor_price) ? $item->favor_teacher->tutor_price : '0.00'); ?></span><span style="color:#6b6e75">/次</span></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="clearboth"></div>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript" src="/js/audio_play.js"></script>
+<script>
+    $(function(){
+        audioPlay.init({});
+        
+        $(document).on('click','.audio_cant_play',function(){
+            var qid = $(this).attr('qid');
+            location.href  = '<?php echo e(route('wechat.question')); ?>?id='+qid;
+        });
+
+        $(".ga_tab>li").click(function(){
+            var now_ga_li = $(this);
+            var now_ga_div = $(this).attr("ga_div");
+            $(".ga_tab").find("li").each(function(){
+                if($(this).hasClass("selected")){
+                	$(this).removeClass("selected");
+                }
+            });
+            now_ga_li.addClass("selected");
+            $(".children_div").each(function(){
+                $(this).hide();
+            });
+            $("."+now_ga_div).show();
+            
+        });
+    })
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,133 @@
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="my">
+                <div class="my_coupon_choice">
+                    <div class="mcc_top">选择优惠券</div>
+                    <ul class="mcc_list mcc_list1"><!--可用优惠券-->
+                        <?php foreach($couponusers_usable as $item): ?>
+                            <li data-couponuserid="<?php echo e($item->id); ?>" data-couponid="<?php echo e($item->coupon_id); ?>" data-type="<?php echo e($item->type); ?>" data-cutmoney="<?php echo e($item->cut_money); ?>" data-discount="<?php echo e($item->discount); ?>" ><!--data-id为优惠券id-->
+                                <!-- 抵用券 -->
+                                <?php if($item->type == 1): ?>
+                                    <div class="mcc_list_left ">
+                                        <div class="mcc_list_left_1"><?php echo e($item->cut_money); ?>元</div>
+                                        <div class="mcc_list_left_2">抵用券</div>
+                                    </div>
+                                    <div class="mcc_list_right">
+                                        <p>满<?php echo e($item->full_money); ?>可使用</p>
+                                        <p>限<?php echo e($coupon_use_scope[$item->use_scope]); ?>使用</p>
+                                        <?php if($item->available_period_type==1): ?>
+                                            <p>期限<?php echo e(date('Y.m.d',strtotime($item->created_at))); ?>-<?php echo e(date('Y.m.d',strtotime($item->expire_at))); ?></p>
+                                        <?php else: ?>
+                                            <p>期限<?php echo e(date('Y.m.d',strtotime($item->available_start_time))); ?>-<?php echo e(date('Y.m.d',strtotime($item->available_end_time))); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                            <!-- 折扣券 -->
+                                    <?php if($item->type == 2): ?>
+                                        <div class="mcc_list_left ">
+                                            <div class="mcc_list_left_1"><?php echo e($item->name); ?></div>
+                                            <div class="mcc_list_left_2">折扣券</div>
+                                        </div>
+                                        <div class="mcc_list_right">
+                                            <p><?php echo e($item->name); ?></p>
+                                            <p>限<?php echo e($coupon_use_scope[$item->use_scope]); ?>使用</p>
+                                            <?php if($item->available_period_type==1): ?>
+                                                <p>期限<?php echo e(date('Y.m.d',strtotime($item->created_at))); ?>-<?php echo e(date('Y.m.d',strtotime($item->expire_at))); ?></p>
+                                            <?php else: ?>
+                                                <p>期限<?php echo e(date('Y.m.d',strtotime($item->available_start_time))); ?>-<?php echo e(date('Y.m.d',strtotime($item->available_end_time))); ?></p>
+                                            <?php endif; ?>
+
+                                        </div>
+                                    <?php endif; ?>
+
+                            </li>
+                        <?php endforeach; ?>
+
+                    </ul>
+
+                    <ul class="mcc_list mcc_list2"><!--不可用优惠券-->
+                        <?php foreach($couponusers_unusable as $item): ?>
+                            <li><!--data-id为优惠券id-->
+                                <!-- 抵用券 -->
+                                <?php if($item->type == 1): ?>
+                                    <div class="mcc_list_left ">
+                                        <div class="mcc_list_left_1"><?php echo e($item->cut_money); ?>元</div>
+                                        <div class="mcc_list_left_2">抵用券</div>
+                                    </div>
+                                    <div class="mcc_list_right">
+                                        <p>满<?php echo e($item->full_money); ?>可使用</p>
+                                        <p>限<?php echo e($coupon_use_scope[$item->use_scope]); ?>使用</p>
+                                        <?php if($item->available_period_type==1): ?>
+                                            <p>期限<?php echo e(date('Y.m.d',strtotime($item->created_at))); ?>-<?php echo e(date('Y.m.d',strtotime($item->expire_at))); ?></p>
+                                        <?php else: ?>
+                                            <p>期限<?php echo e(date('Y.m.d',strtotime($item->available_start_time))); ?>-<?php echo e(date('Y.m.d',strtotime($item->available_end_time))); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                            <!-- 折扣券 -->
+                                    <?php if($item->type == 2): ?>
+                                        <div class="mcc_list_left ">
+                                            <div class="mcc_list_left_1"><?php echo e($item->name); ?></div>
+                                            <div class="mcc_list_left_2">折扣券</div>
+                                        </div>
+                                        <div class="mcc_list_right">
+                                            <p><?php echo e($item->name); ?></p>
+                                            <p>限<?php echo e($coupon_use_scope[$item->use_scope]); ?>使用</p>
+                                            <?php if($item->available_period_type==1): ?>
+                                                <p>期限<?php echo e(date('Y.m.d',strtotime($item->created_at))); ?>-<?php echo e(date('Y.m.d',strtotime($item->expire_at))); ?></p>
+                                            <?php else: ?>
+                                                <p>期限<?php echo e(date('Y.m.d',strtotime($item->available_start_time))); ?>-<?php echo e(date('Y.m.d',strtotime($item->available_end_time))); ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                            </li>
+                        <?php endforeach; ?>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $(".mcc_list li").height($(".mcc_list li").width()/690*160);
+            $(".mcc_list_left").css("top",($(".mcc_list li").height()-52)/2+"px");
+            $(".mcc_list_right").css("top",($(".mcc_list li").height()-60)/2+"px");
+
+            $(".mcc_list1 li").click(function(){//点击可使用优惠券
+                var id=$(this).attr("data-id");
+
+                var url = "<?php echo e(route('vip.buy')); ?>";
+                var coupon_user_id = $(this).data('couponuserid');
+                var coupon_id = $(this).data('couponid');
+                var coupon_type = $(this).data('type');
+                var coupon_cutmoney = $(this).data('cutmoney');
+                var coupon_discount = $(this).data('discount');
+
+                var address_id = '<?php echo e($address_id); ?>';// 收货地址
+                var is_point = '<?php echo e($is_point); ?>';// 积分开关
+                var usable_point = '<?php echo e($usable_point); ?>';// 可用积分
+                var usable_money = '<?php echo e($usable_money); ?>';// 积分可抵用现金
+                var is_balance = '<?php echo e($is_balance); ?>';// 可用余额开关
+                var usable_balance = '<?php echo e($usable_balance); ?>';// 可用余额
+                var total_price = '<?php echo e($total_price); ?>';// 总计
+
+                window.location.href = url +"?temp=2" + "?coupon_user_id=" + coupon_user_id + "&coupon_id=" + coupon_id + "&coupon_type=" + coupon_type + "&coupon_cutmoney=" + coupon_cutmoney
+                + "&coupon_discount=" + coupon_discount + "&address_id=" + address_id + "&is_point=" + is_point +
+                "&usable_point=" + usable_point + "&usable_money=" + usable_money + "&is_balance=" + is_balance + "&usable_balance=" + usable_balance + "&total_price=" + total_price;
+            });
+        });
+    </script>
+
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

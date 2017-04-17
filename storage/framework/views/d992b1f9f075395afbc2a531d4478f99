@@ -1,0 +1,19 @@
+
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div class="my">
+            <div class="my_member_ordinary">
+                <ul class="mmo_list">
+                    <li><a href="<?php echo e(route('user.balance')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的收益 <?php if($balanceCount>0): ?>
+                                <div><?php echo e($balanceCount); ?></div><?php endif; ?></a></li>
+                    <li><a href="<?php echo e(route('user.score')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的和贝 <?php if($pointCount>0): ?>
+                                <div><?php echo e($pointCount); ?></div><?php endif; ?></a></li>
+                    <li><a href="<?php echo e(route('user.coupon')); ?>"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的优惠券 <?php if($couponCount>0): ?>
+                                <div><?php echo e($couponCount); ?></div><?php endif; ?></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

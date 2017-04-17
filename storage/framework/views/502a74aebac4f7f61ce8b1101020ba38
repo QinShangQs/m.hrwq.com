@@ -1,0 +1,155 @@
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="my">
+                <div class="my_collection">
+                    <div class="mc_title">
+                        <div class="mc_title_1 select">我的收藏</div>
+                        <div class="mc_title_2">我的参与</div>
+                    </div>
+                    <div class="mc_div">
+                        <div class="mc_div_1">
+                            <ul class="mc_div_list">
+                                <?php if(count($favors)): ?>
+                                    <?php foreach($favors as $favor): ?>
+	                                    <?php if($favor->favor_type == 1): ?>
+	                                            <li>
+	                                                <div class="mc_div_list_img"><a
+	                                                            href="<?php echo e(route('course.detail',['id'=>$favor->course->id])); ?>">
+	                                                        <div class="gl_list2_xz">好课</div><img style="width:100%; height:100%;" src="<?php echo e(admin_url($favor->course->picture)); ?>" alt=""/></a>
+	                                                </div>
+	                                                <div class="mc_div_list_title"><a
+	                                                            href="<?php echo e(route('course.detail',['id'=>$favor->course->id])); ?>"><?php echo e(@str_limit($favor->course->title,20)); ?></a>
+	                                                </div>
+	                                                <?php if($favor->course->type == 1): ?>
+	                                                    <div class="mc_div_list_price">免费</div>
+	                                                <?php else: ?>
+	                                                    <div class="mc_div_list_price">¥<?php echo e($favor->course->price); ?>
+
+	                                                        <span>¥<?php echo e($favor->course->original_price); ?></span></div>
+	                                                <?php endif; ?>
+	                                                <div class="mc_div_list_people"><?php echo e($favor->course->participate_num); ?>
+
+	                                                    人已报名
+	                                                </div>
+	                                            </li>
+                                        <?php endif; ?>
+                                        
+                                        <?php if($favor->favor_type == 2): ?>
+	                                            <li>
+	                                                <div class="mc_div_list_img"><a
+	                                                            href="<?php echo e(route('vcourse.detail',['id'=>$favor->vcourse->id])); ?>">
+	                                                        <div class="gl_list2_xz">好看</div><img style="width:100%; height:100%;" src="<?php echo e(admin_url($favor->vcourse->cover)); ?>" alt=""/></a>
+	                                                </div>
+	                                                <div class="mc_div_list_title"><a
+	                                                            href="<?php echo e(route('vcourse.detail',['id'=>$favor->vcourse->id])); ?>"><?php echo e(@str_limit($favor->vcourse->title,20)); ?></a>
+	                                                </div>
+	                                                <?php if($favor->vcourse->type == 1): ?>
+	                                                    <div class="mc_div_list_price">免费</div>
+	                                                <?php else: ?>
+	                                                    <div class="mc_div_list_price">¥<?php echo e($favor->vcourse->price); ?>
+
+	                                                        </div>
+	                                                <?php endif; ?>
+	                                                <div class="mc_div_list_people"><?php echo e($favor->vcourse->view_cnt); ?>
+
+	                                                    人已观看
+	                                                </div>
+	                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div class="mc_div_2" style="display:none;">
+                            <ul class="mc_div_list">
+                                <?php if(count($participates)): ?>
+                                    <?php foreach($participates as $participate): ?>
+                                        <?php if($participate->pay_type == 1): ?>
+	                                            <li>
+	                                                <div class="mc_div_list_img">
+	                                                    <a href="<?php echo e(route('course.detail',['id'=>$participate->course->id])); ?>">
+	                                                        <div class="gl_list2_xz">好课</div><img style="width:100%; height:100%;" src="<?php echo e(admin_url($participate->course->picture)); ?>" alt=""/>
+	                                                    </a>
+	                                                </div>
+	                                                <div class="mc_div_list_title"><a
+	                                                            href="<?php echo e(route('course.detail',['id'=>$participate->course->id])); ?>"><?php echo e(@str_limit($participate->course->title,20)); ?></a>
+	                                                </div>
+	                                                <?php if($participate->course->type == 1): ?>
+	                                                    <div class="mc_div_list_price">免费</div>
+	                                                <?php else: ?>
+	                                                    <div class="mc_div_list_price">¥<?php echo e($participate->course->price); ?>
+
+	                                                        <span>¥<?php echo e($participate->course->original_price); ?></span></div>
+	                                                <?php endif; ?>
+	                                                <div class="mc_div_list_people"><?php echo e($participate->course->participate_num); ?>
+
+	                                                    人已参与
+	                                                </div>
+	                                                <a href="<?php echo e(route('course.detail',['id'=>$participate->course->id])); ?>">
+	                                                <div class="mc_div_list_button" data-id="0">开始学习</div></a>
+	                                            </li>
+                                        <?php endif; ?>
+                                        <?php if($participate->pay_type == 2): ?>
+	                                            <li>
+	                                                <div class="mc_div_list_img">
+	                                                    <a href="<?php echo e(route('vcourse.detail',['id'=>$participate->vcourse->id])); ?>">
+	                                                        <div class="gl_list2_xz">好看</div><img style="width:100%; height:100%;" src="<?php echo e(admin_url($participate->vcourse->cover)); ?>" alt=""/>
+	                                                    </a>
+	                                                </div>
+	                                                <div class="mc_div_list_title"><a
+	                                                            href="<?php echo e(route('vcourse.detail',['id'=>$participate->vcourse->id])); ?>"><?php echo e(@str_limit($participate->vcourse->title,20)); ?></a>
+	                                                </div>
+	                                                <?php if($participate->vcourse->type == 1): ?>
+	                                                    <div class="mc_div_list_price">免费</div>
+	                                                <?php else: ?>
+	                                                    <div class="mc_div_list_price">¥<?php echo e($participate->vcourse->price); ?>
+
+	                                                        </div>
+	                                                <?php endif; ?>
+	                                                <div class="mc_div_list_people"><?php echo e($participate->vcourse->view_cnt); ?>
+
+	                                                    人已观看
+	                                                </div>
+	                                                <a href="<?php echo e(route('vcourse.detail',['id'=>$participate->vcourse->id])); ?>">
+	                                                <div class="mc_div_list_button" data-id="0">开始观看</div></a>
+	                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".mc_div_list_button").click(function () {//点击开始学习
+                var value = $(this).attr("data-id");
+                /*----------ajax开始----------*/
+                //传值为value
+                /*----------ajax结束----------*/
+            });
+            $(".mc_title>div").click(function () {
+                if ($(this).attr("class") != "mc_title_1 select" && $(this).attr("class") != "mc_title_2 select") {
+                    $(".mc_title_1").attr("class", "mc_title_1");
+                    $(".mc_title_2").attr("class", "mc_title_2");
+                    $(this).addClass("select");
+                    if ($(this).attr("class") == "mc_title_1 select") {
+                        $(".mc_div_2").hide();
+                        $(".mc_div_1").show();
+                    } else {
+                        $(".mc_div_1").hide();
+                        $(".mc_div_2").show();
+                    }
+                }
+            });
+        });
+    </script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

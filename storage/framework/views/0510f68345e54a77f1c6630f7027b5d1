@@ -1,0 +1,123 @@
+
+<?php $__env->startSection('content'); ?>
+    <div id="subject">
+        <div id="main">
+            <div class="my">
+                <div class="my_task_note">
+                    <div class="mtn_title">
+                        <div class="mtn_title_1 select">作业</div>
+                        <div class="mtn_title_2">笔记</div>
+                    </div>
+                    <div class="mtn_div">
+                        <div class="mtn_div_1">
+                            <ul class="mtn_div_1_list">
+                                <?php if(count($notes)): ?>
+                                    <?php foreach($notes as $item): ?>
+                                        <li>
+                                            <div class="mtn_div_1_list_problem">问题：<?php echo e($item->vcourse->title); ?> - <?php echo e($item->vcourse->work); ?></div>
+                                            <div class="mtn_div_1_list_date"><?php echo e((string)$item->created_at); ?></div>
+                                            <div class="mtn_div_1_list_p">作业内容：<?php echo e($item->mark_content); ?></div>
+                                            <div class="mtn_div_1_list_delect" data-id="<?php echo e($item->id); ?>"><img
+                                                        src="/images/my/mq_div_2_list_delete.png" alt=""/></div>
+                                            <!--data-id为信息id-->
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                        <div class="mtn_div_2" style="display:none;">
+                            <ul class="mtn_div_2_list">
+                                <?php if(count($works)): ?>
+                                    <?php foreach($works as $item): ?>
+                                        <li>
+                                            <div class="mtn_div_1_list_problem">课程：<?php echo e($item->vcourse->title); ?></div>
+                                            <div class="mtn_div_1_list_date"><?php echo e((string)$item->created_at); ?></div>
+                                            <div class="mtn_div_1_list_p">笔记内容：<?php echo e($item->mark_content); ?></div>
+                                            <div class="mtn_div_1_list_delect" data-id="<?php echo e($item->id); ?>"><img
+                                                        src="/images/my/mq_div_2_list_delete.png" alt=""/></div>
+                                            <!--data-id为信息id-->
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('script'); ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var lock=false;
+            $(".mtn_div_1_list_delect").click(function () {//删除作业
+                if (lock) return;
+                lock = true;
+                var _self = $(this);
+                $.ajax({
+                    url: '<?php echo e(route('my.note.delete')); ?>',
+                    type: 'post',
+                    data: {"id": $(this).data('id')},
+                    dataType: 'json',
+                    success: function (res) {
+                        if(res.code == 0){
+                            _self.closest('li').remove();
+                        } else {
+                            Popup.init({
+                                popHtml: res.message,
+                                popFlash:{
+                                    flashSwitch:true,
+                                    flashTime:2000
+                                }
+                            });
+                        }
+                        lock = false;
+                    }
+
+                });
+            });
+            $(".mtn_div_2_list_delect").click(function () {//删除笔记
+                if (lock=true) return;
+                lock = true;
+                var _self = $(this);
+                $.ajax({
+                    url: '<?php echo e(route('my.note.delete')); ?>',
+                    type: 'post',
+                    data: {"id": $(this).data('id')},
+                    dataType: 'json',
+                    success: function (res) {
+                        if(res.code == 0){
+                            _self.closest('li').remove();
+                        } else {
+                            Popup.init({
+                                popHtml: res.message,
+                                popFlash:{
+                                    flashSwitch:true,
+                                    flashTime:2000
+                                }
+                            });
+                        }
+                        lock = false;
+                    }
+
+                });
+            });
+            $(".mtn_title>div").click(function () {
+                if ($(this).attr("class") != "mtn_title_1 select" && $(this).attr("class") != "mtn_title_2 select") {
+                    $(".mtn_title_1").attr("class", "mtn_title_1");
+                    $(".mtn_title_2").attr("class", "mtn_title_2");
+                    $(this).addClass("select");
+                    if ($(this).attr("class") == "mtn_title_1 select") {
+                        $(".mtn_div_2").hide();
+                        $(".mtn_div_1").show();
+                    } else {
+                        $(".mtn_div_1").hide();
+                        $(".mtn_div_2").show();
+                    }
+                }
+            });
+        });
+    </script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

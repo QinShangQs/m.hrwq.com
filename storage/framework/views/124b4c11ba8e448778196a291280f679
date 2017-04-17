@@ -1,0 +1,186 @@
+<?php $__env->startSection('content'); ?>
+<div id="subject">
+    <div id="main">
+        <div class="my">
+            <div class="my_order">
+                <div class="mo_top">我的订单</div>
+                <ul class="mo_list">
+                    <?php foreach($orders as $value): ?>
+                    <li>
+                        <div class="mo_list_top">
+                            <div class="mo_list_number">订单编号：<?php echo e($value->order_code); ?>
+
+                            <?php if($value->pay_type=='6'): ?>
+                            <span class="mo_list_price">(和会员)</span>
+                            <?php endif; ?>
+                            </div>
+                            <div <?php if($value->order_type=='1'): ?> class="mo_list_state mo_list_state_orange" <?php else: ?> class="mo_list_state mo_list_state_green" <?php endif; ?>><?php echo e($order_type[$value->order_type]); ?></div><!--mo_list_state_green为绿色，mo_list_state_orange为橙色-->
+                        </div>
+                        <?php if($value->pay_type=='1'): ?>
+                        <!--好课-->
+                        <div class="mo_list_text">
+                            <div class="mo_list_img"><img src="<?php echo e(config('constants.admin_url').@$value->course->picture); ?>" alt=""/></div>
+                            <div class="mo_list_title"><?php echo e(@str_limit(@$value->course->title,20)); ?></div>
+                            <div class="mo_list_price"><?php if($value->free_flg=='2'): ?>￥<?php echo e($value->each_price); ?><?php else: ?>免费<?php endif; ?></div>
+                            <div class="mo_list_people"><?php echo e(isset($value->course->participate_num) ? $value->course->participate_num : 0); ?>人已参加</div>
+                        </div>
+                        <?php elseif($value->pay_type=='2'): ?>
+                        <!--好看-->
+                        <div class="mo_list_text">
+                            <div class="mo_list_img">
+                            <?php if(@$value->vcourse->cover): ?>
+                                <img src="<?php echo e(config('constants.admin_url').@$value->vcourse->cover); ?>" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                            <?php else: ?>
+                                <img src="<?php echo e(config('qiniu.DOMAIN').@$value->vcourse->video_tran); ?>?vframe/jpg/offset/<?php echo e(config('qiniu.COVER_TIME')); ?>" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                            <?php endif; ?>
+                            </div>
+                            <div class="mo_list_title"><?php echo e(@str_limit(@$value->vcourse->title,20)); ?></div>
+                            <div class="mo_list_price"><?php if($value->free_flg=='2'): ?>￥<?php echo e($value->price); ?><?php else: ?>免费<?php endif; ?></div>
+                            <div class="mo_list_people"><?php echo e(isset($value->vcourse->view_cnt) ? $value->vcourse->view_cnt : 0); ?>人已观看</div>
+                        </div>
+                        <?php elseif($value->pay_type=='3'): ?>
+                        <!--壹家壹-->
+                        <div class="mo_list_text">
+                            <div class="mo_list_img">
+                            <img src="<?php echo e(config('constants.admin_url').@$value->opo->picture); ?>" alt=""/>
+                            </div>
+                            <div class="mo_list_title"><?php echo e(@str_limit(@$value->opo->title,20)); ?></div>
+                            <div class="mo_list_price"><?php if($value->free_flg=='2'): ?>￥<?php echo e($value->price); ?><?php else: ?>免费<?php endif; ?></div>
+                            <div class="mo_list_people"><?php echo e(isset($value->opo->purchase_num) ? $value->opo->purchase_num : 0); ?>人已购买</div>
+                        </div>
+                        <?php elseif($value->pay_type=='6'): ?>
+                        <!--和会员-->
+                        <?php endif; ?>
+                        <div class="mo_list_none">
+                            <ul class="mo_list_none_list">
+                                <li><span><?php echo e($value->created_at); ?></span>下单时间</li>
+                                <li><span>x<?php echo e($value->quantity); ?></span>商品数量</li>
+                                <li><span>￥<?php echo e(number_format($value->total_price,2)); ?></span>商品总价</li>
+                                <li><span>￥<?php echo e(number_format(($value->point_price+$value->coupon_price),2)); ?></span>优惠金额</li>
+                                <li><span>￥<?php echo e(number_format($value->balance_price,2)); ?></span>余额减免</li>
+                                <li><span class="orange">￥<?php echo e(number_format($value->price,2)); ?></span>实际支付金额</li>
+                            </ul>
+                        </div>
+                        <div class="mo_list_button">
+                            <?php if($value->pay_type=='1'): ?>
+                                <div class="mo_list_button_detail" id="course_detail"  course_id="<?php echo e($value->pay_id); ?>" >课程详情</div>
+                            <div class="mo_list_button_service" data-tel="<?php echo e($value->course->tel); ?>" data-area="<?php echo e(@$value->course->area->area_name); ?>">联系客服</div>
+                            <?php elseif($value->pay_type=='3'): ?>
+                                <div class="mo_list_button_detail" id="course_detail"  course_id="<?php echo e($value->pay_id); ?>" >课程详情</div>
+                            <div class="mo_list_button_service" data-tel="<?php echo e(config('constants.opo_tel')); ?>"  data-area="壹家壹">联系客服</div>
+                            <?php elseif($value->pay_type=='6'): ?>
+                                <?php if(isset($value->order_vip)&&($value->order_vip->delivery_flg=='2')&&!empty($value->order_vip->delivery_com)&&!empty($value->order_vip->delivery_nu)): ?>
+                                    <div class="mo_list_button_payment" onclick="location.href = 'http://m.kuaidi100.com/index_all.html?type=<?php echo e($value->order_vip->delivery_com); ?>&postid=<?php echo e($value->order_vip->delivery_nu); ?>&callbackurl=<?php echo e(route('my.orders')); ?>';">查看物流</div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php if($value->order_type=='1'): ?>
+                            <div class="mo_list_button_cancel" data-id="<?php echo e($value->id); ?>">取消订单</div><!--data-id为订单id-->
+                                <?php if($value->pay_method=='1'): ?>
+                                <div class="mo_list_button_payment" id="payment" data-id="<?php echo e($value->id); ?>" data-type="<?php echo e($value->pay_type); ?>">前往支付</div>
+                                <?php else: ?>
+                                <div class="mo_list_button_payment" id="payment_static">线下支付</div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                        </div>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".mo_list_text").click(function(){//展开订单详情
+        $(".mo_list_none").hide();
+        $(this).siblings(".mo_list_none").show();
+    });
+
+
+    var lockf = false;
+    $(".mo_list_button_cancel").click(function(){//取消订单
+        var id=$(this).data("id");
+        Popup.init({
+            popHtml:'<p>确认要删除该订单吗?</p>',
+            popOkButton:{
+                buttonDisplay:true,
+                buttonName:"删除",
+                buttonfunction:function(){
+                        if (lockf) {return;}
+                        lockf = true;
+                        $.get("<?php echo e(route('my.orders.cancel')); ?>",{ id:id },function(res){
+                               if (res.code == 0) {
+                                   xalert(res.message, '', function() { location.reload() });
+                                   lockf = false;
+                                } else {
+                                   xalert(res.message);
+                                   lockf = false;
+                                }
+                        },'json')
+                }
+            },
+            popCancelButton:{
+                buttonDisplay:true,
+                buttonName:"取消",
+                buttonfunction:function(){}
+            },
+            popFlash:{
+                flashSwitch:false
+            }
+        });
+    });
+    //点击一键咨询
+    $(".mo_list_button_service").click(function(){
+        var tel = $(this).data('tel');
+        Popup.init({
+            popTitle:$(this).data('area')+'服务中心',//此处标题随情况改变，需php调用
+            popHtml:'<p><span style="color:#ff9900;">'+$(this).data('tel')+'</span>是否立即拨打电话？</p>',//此处信息会涉及到变动，需php调用
+            popOkButton:{
+                buttonDisplay:true,
+                buttonName:"是",
+                buttonfunction:function(){
+                    //此处填写拨打电话的脚本
+                    window.location.href = 'tel://' + tel;
+                }
+            },
+            popCancelButton:{
+                buttonDisplay:true,
+                buttonName:"否",
+                buttonfunction:function(){}
+            },
+            popFlash:{
+                flashSwitch:false
+            }
+        });
+    });
+    //点击前往支付
+    $("#payment").click(function(){
+        var pay_type = $(this).data('type');
+        var id = $(this).data('id');
+        if (pay_type=='1') {
+            window.location.href = '<?php echo e(route('wechat.course_pay')); ?>?id='+id;
+        } else if(pay_type=='2'){
+            window.location.href = '<?php echo e(route('wechat.vcourse_pay')); ?>?id='+id;
+        } else if(pay_type=='3'){
+            window.location.href = '<?php echo e(route('wechat.opo.pay')); ?>?id='+id;
+        } else if(pay_type=='6'){
+            window.location.href = '<?php echo e(route('wechat.vip_pay')); ?>?id='+id;
+        };
+    });
+    //线下支付
+    $("#payment_static").click(function(){
+        window.location.href = '<?php echo e(route('course.line_pay_static')); ?>';
+    });
+    //线下支付
+    $(".mo_list_button_detail").click(function(){
+        var id = $(this).attr("course_id")
+        window.location.href = '<?php echo e(route('course.detail')); ?>/'+id;
+    });
+});
+</script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

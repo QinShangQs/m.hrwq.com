@@ -1,0 +1,26 @@
+<?php $__env->startSection('content'); ?>
+    <div id="main">
+        <div class="my">
+            <div class="my_data_personal">
+                <div class="mdp_top">
+                    <div class="mdp_top_img"><img src="<?php echo e(url($user->profileIcon)); ?>" alt=""/></div>
+                    <div class="mdp_top_name"><?php echo e($user->nickname); ?></div>
+                    <a href="<?php echo e(route('user.profile.edit')); ?>" class="mdp_top_edit"><img src="/images/my/mdp_top_edit.png" alt=""/></a>
+                </div>
+                <ul class="mdp_list">
+                    <li><span>称呼</span><?php echo e(isset(config('constants.user_label')[$user->label])?config('constants.user_label')[$user->label]:'暂无'); ?></li>
+                    <li><span>真实姓名</span><?php echo e($user->realname); ?></li>
+                    <li><span>年龄</span><?php echo e($user->age); ?></li>
+                    <li><span>生日</span><?php echo e($user->birth); ?></li>
+                    <li><span>所在城市</span><?php echo e(($user->c_province?$user->c_province->area_name:'') . ($user->c_city?$user->c_city->area_name:'') . ($user->c_district?$user->c_district->area_name:'')); ?></li>
+                    <li><span>孩子性别</span><?php echo e(isset(config('constants.user_sex')[$user->c_sex])?config('constants.user_sex')[$user->c_sex]:''); ?></li>
+                    <li><span>孩子生日</span><?php echo e($user->c_birth); ?></li>
+                </ul>
+                <ul class="mmo_list" style="margin-bottom:15px">
+                    <li><a href="<?php echo e(route('my.addresses')); ?>"><span><img src="/images/public/select_right.jpg" alt=""></span>我的地址</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

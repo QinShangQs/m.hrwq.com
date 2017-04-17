@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert
+END
+apiclient_key.pem
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert/apiclient_key.pem
+END
+证书使用说明.txt
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert/%E8%AF%81%E4%B9%A6%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.txt
+END
+apiclient_cert.pem
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert/apiclient_cert.pem
+END
+apiclient_cert.p12
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert/apiclient_cert.p12
+END
+rootca.pem
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/cc-hrwq/!svn/ver/222/trunk/hrwq/config/wechatcert/rootca.pem
+END
