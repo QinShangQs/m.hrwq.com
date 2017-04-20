@@ -45,15 +45,15 @@ article li { list-style: initial; }
 /*----------#nav li { width:20%; float:left; overflow:hidden;}----------*/
 #nav li { width:25%; float:left; overflow:hidden;}
 #nav li a { display:block; width:35px; margin:0 auto; height:40px;}
-.nav_1 { background:url(../images/public/nav_11.png) left top no-repeat; background-size:100%;}
-.nav_2 { background:url(../images/public/nav_21.png) left top no-repeat; background-size:100%;}
+.nav_1 { background:url(../images/public/navs_11.png) left top no-repeat; background-size:100%;}
+.nav_2 { background:url(../images/public/navs_21.png) left top no-repeat; background-size:100%;}
 .nav_3 { background:url(../images/public/nav_31.png) left top no-repeat; background-size:100%;}
-.nav_4 { background:url(../images/public/nav_41.png) left top no-repeat; background-size:100%;}
+.nav_4 { background:url(../images/public/navs_41.png) left top no-repeat; background-size:100%;}
 .nav_5 { background:url(../images/public/nav_51.png) left top no-repeat; background-size:100%;}
-.selected .nav_1 { background:url(../images/public/nav_12.png) left top no-repeat; background-size:100%;}
-.selected .nav_2 { background:url(../images/public/nav_22.png) left top no-repeat; background-size:100%;}
+.selected .nav_1 { background:url(../images/public/navs_12.png) left top no-repeat; background-size:100%;}
+.selected .nav_2 { background:url(../images/public/navs_22.png) left top no-repeat; background-size:100%;}
 .selected .nav_3 { background:url(../images/public/nav_32.png) left top no-repeat; background-size:100%;}
-.selected .nav_4 { background:url(../images/public/nav_42.png) left top no-repeat; background-size:100%;}
+.selected .nav_4 { background:url(../images/public/navs_42.png) left top no-repeat; background-size:100%;}
 .selected .nav_5 { background:url(../images/public/nav_52.png) left top no-repeat; background-size:100%;}
 
 /*----------弹窗----------*/
@@ -621,8 +621,8 @@ transform: rotate(-45deg);
 .mbtd_list_title { position:absolute; left:0px; top:0px; line-height:46px; font-size:14px; color:#999;}
 .mbtd_list_input input { width:100%; line-height:46px; padding:0 10px; box-sizing:border-box; border:none; font-size:16px; color:#323232;}
 .mbtd_list_select input { width:100%; line-height:46px; padding:0 10px; box-sizing:border-box; border:none; font-size:16px; color:#323232;}
-.mbtd_button { margin:0 10px 20px 10px;}
-.mbtd_button input { color:#fff; text-align:center; background:#ff9900; font-size:18px; border:none; border-radius:3px; line-height:44px; width:100%; margin:0;}
+.mbtd_button { position: fixed; left: 0px; bottom: 0px; width: 100%; text-align: center; margin-bottom: 0.05rem;}
+.mbtd_button input { color:#fff; text-align:center; background:#ff9900; font-size:18px; border:none; border-radius:3px; line-height:44px; width:100%; margin:0;position: static;}
 .mbtd_list_input_span { font-size:14px; color:#f39700; padding:0 10px; display:inline-block;}
 
 /*----------我-成为导师-申请进度----------*/
@@ -735,7 +735,7 @@ transform: rotate(-45deg);
 .mi_list_state { position:absolute; right:0px; top:0px; color:#333; font-size:14px;}
 
 /*----------我-我的积分-积分介绍----------*/
-.my_integral_introduce { padding:8px 20px;}
+.my_integral_introduce { padding:8px 20px;margin-bottom: 2.25rem}
 .my_integral_introduce h2 { font-size:18px; color:#666; line-height:36px;}
 .my_integral_introduce dt { font-size:12px; color:#666; line-height:18px;}
 .my_integral_introduce dd { padding-bottom:18px;}

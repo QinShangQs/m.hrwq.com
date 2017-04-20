@@ -16,11 +16,16 @@ return [
     /**
      * 账号基本信息，请从微信公众平台/开放平台获取
      */
-    'app_id'  => env('WECHAT_APPID', 'wx564b0f968fb2e7b0'),         // AppID
-    'secret'  => env('WECHAT_SECRET', 'b86098aac94590c8f113dac8d24c0623'),     // AppSecret
-    'token'   => env('WECHAT_TOKEN', 'weixin'),          // Token
-    'aes_key' => env('WECHAT_AES_KEY', '5dsEN3K49elrqIH9ngJuruPPOMenHd9vyrhHSAc6Jdu'),                    // EncodingAESKey
+    //'app_id'  => env('WECHAT_APPID', 'wx564b0f968fb2e7b0'),         // AppID
+    //'secret'  => env('WECHAT_SECRET', 'b86098aac94590c8f113dac8d24c0623'),     // AppSecret
+    //'token'   => env('WECHAT_TOKEN', 'weixin'),          // Token
+    //'aes_key' => env('WECHAT_AES_KEY', '5dsEN3K49elrqIH9ngJuruPPOMenHd9vyrhHSAc6Jdu'),                    // EncodingAESKey
 
+	'app_id'  => env('WECHAT_APPID', 'wx1a6d72cb63c2e01b'),         // AppID
+	'secret'  => env('WECHAT_SECRET', '15fa82877812dfbcf1543e4c40cf97e3'),     // AppSecret
+	'token'   => env('WECHAT_TOKEN', 'riventest'),          // Token
+	'aes_key' => env('WECHAT_AES_KEY', '5dsEN3K49elrqIH9ngJuruPPOMenHd9vyrhHSAc6Jdu'),
+	
     /**
      * 日志配置
      *

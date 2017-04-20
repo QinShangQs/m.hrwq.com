@@ -84,7 +84,7 @@ class QuestionController extends Controller
                     $item->audio_msg = '限时免费';
                 } else {
                     $item->audio_type = 1;
-                    $item->audio_msg = '一元旁听';
+                    $item->audio_msg = '1元旁听';
                 }
             }
         }
@@ -534,7 +534,7 @@ class QuestionController extends Controller
                     $item->audio_msg = '限时免费';
                 } else {
                     $item->audio_type = 1;
-                    $item->audio_msg = '一元旁听';
+                    $item->audio_msg = '1元旁听';
                 }
             }
         }
