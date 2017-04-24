@@ -156,6 +156,18 @@ class UserController extends Controller
             'couponCount' => $couponCount,
         ]);
     }
+    
+    /**
+     * 设置
+     */
+    public function setting(){
+    	$tutorCourse = Course::where('is_tutor_course', 1)->where('status', 2)->first();
+    	return view('user.setting', [
+            'data' => user_info(),
+    		'tutorCourse' => $tutorCourse
+    		]
+    	);
+    }
 
     /**
      * 我的收益-余额

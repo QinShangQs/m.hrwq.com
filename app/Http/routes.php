@@ -173,6 +173,8 @@ Route::group(['prefix' => 'user', 'middleware' => ['FrontWechat']], function () 
     Route::get('/listen_teacher', 'UserController@listen_teacher')->name('user.listen_teacher');
     //我的提问
     Route::get('/question', 'UserController@question')->name('user.question');
+    //设置
+    Route::get('/setting', 'UserController@setting')->name('user.setting');
 
     Route::get('/my_card', 'UserController@my_card')->name('user.my_card');
     Route::get('/my_info', 'UserController@my_info')->name('user.my_info');

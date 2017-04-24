@@ -541,14 +541,55 @@ transform: rotate(-45deg);
 .address_choice_form_button { cursor:pointer; line-height:44px; color:#fff; background:#ff9900; font-size:20px; text-align:center; border-radius:5px; margin:0 10px 30px 10px;}
 
 /*----------我-普通会员----------*/
-.my_member_ordinary { width:100%; padding-bottom:80px;}
-.mmo_top { padding:10px 20px 10px 100px; height:60px; overflow:hidden; background:url(../images/my/mmo_top_bg.jpg) left top no-repeat; background-size:100%; position:relative;}
-.mmo_portrait { width:60px; height:60px; position:absolute; left:20px; top:10px; border-radius:30px; overflow:hidden;}
+.my_member_ordinary {width:100%;padding-bottom:80px;font-family: '微软雅黑';}
+.mmo_top {height: 14.65rem;overflow:hidden;background:url(../images/my/mmo_top_bg.jpg) left top no-repeat;background-size: 100% 75%;position:relative;background-color: #fff;padding-bottom: 1.5rem;}
+.mmo_top a{font-size:inherit;color:inherit;}
+.mmo_portrait {width:60px;height:60px;position:absolute;left:20px;top: 9.5rem;border-radius:30px;overflow:hidden;}
 .mmo_portrait a { display:block; line-height:0; height:60px; width:60px;}
 .mmo_portrait img { width:100%; height:100%;}
-.mmo_title { line-height:36px; color:#fff; font-size:16px;}
-.mmo_identity { display:inline-block; border:2px solid #ed6d11; height:20px; line-height:0px; border-radius:10px; overflow:hidden;}
-.mmo_identity_1 { display:inline-block; padding:0 8px; background:#fff; text-align:center; font-size:12px; line-height:20px; color:#ed6d11; margin:0;}
+.mmo_menus{
+    margin-top: 0.8rem;
+    width: 100%;
+    display: inline-block;
+}
+.mmo_menus img{
+    height: 1.5rem;
+    vertical-align: super;
+}
+.mmo_menus .money{
+    width: 30%;
+    padding-left: 1rem;
+}
+.mmo_menus .setting{
+    float: right;
+    padding-right: 1.2rem;
+}
+.mmo_love {
+    position: absolute;
+    color: #fff;
+    top: 10.5rem;
+    right: 1.2rem;
+    font-size: 0.8rem
+}
+.mmo_line{position: absolute;left: 0;top: 13.2rem;color: #ed6d11;font-weight: 500;font-family: '微软雅黑';font-size: 1.05rem;width: 100%;}
+.mmo_line .mmo_title {line-height: 36px;width: 4rem;padding-left: 1rem;text-align: center;display: inline-block;}
+.mmo_line .mmo_title  .mmo_vip {
+    position: absolute;
+    display: inline-block;
+    width: 1rem;
+    padding-left: 0.5rem;
+}
+.mmo_line .mmo_title  .mmo_vip img{width:1.5rem}
+.mmo_line .mmo_right_menu{
+    float: right;
+    margin-top: .5rem;
+    margin-right: .5rem;
+}
+.mmo_line .mmo_right_menu a {color:#ed6d11;font-size: 0.96rem;/* margin-top: 1rem; */padding-left: 0.5rem;padding-right: 0.5rem;}
+.mmo_identity {border-radius:10px;overflow:hidden;position: absolute;top: 3rem;width: 100%;text-align: center;}
+.mmo_identity_1 {display:inline-block;padding:0 8px;text-align:center;font-size:12px;color: #fff;margin:0;}
+.mmo_identity_1 .grow_txt{font-size:1.1rem}
+.mmo_identity_1 .grow{font-size:2.5rem}
 .mmo_identity_2 { display:inline-block; padding:0 8px; background:#ed6d11; text-align:center; font-size:12px; line-height:20px; color:#fff; margin:0;}
 .mmo_top2 { height:34px; line-height:0px; padding:0 20px; background:#fff;}
 .mmo_top2 span { display:inline-block; width:110px; color:#333; font-size:12px; line-height:34px;}

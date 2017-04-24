@@ -219,7 +219,7 @@ if (!function_exists('set_audio_state')) {
 
         //初始化
         $item->audio_type = 1;
-        $item->audio_msg = '一元旁听';
+        $item->audio_msg = '1元旁听';
 
         $vip_flg = $user_info['vip_flg'];
 

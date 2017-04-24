@@ -5,49 +5,74 @@
             <div class="my">
                 <div class="my_member_ordinary">
                     <div class="mmo_top">
-                        <div class="mmo_portrait"><a href="{{route('user.profile')}}"><img
-                                        src="{{url($data['profileIcon'])}}" alt=""/></a></div>
-                        <div class="mmo_title">{{$data['realname'] or $data['nickname']}}</div>
-                        <div class="mmo_identity">
-                            <a href="{{route('article',['id'=>4])}}"><div class="mmo_identity_1">成长值:{{$data['grow']}}</div></a><div class="mmo_identity_2">@if($data['role']=='1'&&$data['vip_flg']=='2')和会员@else{{config('constants.user_role')[$data['role']]}}@endif</div>
+                        <div class="mmo_portrait">
+                        	<a href="{{route('user.profile')}}">
+                        	<img src="{{url($data['profileIcon'])}}" alt=""/></a>
                         </div>
+                        
+                        <div class="mmo_menus">
+                        	<span class="money">
+                        	 <a href="{{route('user.wallet')}}">
+                        		<img src="/images/my/money.png"/>@if($myWalletCount)<span>{{$myWalletCount}}</span>@endif
+                        	 </a>
+                        	</span>
+                        	<span class="setting">
+                        		<a href="{{route('user.setting')}}">
+                        			<img src="/images/my/setting.png" />
+                        		</a>
+                        	</span>
+                        </div>
+                        
+                        <div class="mmo_line">
+                        	<div class="mmo_title">
+                        		{{$data['realname'] or $data['nickname']}}
+                        		<div class="mmo_vip">
+                        		@if($data['role']=='1'&&$data['vip_flg']=='2')
+                        			<img src="/images/my/vip-2.png" alt=""/>
+                        		@else
+                        			<img src="/images/my/vip-1.png" alt=""/>
+                        		@endif
+                        	</div>
+                        	</div>                        	
+                        	<div class="mmo_right_menu">
+                        		<a href="{{route('my.courses')}}">收藏</a> 
+                        		<!--  @if($order_read_num>0)<span>{{$order_read_num}}</span>@endif</a>-->
+                        		| 
+                        		<a href="{{route('my.orders')}}">订单</a></div>
+                        </div>
+                        
+                        @if($data['role'] != 2 )
+                        <div class="mmo_love">
+							<a href="{{route('my.invite_user')}}">爱心大使&nbsp;></a>                      	
+                        </div>
+                        @endif
+                        
+                        <div class="mmo_identity">
+                            <a href="{{route('article',['id'=>4])}}">
+                            	<div class="mmo_identity_1">
+                            	<div class="grow_txt">成长值</div>
+                            	<div class="grow">{{$data['grow']}}</div>
+                            	</div>
+                            </a>
+                        </div>                        
                     </div>
-                    <div class="mmo_top2"><span><img src="/images/my/mmo_top2_1.png" alt=""/> 已提问 <a
-                                    href="{{route('user.question')}}">{{$ask_question_num}}</a></span><span><img
-                                    src="/images/my/mmo_top2_2.png" alt=""/> 和贝 <a
-                                    href="{{route('user.score')}}">{{$data['score']}}</a></span></div>
                     <ul class="mmo_list">
-                        <li><a href="{{route('user.wallet')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的钱包@if($myWalletCount)
-                                    <div>{{$myWalletCount}}</div>@endif</a>
-                        </li>
-                        <li><a href="{{route('my.orders')}}"><span><img src="/images/public/select_right.jpg"
-                                                                        alt=""/></span>我的订单 @if($order_read_num>0)
-                                    <div>{{$order_read_num}}</div>@endif</a></li>
-                        <li><a href="{{route('my.courses')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>我的课程</a>
-                        </li>
                         <li><a href="{{route('my.notes')}}"><span><img src="/images/public/select_right.jpg"
                                                                        alt=""/></span>作业&笔记</a></li>
                         <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
-                                                                            alt=""/></span>我的好问 @if($new_answer_questions_count>0)
+                                                                            alt=""/></span>我的问答 @if($new_answer_questions_count>0)
                                     <div>{{$new_answer_questions_count}}</div>@endif</a></li>
                         <li><a href="{{route('user.talk')}}"><span><img src="/images/public/select_right.jpg"
-                                                                        alt=""/></span>我的帖子 @if($unreadTalkCommentCount)
+                                                                        alt=""/></span>家长圈子 @if($unreadTalkCommentCount)
                                     <div>{{$unreadTalkCommentCount}}</div>@endif</a></li>
-                        @if($data['role'] != 2 )
-                        <li><a href="{{route('my.invite_user')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>推荐有奖</a></li>
-                         @endif
+  
                     </ul>
                     <ul class="mmo_list">
                         @if($data['vip_flg'] == 1 )
-                            <li><a href="{{route('vip')}}"><span>与最优秀的父母一起学习 <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>成为和会员</a></li>
+                            <li><a href="{{route('vip')}}"><span> <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                         @endif
-                        @if($data['role'] == 1 )
-                            <li id="tutor_apply"><a href="#"><span>加入智慧榜，帮助更多家庭 <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>成为指导师</a></li>
-                            <li id="partner_apply"><a href="{{route('partner.apply')}}"><span>加盟合作，普及现代家庭教育 <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>成为合伙人</a></li>
-                        @elseif($data['role'] == 2)
+                        @if($data['role'] == 2)
                             <li data-value="0" data-state="false" class="mmo_list_button">
                                 <div class="mmo_list_button_1">+</div>
                                 <div class="mmo_list_button_2">-</div>
@@ -86,10 +111,7 @@
                                         href="{{route('partner.complete')}}"><span><img
                                                 src="images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;完善资料</a></li>
                         @endif
-                        <li><a href="{{route('article',['id'=>2])}}"><span><img src="/images/public/select_right.jpg"
-                                                                                alt=""/></span>关于我们</a></li>
-                        <li><a href="{{route('article.helpcenter',['type'=>7])}}"><span><img
-                                            src="/images/public/select_right.jpg" alt=""/></span>帮助中心</a></li>
+                        
                     </ul>
                 </div>
             </div>
@@ -100,39 +122,6 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#tutor_apply").click(function () {
-                @if($tutorCourse != null)
-                    Popup.init({
-                    popTitle: '指导师申请',//此处标题随情况改变，需php调用
-                    popHtml: '<p>是否立即前往参加指导师培训课程？</p>',//此处信息会涉及到变动，需php调用
-                    popOkButton: {
-                        buttonDisplay: true,
-                        buttonName: "是",
-                        buttonfunction: function () {
-                            window.location.href = '{{route('course.detail', ['id'=>$tutorCourse->id])}}';
-                        }
-                    },
-                    popCancelButton: {
-                        buttonDisplay: true,
-                        buttonName: "否",
-                        buttonfunction: function () {
-                        }
-                    },
-                    popFlash: {
-                        flashSwitch: false
-                    }
-                });
-                @else
-                    Popup.init({
-                    popHtml: '指导师培训课程暂未开设！',
-                    popFlash: {
-                        flashSwitch: true,
-                        flashTime: 2000
-                    }
-                });
-                @endif
-            });
-
             $(".mmo_list_button").click(function () {//伸缩菜单
                 if ($(this).attr("data-state") == "false") {
                     $(this).attr("data-state", "true");
