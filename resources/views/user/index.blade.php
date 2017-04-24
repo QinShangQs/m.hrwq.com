@@ -13,7 +13,8 @@
                         <div class="mmo_menus">
                         	<span class="money">
                         	 <a href="{{route('user.wallet')}}">
-                        		<img src="/images/my/money.png"/>@if($myWalletCount)<span>{{$myWalletCount}}</span>@endif
+                        		<img src="/images/my/money.png"/>
+                        		<!-- @if($myWalletCount)<span>{{$myWalletCount}}</span>@endif -->
                         	 </a>
                         	</span>
                         	<span class="setting">
