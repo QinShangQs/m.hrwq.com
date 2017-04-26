@@ -269,4 +269,5 @@ Route::group(['prefix' => 'article', 'middleware' => ['FrontWechat']], function 
 /** 用户分享的事件回调 */
 Route::group(['prefix' => 'share', 'middleware' => ['FrontWechat']], function () {
     Route::post('/', 'ShareController@index')->name('share');
+    Route::get('/love_angle', 'ShareController@loveAngle')->name('share.angle');
 });

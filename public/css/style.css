@@ -17,6 +17,12 @@ a:hover{text-decoration:none; color:#333333;}
 .right { float:right;}
 .none { display:none;}
 
+@media screen and (max-width: 320px) {
+    body {
+        font-size:50.5%;
+    }
+}
+
 input[type="submit"],
 input[type="reset"],
 input[type="button"],
@@ -572,14 +578,9 @@ transform: rotate(-45deg);
     font-size: 0.8rem
 }
 .mmo_line{position: absolute;left: 0;top: 13.2rem;color: #ed6d11;font-weight: 500;font-family: '微软雅黑';font-size: 1.05rem;width: 100%;}
-.mmo_line .mmo_title {line-height: 36px;width: 4rem;padding-left: 1rem;text-align: center;display: inline-block;}
-.mmo_line .mmo_title  .mmo_vip {
-    position: absolute;
-    display: inline-block;
-    width: 1rem;
-    padding-left: 0.5rem;
-}
-.mmo_line .mmo_title  .mmo_vip img{width:1.5rem}
+.mmo_line .mmo_title {line-height: 36px;padding-left: 1rem;text-align: center;display: inline-block;}
+
+.mmo_line .mmo_title  img{width:1.5rem}
 .mmo_line .mmo_right_menu{
     float: right;
     margin-top: .5rem;
@@ -1060,3 +1061,65 @@ transform: rotate(-45deg);
 
 /*----------新增功能----------*/
 .return_index { position:fixed; right:16px; bottom:58px; width:30px; height:30px; background:url(../images/new/return.png) left top no-repeat; background-size:100%; z-index:3000; display:block;}
+
+/***************分享*************/
+/*----------爱心大使------------*/
+.share-love{
+    width: 100%;
+}
+.share-love .banner{}
+.share-love .banner img{width:100%}
+.share-love .footer{
+    background-color: #FFFFFF;
+    padding-left: 1.12rem;
+    padding-right: 1.12rem;
+    font-family: '微软雅黑';
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+}
+.share-love .footer .tip{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 1rem;
+    width: 100%;
+}
+.share-love .footer .tip .title{}
+.share-love .footer .tip .detail{float: right;font-size: 0.9rem;color: gray;}
+.share-love .footer .tip .detail  .forward{    
+	background: url(../images/public/select_button.jpg);
+    width: 11px;
+    height: 6px;
+    display: -webkit-inline-box;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+	-ms-transform:rotate(180deg); 	
+	-moz-transform:rotate(180deg); 
+	-webkit-transform:rotate(180deg);
+	-o-transform:rotate(180deg);
+}
+.share-love .footer .tip .detail .forward-selected{
+	transform: rotate(0deg);
+	-ms-transform:rotate(0deg); 	
+	-moz-transform:rotate(0deg); 
+	-webkit-transform:rotate(0deg);
+	-o-transform:rotate(0deg);
+}
+.share-love .footer .content {
+    color: #666;
+}
+.share-love .footer .content p{
+    font-size: 0.9rem;
+    padding: 1rem 0 1rem 0;
+    border-top: 1px solid #e1e1e1;
+    line-height: 1.2rem;
+}
+
+p {}
+.share-love .footer .content p b{
+    font-size: 0.95rem;
+    font-weight: normal;
+    line-height: 2rem;
+}
+.share-love .footer .content p:last-child {}

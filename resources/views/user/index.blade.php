@@ -27,13 +27,11 @@
                         <div class="mmo_line">
                         	<div class="mmo_title">
                         		{{$data['realname'] or $data['nickname']}}
-                        		<div class="mmo_vip">
                         		@if($data['role']=='1'&&$data['vip_flg']=='2')
                         			<img src="/images/my/vip-2.png" alt=""/>
                         		@else
                         			<img src="/images/my/vip-1.png" alt=""/>
                         		@endif
-                        	</div>
                         	</div>                        	
                         	<div class="mmo_right_menu">
                         		<a href="{{route('my.courses')}}">收藏</a> 
@@ -44,7 +42,7 @@
                         
                         @if($data['role'] != 2 )
                         <div class="mmo_love">
-							<a href="{{route('my.invite_user')}}">爱心大使&nbsp;></a>                      	
+							<a href="{{route('share.angle')}}">爱心大使&nbsp;></a>                      	
                         </div>
                         @endif
                         
@@ -63,7 +61,7 @@
                         <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
                                                                             alt=""/></span>我的问答 @if($new_answer_questions_count>0)
                                     <div>{{$new_answer_questions_count}}</div>@endif</a></li>
-                        <li><a href="{{route('user.talk')}}"><span><img src="/images/public/select_right.jpg"
+                        <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
                                                                         alt=""/></span>家长圈子 @if($unreadTalkCommentCount)
                                     <div>{{$unreadTalkCommentCount}}</div>@endif</a></li>
   

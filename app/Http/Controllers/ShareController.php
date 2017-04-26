@@ -14,4 +14,8 @@ class ShareController extends Controller
         get_score(2);
         return response()->json(['code'=>0, 'message'=>'分享成功！']);
     }
+    
+    public function loveAngle(){
+    	return view('share.love_angle');
+    }
 }
