@@ -519,15 +519,15 @@ transform: rotate(-45deg);
 .gap_button { background:#ff9900; border-radius:5px; margin:0 10px 14px 10px; font-size:20px; line-height:44px; text-align:center; color:#fff;}
 
 /*----------我-帮助中心----------*/
-.my_help { width:100%;}
-.my_help_title { padding:20px 20px 0 20px; line-height:24px; color:#999; font-size:14px;}
+.my_help { width:100%; }
+.my_help_title { padding:0px 20px 0 20px; line-height:24px; color:#999; font-size:14px;}
 .my_help_list { background:#fff; padding:0 20px; overflow:hidden;}
-.my_help_list li { position:relative; top:-1px; font-size:16px; color:#333; line-height:44px; border-top:1px solid #e3e3e3;}
-.my_help_list li a { display:block; width:100%; color:#333;}
+.my_help_list li { position:relative; top:-1px; color:#333; line-height:44px; border-top:1px solid #e3e3e3;}
+.my_help_list li a { display:block; width:100%; color:#333;font-size:14px;    padding: 10px 0 10px 0;line-height: normal; }
 .my_help_list li span { float:right;}
 .my_help_details { width:100%; padding:14px 0 0 0;}
-.my_help_details_list { background:#fff;}
-.my_help_details_list dt { font-size:18px; color:#ed6d11; line-height:44px; border-bottom:1px solid #e3e3e3; padding:0 20px;}
+.my_help_details_list { background:#fff;    }
+.my_help_details_list dt { line-height: normal;font-size:18px; color:#ed6d11;  border-bottom:1px solid #e3e3e3; padding:0 20px;}
 .my_help_details_list dd { line-height:24px; color:#333; font-size:14px; padding:10px 20px;}
 
 /*----------选择默认地址----------*/
@@ -548,7 +548,7 @@ transform: rotate(-45deg);
 
 /*----------我-普通会员----------*/
 .my_member_ordinary {width:100%;padding-bottom:80px;font-family: '微软雅黑';}
-.mmo_top {height: 14.65rem;overflow:hidden;background:url(../images/my/mmo_top_bg.jpg) left top no-repeat;background-size: 100% 75%;position:relative;background-color: #fff;padding-bottom: 1.5rem;}
+.mmo_top {height: 14.65rem;overflow:hidden;background:url(../images/my/mmo_top_bg.png) left top no-repeat;background-size: 100% 75%;position:relative;background-color: #fff;padding-bottom: 1.5rem;}
 .mmo_top a{font-size:inherit;color:inherit;}
 .mmo_portrait {width:60px;height:60px;position:absolute;left:20px;top: 9.5rem;border-radius:30px;overflow:hidden;}
 .mmo_portrait a { display:block; line-height:0; height:60px; width:60px;}
@@ -602,8 +602,8 @@ transform: rotate(-45deg);
 .mmo_list li span { float:right; color:#666;}
 .mmo_list li div { display:inline-block; height:18px; width:18px; border-radius:9px; background:#f00; color:#fff; line-height:18px; text-align:center;}
 .mmo_list_button { position:relative;}
-.mmo_list_button .mmo_list_button_1 { display:none; position:absolute; right:0px; top:0px; line-height:46px; font-size:36px; height:46px; width:auto; background:none; color:#666;}
-.mmo_list_button .mmo_list_button_2 { display:none; position:absolute; right:0px; top:0px; line-height:46px; font-size:36px; height:46px; width:auto; background:none; color:#666;}
+.mmo_list_button .mmo_list_button_1 {display:none;position:absolute;right:0px;top:0px;line-height:46px;font-size: 18px;height:46px;width:auto;background:none;color: #c8c7cc;}
+.mmo_list_button .mmo_list_button_2 {display:none;position:absolute;right:0px;top:0px;line-height:46px;font-size: 28px;height:46px;width:auto;background:none;color: #999;}
 .mmo_list_button[data-state=false] .mmo_list_button_1 { display:block;}
 .mmo_list_button[data-state=true] .mmo_list_button_2 { display:block;}
 
