@@ -14,7 +14,9 @@
                             </li>
                             <li>
                                 <div class="mbtd_list_title">头衔</div>
-                                <div class="mbtd_list_input"><input type="text" value="{{$user->tutor_honor}}" placeholder="如工作职位/家里蹲大学资深妈妈" name="tutor_honor" class="mbtd_input_realname"></div>
+                                <div class="mbtd_list_input">
+                                <input name="tutor_honor" type="hidden" value="家庭教育指导师">
+                                <input type="text" readonly="readonly" value="家庭教育指导师" placeholder="如工作职位/家里蹲大学资深妈妈" class="mbtd_input_realname"></div>
                             </li>
                             <li>
                                 <div class="mbtd_list_title">性别</div>

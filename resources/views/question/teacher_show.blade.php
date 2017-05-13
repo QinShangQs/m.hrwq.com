@@ -9,8 +9,8 @@
                         <div class="gatd_img" style="background:url({{asset($data->tutor_cover)}}) center no-repeat; background-size:100%;"></div>
                         <div class="gatd_name">{{$data->realname or $data->nickname}} <span>{{$data->tutor_honor}}</span></div>
                         <ul class="gatd_information">
-                            <li class="gatd_information_1"><img src="/images/ask/ga_div_1_list_information_1.png" alt=""/> {{$data->question->count()}}</li>
-                            <li class="gatd_information_2"><img src="/images/ask/ga_div_1_list_information_2.png" alt=""/> <span id="user_favor_num">{{$data->user_favor->count()}}</span></li>
+                            <li class="gatd_information_1"><img src="/images/ask/ga_div_1_list_information_1.png" alt=""/> {{$data->question->count()}}人提问</li>
+                            <li class="gatd_information_2"><img src="/images/ask/ga_div_1_list_information_2.png" alt=""/> <span id="user_favor_num">{{$data->user_favor->count()}}人收听</span></li>
                         </ul>
                         <div class="clearboth"></div>
                         @if($data->id != user_info('id'))
@@ -21,7 +21,7 @@
                         <div class="gatd_price"><div><span>￥{{$data->tutor_price or '0.00'}}</span>/次</div>在线问题解答</div>
                     </div>
                     <div class="gatd_div">
-                        <div class="gatd_title"><div>关于指导师</div></div>
+                        <div class="gatd_title"><div>指导师简介</div></div>
                         <div class="gatd_p">
                             <p>{{$data->tutor_introduction}}</p>
                         </div>
