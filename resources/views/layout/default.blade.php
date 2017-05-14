@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>和润万青</title>
+    <title>@yield('title','和润万青')</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="format-detection" content="telephone=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">

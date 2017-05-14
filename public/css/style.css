@@ -303,6 +303,8 @@ transform: rotate(-45deg);
 /*----------好问-导师详情----------*/
 .ga_tutor_details { width:100%; padding-bottom:50px;}
 .gatd_div { background:#fff; margin-bottom:14px; position:relative;}
+.gatd_icon {display:inline-block;margin-left:0.5rem}
+.gatd_icon img{width:3rem;margin:0.1rem;border-radius:25px}
 .gatd_img { width:100%;}
 .gatd_img img { width:100%;}
 .gatd_name { padding:9px 20px 0 20px; line-height:36px; color:#333; font-size:20px;}
@@ -315,7 +317,7 @@ transform: rotate(-45deg);
 .gatd_price div span { color:#ed6d11; font-size:20px;}
 .gatd_title { padding:10px 20px;}
 .gatd_title div { line-height:20px; border-left:5px solid #ed6d11; padding-left:6px; color:#333333; font-size:14px;}
-.gatd_p { padding:5px 20px 10px 20px; color:#666666; font-size:14px; line-height:18px; text-indent:28px;}
+.gatd_p { padding:5px 20px 10px 20px; color:#666666; font-size:14px; line-height:18px; }
 .gatd_list { padding:5px 20px 10px 20px;}
 .gatd_list dt { position:relative; padding:0 0 0 65px; min-height:60px;}
 .gatd_list_img { width:49px; height:49px; border-radius:49px; position:absolute; top:5px; left:0px; overflow:hidden;}
@@ -600,7 +602,15 @@ transform: rotate(-45deg);
 .mmo_list li { line-height:46px; color:#333; font-size:14px; position:relative; top:-1px; border-top:1px solid #e3e3e3;}
 .mmo_list li a { display:block; width:100%; height:46px; line-height:46px; color:#333; font-size:14px;}
 .mmo_list li span { float:right; color:#666;}
-.mmo_list li div { display:inline-block; height:18px; width:18px; border-radius:9px; background:#f00; color:#fff; line-height:18px; text-align:center;}
+.mmo_list li div {    display: inline-block;
+    height: 0.8rem;
+    width: 0.8rem;
+    border-radius: 9px;
+    background: #f00;
+    color: #fff;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.5rem;}
 .mmo_list_button { position:relative;}
 .mmo_list_button .mmo_list_button_1 {display:none;position:absolute;right:0px;top:0px;line-height:46px;font-size: 18px;height:46px;width:auto;background:none;color: #c8c7cc;}
 .mmo_list_button .mmo_list_button_2 {display:none;position:absolute;right:0px;top:0px;line-height:46px;font-size: 28px;height:46px;width:auto;background:none;color: #999;}
@@ -1123,3 +1133,59 @@ p {}
     line-height: 2rem;
 }
 .share-love .footer .content p:last-child {}
+
+/*----------视频课程------------*/
+.vcoures-item{
+	background-color: #fff;
+	padding: 0.5rem 1rem;
+	box-sizing: border-box;
+	margin-bottom: 0.5rem;
+}
+.vcoures-item .title a{font-size: 1rem;font-weight: bold;margin-bottom: 0.2rem;}
+.vcoures-item .title img{
+	width: 4.5rem;
+	float:right;
+	padding-top: 0.5rem;
+}
+.vcoures-item .time{
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.vcoures-item .desc{
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height:2rem;
+    width: 100%;
+}
+
+.vcoures-item .desc a{
+    float:right;
+    margin-top: -2rem;
+    font-size: 0.9rem;
+    color: #f29357;
+    display: none;
+}
+.vcoures-item .cover{}
+.vcoures-item .cover img{
+    width: 100%;
+}
+.vcoures-item .foot{
+    font-size: 0.8rem;
+    color: gray;
+    padding: 0.2rem 0;
+}
+.vcoures-item .foot .cnt{}
+.vcoures-item .foot .pinglun{}
+.vcoures-item .foot .favor{
+    float: right;
+}
+.vcoures-item .foot .favor img{
+    width: 0.8rem;
+    margin: 0 0.2rem;
+}

@@ -11,7 +11,7 @@ class QuestionListener extends Model
 
     public function question()
     {
-        return $this->belongsTo('App\Models\Question','id');
+        return $this->belongsTo('App\Models\Question','question_id');
     }
 
 }
