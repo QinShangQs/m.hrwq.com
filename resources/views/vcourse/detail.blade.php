@@ -1,4 +1,5 @@
 @extends('layout.default')
+@section('title','和润好父母学院')
 @section('content')
 <link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <script src="/qiniu/js/videojs/video.min.js"></script>
@@ -34,12 +35,12 @@
                 @endif
             </div>
             <ul class="lcd_tab">
-                <li id="lcd_tab_1" class="selected">课程详情</li>
-                <li id="lcd_tab_2">作业&笔记</li>
+                <li id="lcd_tab_1" >课程详情</li>
+                <li id="lcd_tab_2" class="selected">作业&笔记</li>
                 <li id="lcd_tab_3">推荐课程</li>
             </ul>
             <div class="lcd_div">
-                <div class="lcd_div_1">
+                <div class="lcd_div_1" style="display:none">
                     <dl>
                         <dt>更新时间</dt>
                         <dd><p>{{ $vcourseDetail->created_at }}</p></dd>
@@ -70,7 +71,7 @@
                         @endif
                     </dl>
                 </div>
-                <div class="lcd_div_2" style="display:none;">
+                <div class="lcd_div_2" >
                     <div class="lcd_div_2_title">课程作业：{{ $vcourseDetail->work }}</div>
                     @if(count($vcourseDetail->order)>0)
                     <form class="lcd_div_2_form">
@@ -78,7 +79,8 @@
                         <input type='hidden' name='_token' value="{{csrf_token()}}">
                         <div class="lcd_div_2_form_textarea"><textarea id="lcd_div_2_form_textarea" placeholder="勤记笔记，随时随地查看，永不丢失，不少于20字符。" name="mark_content"></textarea></div>
                         <div class="lcd_div_2_form_select1">
-                            <input type="text" id="lcd_div_2_form_select1_dummy" class="" placeholder="" readonly=""><select id="lcd_div_2_form_select1" class="dw-hsel" tabindex="-1" name="mark_type">
+                            <input type="text" id="lcd_div_2_form_select1_dummy" class="" placeholder="" readonly="">
+                            <select id="lcd_div_2_form_select1" class="dw-hsel" tabindex="-1" name="mark_type">
                               <option value="2" selected="">作业</option>
                               <option value="1">笔记</option>
                             </select>
@@ -140,9 +142,9 @@
             <div id='is_favor' @if($userFavor) class="lcd_collection lcd_collection_yes" @else class="lcd_collection lcd_collection_no" @endif></div><!--lcd_collection_no是未收藏，lcd_collection_yes是已收藏，需要链接就把div改成a标签-->
             @if(!count($vcourseDetail->order)>0)
                 @if(@$user_info['vip_flg']=='2')
-                    <div class="lcd_button" id="vcourse_add">参加该课程(和会员免费)</div>
+                    <div class="lcd_button" id="vcourse_add" style="display:none">参加该课程(和会员免费)</div>
                 @else
-                    <div class="lcd_button" id="vcourse_add">参加该课程</div>
+                    <div class="lcd_button" id="vcourse_add" style="display:none">参加该课程</div>
                 @endif
             @else
                 @if($vcourseDetail->order[0]->order_type=='1')
@@ -189,7 +191,7 @@ $(document).ready(function(){
             wx.ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '{{strip_tags($vcourseDetail->title)}}', // 分享标题
-                    desc: '我看到一个非常好的父母课堂，可能很适合你哟', // 分享描述
+                    desc: '我看到一个很好的家长课堂，可能很适合你呦', // 分享描述
                     link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
@@ -202,7 +204,7 @@ $(document).ready(function(){
                     }
                 });
                 wx.onMenuShareTimeline({
-                    title: '我看到一个非常好的父母课堂，可能很适合你哟', // 分享标题
+                    title: '我看到一个很好的家长课堂，可能很适合你呦', // 分享标题
                     link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     success: function () {
@@ -254,10 +256,28 @@ $(document).ready(function(){
     var videoEnd = function(){
       if ($('#video-container').data('flg')=='free') {
          Popup.init({
-            popHtml:'<p>参加该课程后可观看完整版</p>',
+        	popTitle:'试看结束',
+            popHtml:'<p>加入和润父母学院可永久免费观看全部视频</p>',
+            popOkButton:{
+                buttonDisplay:true,
+                buttonName:"我要加入",
+                buttonfunction:function(){
+                     
+                     @if(@$user_info['vip_flg']=='2')
+                    	 location.href='{{ url("vip.buy") }}';
+                     @else
+                    	 location.href='{{ url("/user/login?url=/vcourse/detail/".@$vcourseDetail->id) }}';
+                     @endif
+                     return false;
+                }
+            },
+            popCancelButton:{
+                buttonDisplay:true,
+                buttonName:"我不关心",
+                buttonfunction:function(){}
+            },
             popFlash:{
-                flashSwitch:true,
-                flashTime:2000,
+                flashSwitch:false
             }
         });
       };
@@ -283,6 +303,8 @@ $(document).ready(function(){
             type: vType(),
             src: vLink
         });
+        var player = this;
+        player.play();
     }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
 
     $('.lcd_banner_div').click(function(event) {
@@ -301,6 +323,7 @@ $(document).ready(function(){
     });
     @endif
 
+    
     var lockm = false;
     $(".lcd_div_2_form_button").click(function(){//提交作业笔记表单
         if (lockm) {return;}
@@ -473,7 +496,8 @@ $(document).ready(function(){
         @endif
         return false;
     });
-
+    $("#vcourse_add").click();//自动参加课程
+    
     $(".lcd_tab li").click(function(){//tab切换
         if($(this).attr("class")!="selected"){
             $(".lcd_tab li").attr("class","");
@@ -495,6 +519,7 @@ $(document).ready(function(){
             }
         }
     });
+    
     var lockf = false;
     $("#is_favor").click(function(){//点击收藏
         @if(!session('wechat_user'))

@@ -1,18 +1,29 @@
 @extends('layout.default')
+@section('title', '好父母学院')
 @section('content')
 <div id="subject">
     <div id="main">
-        <div class="good_looking">
-            <div class="gl_search"><div><img src="images/public/search_bg.png" alt=""/> <span id="search_tip">@if(request('search_key')) {{request('search_key')}} @else  搜索讲师/课程 @endif</span></div></div>
-            <div class="public_search"  style="display:none;" >
+        <div class="good_looking">            
+            <div class="public_search"  style="display:block;" >
                 <form class="public_search_form">
-                    <div class="public_search_form_div"><input class="public_search_form_input" type="text" name="search_key" value="{{request('search_key')}}" placeholder="搜索讲师/课程" ><div class="public_search_form_input_delete"></div></div>
-                    <div class="public_search_form_cancel">取消</div>
+                    <div class="public_search_form_div"><input class="public_search_form_input" type="text" name="search_key" value="{{request('search_key')}}" placeholder="搜索讲师/课程" ></div>
+                    <div class="public-search-menu">
+                    	<img src="/images/vcourse/menu.png"/>
+                    	<div class="list" style="display:none">
+                    		@if(request('ob') == 'created_at')
+                    			<div desc="created_at" class="item selected">更新时间</div>
+                    			<div desc="view_cnt" class="item">观看人数</div>
+                    		@else
+                    			<div desc="created_at" class="item">更新时间</div>
+                    			<div desc="view_cnt" class="item  selected">观看人数</div>
+                    		@endif
+                    	</div>
+                    </div>
                 </form>
                 <div class="public_search_hot" style="display: none">
                     <div>搜索"<span>东风</span>"</div>
                 </div>
-                <dl class="public_search_quick">
+                <dl class="public_search_quick" style="display: none">
                     <dt>热门搜索</dt>
                     <dd>
                         @if(isset($hot_search)&&count($hot_search)>0)
@@ -34,128 +45,49 @@
                 </dl>
                 <div class="public_search_delete">清除搜索记录</div><!--若没有最近搜索信息,则不显示清除搜索记录-->
             </div>
-            @if(count($carouselList)>0)
-            <div class="public_slide">
-                <div class="main_visual">
-                    <div class="flicking_con">
-                        @foreach ($carouselList as $item)
-                        <a href="#">{{ $item->id }}</a>
-                        @endforeach
-                    </div>
-                    <div class="main_image">
-                        <ul>
-                           @foreach($carouselList as $item)
-                                @if($item->redirect_type == 1)
-                                <li> <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
-                                    </span></li>
-                                @elseif($item->redirect_type == 2)
-                                <li>
-                                    <a href="{{$item->redirect_url}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
-                                    </span>
-                                    </a>
-                                @else
-                                 <li><a href="{{route('course.staticlink',['id'=>$item->id])}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
-                                    </span>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </ul>
-                        <a href="javascript:;" id="btn_prev"></a>
-                        <a href="javascript:;" id="btn_next"></a>
-                    </div>
-                </div>
+            <div style="height:3rem"></div>
+            @foreach ($vcourseList as $item)
+            <div class="vcoures-item">
+            	<div class="title">
+            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">{{ $item->title }}</a>
+            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}"><img src="/images/vcourse/look.png" /></a>
+            	</div>
+            	<div class="time">
+            		{{ $item->updated_at}}            		
+            	</div>
+            	
+            	@if($item->vcourse_des)
+            	<div class="desc">
+            		{{ $item->vcourse_des }}
+            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">更多</a>
+            	</div>
+            	@endif
+            	<div class="cover">
+            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">
+            		@if($item->cover)
+                       <img src="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                    @else
+                       <img src="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                    @endif
+                    </a>
+            	</div>
+            	<div class="foot">
+            		<span class="cnt">{{$item->view_cnt}}人观看</span>
+            		<span class="pinglun"></span>
+            		<span class="favor">
+            			<table>
+            				<tr>
+            					<td valign="middle"><img src="/images/vcourse/xin-1.png"></td>
+            					<td valign="middle">收藏</td>
+            				</tr>
+            			</table>
+            		</span>
+            	</div>
             </div>
-            @endif
-            @if(count($freeVcourseList)>0)
-            <div class="gl_div gl_div1">
-                <div class="gl_title">免费课程</div>
-                <a class="gl_more" href="{{route('vcourse.more',['type'=>'1'])}}">更多></a>
-                <ul class="gl_list">
-                    @foreach ($freeVcourseList as $item)
-                    <li>
-                        <div class="gl_list_img"><div class="gl_list2_xz">{{mb_substr($item->agency->agency_name,0,4)}}</div><a href="{{route('vcourse.detail',['id'=>$item->id])}}">
-                        @if($item->cover)
-                            <img src="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                        @else
-                            <img src="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                        @endif
-                        </a></div>
-                        <div class="gl_list_title"><a href="{{route('vcourse.detail',['id'=>$item->id])}}">{{ @str_limit($item->title,30) }}</a></div>
-                    </li>
-                    @endforeach
-                </ul>
-                <div class="clearboth"></div>
-            </div>
-            @endif
-            @if(count($chargeVcourseList)>0)
-            <div class="gl_div gl_div2">
-                <div class="gl_title">畅销课程</div>
-                <a class="gl_more" href="{{route('vcourse.more',['type'=>'2'])}}">更多></a>
-                <ul class="gl_list">
-                    @foreach ($chargeVcourseList as $item)
-                    <li>
-                        <div class="gl_list_img">
-                            <div class="gl_list2_xz">{{mb_substr($item->agency->agency_name,0,4)}}</div>
-                            <a href="{{route('vcourse.detail',['id'=>$item->id])}}">
-                        @if($item->cover)
-                            <img src="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                        @else
-                            <img src="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                        @endif
-                        </a></div>
-                        <div class="gl_list_title">
-                            <a href="{{route('vcourse.detail',['id'=>$item->id])}}">{{ @str_limit($item->title,30) }}</a>
-                        </div>
-                        <div class="gl_list_money">￥{{ $item->price }}</div>
-                        <div class="gl_list_people">{{ $item->view_cnt or 0 }}人观看</div>
-                    </li>
-                    @endforeach
-                </ul>
-                <div class="clearboth"></div>
-            </div>
-            @endif
-            @if(count($recommendVcourseList)>0)
-            <div class="gl_div gl_div3">
-                <div class="gl_title">推荐课程</div>
-                <ul class="gl_list2">
-                    @foreach ($recommendVcourseList as $item)
-                    <li>
-                        <a href="{{route('vcourse.detail',['id'=>$item->id])}}">
-                            <div class="gl_list2_xz">{{mb_substr($item->agency->agency_name,0,4)}}</div>
-                            <div class="gl_list2_img">
-                            @if($item->cover)
-                                <img src="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                            @else
-                                <img src="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
-                            @endif
-                            </div>
-                            <div class="gl_list2_div">
-                                <div class="gl_list2_title">{{ $item->title }}</div>
-                                <div class="gl_list2_span">
-                                    @if($item->type=='1')
-                                    <span class="lcd_banner_span_1">免费</span> 
-                                    @else
-                                    <span class="lcd_banner_span_1">￥{{ $item->price }}</span> 
-                                    @endif
-                                    @if($item->current_class)
-                                    <span class="lcd_banner_span_3">课时：<span>{{ $item->current_class }}/{{ $item->total_class }}</span>
-                                    </span>
-                                    @endif()
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
-                @if($recommendVcourseList->hasMorePages())
-                <div class="gl_list2_more">点击加载更多...</div>
-                @endif
-            </div>
-            @endif
-        </div>
-        @include('element.nav', ['selected_item' => 'nav2'])
+           @endforeach
+           <div style="height:3rem;"></div>
+            
+        	@include('element.nav', ['selected_item' => 'nav2'])
     </div>
 </div>
 @endsection
@@ -218,30 +150,24 @@ $(document).ready(function(){//搜索
              }
          });
 
+		$(".public-search-menu img").click(function(){
+			$(".public-search-menu .list").toggle();
+		});
+
+		$(".public-search-menu .list .item").click(function(){
+			 var search_key = $(".public_search_form_input").val();
+			 location.href = '{{route('vcourse')}}'+'?search_key='+search_key+"&ob="+$(this).attr('desc');
+		});
+         
          //点击搜索
          $('.public_search_hot').click(function(){
              //搜索内容
              var search_key = $('>div >span',this).html();
              historySearch.store(search_key);
 
-             location.href = '{{route('vcourse.search')}}'+'?search_key='+search_key;
+             location.href = '{{route('vcourse')}}'+'?search_key='+search_key+"&ob="+$('.public-search-menu .list .selected').attr('desc');
          })
 
-         $(".gl_search").click(function(){//弹出搜索框
-                $(this).hide();
-                $(".public_search").show();
-
-                var tmp_val =  $(".public_search_form_input").val();
-                if(tmp_val =='')
-                {
-                   $('.public_search_hot').hide();
-                }else{
-                   $('.public_search_hot').show();
-                   $('.public_search_hot span').html(tmp_val);
-                }
-
-                $(".public_search_form_input").focus();
-            });
             $(".public_search_form_input_delete").click(function(){//清空搜索input中的内容
                 $(".public_search_form_input").val("");
             });
@@ -255,7 +181,7 @@ $(document).ready(function(){//搜索
             $(".public_search_quick li,.h-search-item li").click(function(){//快捷搜索
                 var value=$(this).attr("data-value");
                 historySearch.store(value);
-                location.href = '{{route('vcourse.search')}}'+'?search_key='+value;
+                location.href = '{{route('vcourse.search')}}'+'?search_key='+value+"&ob="+$('.public-search-menu .list .selected').attr('desc');;
                 /*----------ajax开始----------*/
                 //传值为value，value是要搜索的内容
 
@@ -267,58 +193,7 @@ $(document).ready(function(){//搜索
                 $(".public_search_delete_con").remove();
             });
 
-    /*----------推荐课程加载更多----------*/
-     var current_page = 1, last_page = '{{$recommendVcourseList->lastPage()}}';
-     $(".gl_list2_more").click(function(){//点击加载更多按钮
-         if(last_page > current_page)
-         {
-             var sheight = $('.gl_list2_more').offset().top;
-             current_page ++;
-             $.ajax({
-                 type: 'post',
-                 url: '{{route('vcourse.recommend_list')}}',
-                 data: {page:current_page},
-                 dataType: 'json',
-                 success: function (res) {
-                    if(res)
-                    {
-                        var recommend_data = res.data;
-                        var recommend_ul_li ='';
-                        $.each(recommend_data,function(k,v){
-                            recommend_ul_li += '<li>';
-                            recommend_ul_li += '<a href="{{route('vcourse.detail')}}/'+ v.id+'">';
-                            recommend_ul_li += '<div class="gl_list2_xz">'+v.agency.agency_name.substring(0,20)+'</div>';
-                            if(v.cover==''||v.cover==null){
-                                recommend_ul_li += '<div class="gl_list2_img"><img src="{{ config("qiniu.DOMAIN")}}'+ v.video_tran+'?vframe/jpg/offset/{{ config("qiniu.COVER_TIME")}}" alt="" onerror="javascript:this.src=\'/images/error.jpg\'"/></div>';
-                            }else{
-                                recommend_ul_li += '<div class="gl_list2_img"><img src="{{config('constants.admin_url')}}'+ v.cover+'" alt=""/></div>';
-                            }
-                            recommend_ul_li += '<div class="gl_list2_div">';
-                            recommend_ul_li += '<div class="gl_list2_title">'+ v.title.substring(0,20)+'</div>';
-                            recommend_ul_li += '<div class="gl_list2_span">';
-                            if(v.type=='1'){ 
-                                recommend_ul_li += '<span class="lcd_banner_span_1">免费</span>';
-                            }else{
-                                recommend_ul_li += '<span class="lcd_banner_span_1">￥'+v.price+'</span>';
-                            }
-                            if(v.current_class>0){
-                                recommend_ul_li +='<span class="lcd_banner_span_3">课时：<span>'+v.current_class+'/'+v.total_class+'</span></span>';
-                            }
-                            recommend_ul_li += '</div></div></a></li>';
-                        })
-                        if(recommend_ul_li!='')
-                        {
-                            $('.gl_list2').append(recommend_ul_li);
-                            $("html,body").animate({scrollTop:sheight}, 1000);
-                        }
-                    }
-                 }
-             });
-             if(current_page >= last_page){
-                 $(".gl_list2_more").hide();
-             }
-         }
-     });
+  
 });
 </script>
 <script type="text/javascript">

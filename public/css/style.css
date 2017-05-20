@@ -172,10 +172,29 @@ div.flicking_con a.on{ background:url(../images/temporary/index_banner_bg1.png) 
 .gl_search div { display:block; border:1px solid #e1e1e1; height:30px; line-height:30px; text-align:center; border-radius:15px; background:#fff; color:#909090; font-size:16px;}
 .public_search { width:100%; position:fixed; left:0px; top:0px; z-index:3000; background:#f6f6f6;}
 .public_search_form { margin:6px 20px; position:relative;}
-.public_search_form_div { margin-right:40px; position:relative;}
+.public_search_form_div { width: 85%;
+    position: relative;}
 .public_search_form_input { width:100%; border:1px solid #e1e1e1; height:32px; line-height:32px; border-radius:15px; background:#fff url(../images/public/search_bg.png) 10px center no-repeat; color:#909090; font-size:16px; padding:0 30px 0 35px; box-sizing:border-box;}
 .public_search_form_input_delete { width:15px; height:15px; position:absolute; right:8px; top:8px; background:url(../images/public/public_search_form_input_delete.png) left top no-repeat; background-size:100%;}
 .public_search_form_cancel { position:absolute; right:0px; line-height:32px; color:#333333; font-size:14px; top:0px;}
+.public-search-menu{position: absolute;
+    right: 0px;
+    top: 5px;
+    text-align: right;}
+.public-search-menu img{    
+	width: 1.8rem;
+}
+.public-search-menu .list {
+	width: 4.2rem;
+    padding: 3px 20px 3px 10px;
+    background-color: #f6f6f6;
+    line-height: 1.4rem;
+    margin-top: 5px;
+    margin-right: -20px;
+    font-size: 0.9rem;
+}
+.public-search-menu .list .item {}
+.public-search-menu .list .selected {color: #fd9800}
 .public_search_hot { height:50px; line-height:50px; padding:0 24px 0 50px; background:#fff url(../images/public/search_bg.png) 24px center no-repeat; font-size:14px;}
 .public_search_hot div { background:url(../images/public/select_right.jpg) right center no-repeat;}
 .public_search_hot span { color:#4ca0f1;}
@@ -639,7 +658,7 @@ transform: rotate(-45deg);
 .mde_list { margin-bottom:14px; padding:0 20px; background:#fff; overflow:hidden;}
 .mde_list li { line-height:46px; min-height:46px; color:#333; font-size:14px; position:relative; top:-1px; border-top:1px solid #e3e3e3; padding-left:75px;}
 .mde_list_title { position:absolute; left:0px; top:0px; line-height:46px; font-size:14px; color:#999;}
-.mde_list_input input { width:100%; line-height:46px; padding:0 10px; box-sizing:border-box; border:none; font-size:16px; color:#323232;}
+.mde_list_input input { width:100%; line-height:30px; padding:0 10px; box-sizing:border-box;  font-size:16px; color:#323232;}
 .mde_list_select input { width:100%; line-height:46px; padding:0 10px; box-sizing:border-box; border:none; font-size:16px; color:#323232;}
 .mde_button { margin:0 10px 20px 10px;}
 .mde_button input { color:#fff; text-align:center; background:#ff9900; font-size:18px; border:none; border-radius:3px; line-height:44px; width:100%; margin:0;}

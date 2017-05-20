@@ -25,30 +25,23 @@ class VcourseController extends Controller
     /** 好看课程首页 */
     public function index(Request $request)
     {
-        //轮播图
-        $carouselList = Carousel::whereUseType('2')->orderBy('sort', 'desc')->get();
-
         $builder = Vcourse::whereStatus('2')
             ->whereNotNull('vcourse.video_tran')
             ->whereNotNull('vcourse.video_free')
             ->whereNotNull('vcourse.bucket');
 
-        $builder_b = clone $builder;
-
-        //免费课程
-        $freeVcourseList = $builder->whereType('1')->take(4)->orderBy('vcourse.sort', 'desc')->get();
-
-        //畅销课程
-        $chargeVcourseList = $builder_b->whereType('2')->take(4)->orderBy('vcourse.sort', 'desc')->get();
-
-        //推荐课程
-        $recommendVcourseList = $this->recommend_list($request);
-
+        $sortField = $request->input('ob','created_at');
+        $request['ob'] = $sortField;
+        if (($search_key = $request->input('search_key'))) {
+        	$builder->where('title', 'like', '%' . $search_key . '%');
+        }
+        $vcourseList = $builder->take(20)->orderBy('vcourse.'.$sortField, 'desc')->get();
+        
         //热门搜索
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
 
-        return view('vcourse.index', compact('carouselList', 'freeVcourseList', 'chargeVcourseList', 'recommendVcourseList', 'hot_search','wx_js'));
+        return view('vcourse.index', compact('vcourseList','hot_search', 'wx_js'));
     }
 
     /** 好看课程搜索 */
