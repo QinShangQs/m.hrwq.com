@@ -36,6 +36,11 @@ class VcourseController extends Controller
         	$builder->where('title', 'like', '%' . $search_key . '%');
         }
         $vcourseList = $builder->take(20)->orderBy('vcourse.'.$sortField, 'desc')->get();
+        if($userid = session('user_info')['id']){
+        	foreach ($vcourseList as $k => $v){
+        		$v->userFavor = UserFavor::whereUserId($userid)->whereFavorId($v->id)->whereFavorType('2')->first();
+        	}
+        }
         
         //热门搜索
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');

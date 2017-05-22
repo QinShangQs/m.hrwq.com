@@ -53,13 +53,12 @@
             		<a href="{{route('vcourse.detail',['id'=>$item->id])}}"><img src="/images/vcourse/look.png" /></a>
             	</div>
             	<div class="time">
-            		{{ $item->updated_at}}            		
+            		{{ $item->created_at}}            		
             	</div>
             	
             	@if($item->vcourse_des)
             	<div class="desc">
             		{{ $item->vcourse_des }}
-            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">更多</a>
             	</div>
             	@endif
             	<div class="cover">
@@ -74,10 +73,15 @@
             	<div class="foot">
             		<span class="cnt">{{$item->view_cnt}}人观看</span>
             		<span class="pinglun"></span>
-            		<span class="favor">
+            		<span class="favor" vid="{{ $item->id }}">
             			<table>
             				<tr>
-            					<td valign="middle"><img src="/images/vcourse/xin-1.png"></td>
+            					<td valign="middle">
+            					@if($item->userFavor)
+            						<img src="/images/vcourse/xin-2.png"></td>
+            					@else
+            						<img src="/images/vcourse/xin-1.png"></td>
+            					@endif
             					<td valign="middle">收藏</td>
             				</tr>
             			</table>
@@ -255,6 +259,46 @@ $(document).ready(function(){//幻灯效果
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
+	var lockf = false;
+    $(".favor").click(function(){//点击收藏
+        @if(!session('wechat_user'))
+            window.location.href = '{{route('wechat.qrcode')}}';
+        @endif
+        /*----------ajax开始----------*/
+        var vid = $(this).attr('vid');
+        var img = $(this).find('img').eq(0);
+        if (lockf) {return;}
+        lockf = true;
+        $.get("{{route('vcourse.add_favor')}}",{ vcourse_id:vid },function(res){
+               if (res.code == 0) {
+                    //ajax成功返回事件开始
+                    img.attr('src','/images/vcourse/xin-1.png');
+                    lockf = false;
+                    //ajax成功返回事件结束
+                }else if(res.code == 2){
+                    Popup.init({
+                        popHtml: '您已成功收藏该课程，可在 <b>我的</b>-<b>我的课程</b> 中查看',
+                        popFlash:{
+                        flashSwitch:true,
+                        flashTime:2000
+                        }
+                    });
+                    img.attr('src','/images/vcourse/xin-2.png');
+                    lockf = false;
+                }else {
+                    Popup.init({
+                        popTitle:'失败',
+                        popHtml:'<p>'+res.message+'</p>',
+                        popFlash:{
+                            flashSwitch:true,
+                            flashTime:2000,
+                        }
+                    });
+                    lockf = false;
+                }
+        },'json')
+    });
+	
     $(".gl_list2_more").click(function(){//点击加载更多按钮
         /*----------ajax开始----------*/
             //ajax获取更多的信息

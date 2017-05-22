@@ -449,17 +449,7 @@ $(document).ready(function(){
             lockp = true;
             $.post("{{route('vcourse.order_free')}}", { vcourse_id:{{ $vcourseDetail->id }} },function(data){
                 if(data.status){
-                   Popup.init({
-                        popTitle:'参加成功',
-                        popHtml:'<p>'+data.msg+'</p>',
-                        popOkButton:{
-                        buttonDisplay:true,
-                        buttonName:"确认",
-                        buttonfunction:function(){
-                            location.reload();
-                        }
-                    }
-                    });
+                   location.reload();
                    lockp = false;
                 }else{
                    Popup.init({
@@ -492,7 +482,7 @@ $(document).ready(function(){
             });
         @else
         //收费
-        location.href = '{{route('vcourse.order',['id'=>$vcourseDetail->id])}}';
+        //location.href = '{{route('vcourse.order',['id'=>$vcourseDetail->id])}}';
         @endif
         return false;
     });
