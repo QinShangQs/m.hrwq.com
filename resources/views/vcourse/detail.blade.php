@@ -257,17 +257,17 @@ $(document).ready(function(){
       if ($('#video-container').data('flg')=='free') {
          Popup.init({
         	popTitle:'试看结束',
-            popHtml:'<p>加入和润父母学院可永久免费观看全部视频</p>',
+            popHtml:'<p>加入好父母学院，观看每周一期完整视频</p>',
             popOkButton:{
                 buttonDisplay:true,
                 buttonName:"我要加入",
                 buttonfunction:function(){
-                     
-                     @if(@$user_info['vip_flg']=='2')
-                    	 location.href='{{ url("vip.buy") }}';
-                     @else
-                    	 location.href='{{ url("/user/login?url=/vcourse/detail/".@$vcourseDetail->id) }}';
-                     @endif
+                	location.href='{{ url("article/6") }}';
+//                      @if(@$user_info['vip_flg']=='2')
+//                     	 location.href='{{ url(".buy") }}';
+//                      @else
+//                     	 location.href='{{ url("/user/login?url=/vcourse/detail/".@$vcourseDetail->id) }}';
+//                      @endif
                      return false;
                 }
             },
