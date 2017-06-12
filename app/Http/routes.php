@@ -257,6 +257,8 @@ Route::group(['prefix'=>'vip','middleware' => ['FrontWechat', 'FrontAuth']], fun
     Route::post('/delete', 'VipController@delete')->name('course.delete');
     //优惠券选择
     Route::get('/coupon', 'VipController@coupon')->name('vip.coupon');
+    //和会员天数记录
+    Route::get('/records', 'VipController@records')->name('vip.records');
 });
 
 //文章

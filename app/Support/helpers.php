@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Psr7\str;
 if (!function_exists('is_mobile')) {
     /**
      * 粗略判断是否移动端浏览器
@@ -375,4 +376,36 @@ if(!function_exists('qiniu_previews')) {
             return $fileList;
         }
     }
+}
+
+if(!function_exists('computer_vip_left_day')) {
+	function computer_vip_left_day($vip_left_day){
+		$left_day = 0;
+		if(!empty($vip_left_day)){
+			$d1 = strtotime(date('Y-m-d'));
+			$d2 = strtotime($vip_left_day);
+			$left_day = round(($d2-$d1)/3600/24);
+		}
+		
+		if($left_day > 365 * 10){
+			return '永久';
+		}
+		
+		return $left_day;
+	}
+}
+
+/**
+ * 增加天数的和会员有效期
+ */
+if(!function_exists('get_new_vip_left_day')){
+	function get_new_vip_left_day($vip_left_day, $days){
+		$left_days = 0;
+		if(empty($vip_left_day)){
+			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
+		}else{
+			$left_days = date('Y-m-d',strtotime("+ {$days} day", strtotime($vip_left_day)));
+		}
+		return $left_days;
+	}
 }

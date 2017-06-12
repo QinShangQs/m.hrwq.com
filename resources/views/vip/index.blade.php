@@ -13,6 +13,7 @@
                         <li><a href="{{route('article',['id'=>6])}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>和会员介绍</a></li>
                         <li><a href="#" id="vip_open"><span><img src="/images/public/select_right.jpg" alt=""/></span>开通会员</a></li>
                         <li><a id="vip_card" href="{{route('vip.active')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>激活会员卡</a></li>
+                        <li><a href="{{route('vip.records')}}" ><span><img src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                     </ul>
                 </div>
             </div>

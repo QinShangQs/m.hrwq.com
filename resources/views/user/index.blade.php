@@ -47,10 +47,13 @@
                         @endif
                         
                         <div class="mmo_identity">
-                            <a href="{{route('article',['id'=>4])}}">
+                            <a href="{{route('vip')}}">
                             	<div class="mmo_identity_1">
-                            	<div class="grow_txt">成长值</div>
-                            	<div class="grow">{{$data['grow']}}</div>
+                            		<div class="grow_txt">和会员有效期</div>
+                            		<div class="grow">
+                            		 {{ computer_vip_left_day($data['vip_left_day']) }}
+                            		 <span style="font-size:0.8rem">天</span>
+                            		</div>
                             	</div>
                             </a>
                         </div>                        

@@ -108,142 +108,63 @@ class VipController extends Controller
      */
     public function create_order(Request $request)
     {
-        $user_id = user_info('id');
-        //是否已生成订单
-        $order = Order::where('user_id',$user_id)->where('pay_type',6)->where('order_type',1)->first();
-        $addressInfo = UserReceiptAddress::find($request->input('address_id'));
-        if (!$addressInfo) {
-            return "<script>alert('请填写收获地址！');history.go(-1);</script>";
-        }
-        if (!$order) {
-            DB::beginTransaction();
-            try {
-                // 添加订单（主表 order表）
-                $order = new Order;
-                $order->order_code = get_order_code(6);
-                $order->user_id = $user_id;
-                $order->pay_type = 6;//1好课 2好看 3壹家壹 4好问提问 5好问偷听 6和会员
-                $order->order_type = 1;
-                $order->order_name = '和会员';
-                $order->free_flg = 2;
-                $last_price = $order->total_price =  Config::first()->pluck('vip_price');// 任何减免之前的价格
+    	$user_id = user_info('id');
+    	//是否已生成订单
+    	$order = Order::where('user_id',$user_id)->where('pay_type',6)->where('order_type',1)->first();
 
-                // 优惠券
-                $coupon_id = $request->input('coupon_id');
-                if ($coupon_id) {
-                    $couponuser = CouponUser::where('coupon_id',$coupon_id)
-                        ->where('user_id',$user_id )
-                        ->where('is_used',2)
-                        ->whereNull('used_at')
-                        ->where('expire_at','>',date('Y-m-d'))
-                        ->first();
-                    if ($couponuser) {
-                        $coupon_info = Coupon::find($coupon_id);
-                        // 代金券
-                        if ($coupon_info->type == 1) {
-                            $coupon_score = $coupon_info->cut_money;
-                            $last_price -= $coupon_score;
-                        }
-                        // 折扣券
-                        if ($coupon_info->type == 2) {
-                            $coupon_score = $last_price * (1 - $coupon_info->discount / 100);
-                            $last_price -= $coupon_score;
-                        }
-                        $order->coupon_user_id = $couponuser->id;// 优惠券id
-                        $order->coupon_price = $coupon_score;// 优惠券减免的金额
+    	if (!$order) {
+    		DB::beginTransaction();
+    		try {
+    			// 添加订单（主表 order表）
+    			$order = new Order;
+    			$order->order_code = get_order_code(6);
+    			$order->user_id = $user_id;
+    			$order->pay_type = 6;//1好课 2好看 3壹家壹 4好问提问 5好问偷听 6和会员
+    			$order->order_type = 1;
+    			$order->order_name = '和会员';
+    			$order->free_flg = 2;
+    			$last_price = $order->total_price =  Config::first()->pluck('vip_price');// 任何减免之前的价格
 
-                        // 相应的减少优惠券(coupon_user表更改优惠券的使用状态)
-                        $couponuser->is_used = 1;
-                        $couponuser->used_at = date('Y-m-d H:i:s');
-                        $couponuser->save();
-                    }
-
-                }
-
-                // 积分抵用
-                $is_point = $request->input('is_point');// 积分抵用开关
-                $usable_point = $request->input('usable_point');// 积分减免的积分
-                $usable_money = $request->input('usable_money');;// 积分减免的金额
-                $user = User::find($user_id);
-
-                if ($is_point&&$usable_point>0&&($order->total_price/2)>=$usable_money&&($usable_money*100)==$usable_point&&$usable_point<=$user->score) {
-
-                    $last_price -= $usable_money;
-
-                    $order->point_price = $usable_money;
-
-                    // 相应的减少积分（user 用户表积分减少，user_point 积分增减记录）
-                    $user->score -= $usable_point;
-                    $user->save();
-
-                    $userpoint = new UserPoint;
-                    $userpoint->user_id = $user_id;
-                    $userpoint->point_value = $usable_point;
-                    $userpoint->source = 3;
-                    $userpoint->move_way = 2;
-                    $userpoint->save();
-                }
-
-                // 可用余额
-                $is_balance = $request->input('is_balance');// 可用余额开关
-                $user = User::find($user_id);
-                $usable_balance = $request->input('usable_balance');// 可用余额
-                if ($is_balance&&$usable_balance<=$user->current_balance&&$usable_balance>0) {
-                    $last_price -= $usable_balance;
-                    $order->balance_price = $usable_balance;
-
-                    // 相应的减少余额(user表的当前余额减少,user_balance记录减少)
-                    $user->current_balance -= $usable_balance;
-                    $user->save();
-
-                    $userbalance = new UserBalance;
-                    $userbalance->user_id = $user_id;
-                    $userbalance->amount = $usable_balance;
-                    $userbalance->operate_type = 2;
-                    $userbalance->source = 5;
-                    $userbalance->save();
-                }
-                if ($last_price < 0) {
-                    echo "<script>alert('订单金额异常！');history.go(-1);</script>";
-                    exit;
-                }
-                //实际支付金额为零
-                if ($last_price == 0) {
-                    $order->order_type = '2';
-                    $order->pay_method = '3';
-                    $order->pay_time = date('Y-m-d H:i:s');
-                }
-                $order->price = $last_price;
-                $order->free_flg = 2;
-                $order->save();
-
-                //添加 vip 订单附加信息 （order_vip表
-                $orderVip = new OrderVip();
-                $orderVip->order_id = $order->id;
-                $orderVip->consignee = $addressInfo->name;
-                $orderVip->consignee_tel = $addressInfo->phone;
-                $orderVip->consignee_address = $addressInfo->region . $addressInfo->address;
-                $orderVip->delivery_flg = 1;
-                $orderVip->save();
-                //实际支付金额为零
-                if ($last_price == 0) {
-                    //vip flag
-                    Event::fire(new OrderPaid($order));
-                    User::find($user_id)->update(['vip_flg'=>2]);
-                    DB::commit();
-                    return redirect(route('user'));
-                }
-                DB::commit();
-                return redirect(route('wechat.vip_pay'));
-            }catch (\Exception $e) {
-                DB::rollBack();
-                abort(403,$e->getMessage());
-            }
-        }else{
-            return redirect(route('wechat.vip_pay'));
-        }
+    			if ($last_price < 0) {
+    				echo "<script>alert('订单金额异常！');history.go(-1);</script>";
+    				exit;
+    			}
+    			//实际支付金额为零
+    			if ($last_price == 0) {
+    				$order->order_type = '2';
+    				$order->pay_method = '3';
+    				$order->pay_time = date('Y-m-d H:i:s');
+    			}
+    			$order->price = $last_price;
+    			$order->free_flg = 2;
+    			$order->save();
+    
+    			//添加 vip 订单附加信息 （order_vip表
+    			$orderVip = new OrderVip();
+    			$orderVip->order_id = $order->id;
+    			$orderVip->consignee = '';
+    			$orderVip->consignee_tel = '';
+    			$orderVip->consignee_address = '';
+    			$orderVip->delivery_flg = 1;
+    			$orderVip->save();
+    			//实际支付金额为零
+    			if ($last_price == 0) {
+    				//vip flag
+    				Event::fire(new OrderPaid($order));
+    				User::find($user_id)->update(['vip_flg'=>2]);
+    				DB::commit();
+    				return redirect(route('user'));
+    			}
+    			DB::commit();
+    			return redirect(route('wechat.vip_pay'));
+    		}catch (\Exception $e) {
+    			DB::rollBack();
+    			abort(403,$e->getMessage());
+    		}
+    	}else{
+    		return redirect(route('wechat.vip_pay'));
+    	}
     }
-
 
     // 更换收货地址  页面
     public function receipt_address(Request $request)
@@ -503,6 +424,21 @@ class VipController extends Controller
         }
     }
 
+
+    /**
+     * 我的和会员天数记录
+     */
+    public function records()
+    {
+    	$data = User::with([
+    			'user_point_vip' => function ($query) {
+    				$query->orderBy('id', 'desc');
+    			}
+    	])->find(session('user_info')['id']);
+    
+    	return view('vip.records', ['data' => $data]);
+    }
+    
     /**
      * 禁止和会员操作
      */
@@ -512,5 +448,6 @@ class VipController extends Controller
             abort('403','当前已是和会员身份');
         }
     }
+   
 
 }

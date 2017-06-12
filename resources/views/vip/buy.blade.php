@@ -1,6 +1,6 @@
 @extends('layout.default')
 @section('content')
-    <div id="subject">
+    <div id="subject" style="display:none">
         <div id="main">
             <div class="good_looking">
                 <div class="gl_order_details">
@@ -89,6 +89,10 @@
 
 @section('script')
 <script>
+	$(document).ready(function(){
+		$(".glod_form").submit();
+	});
+                              
     $(document).ready(function(){
         @if (count($errors) > 0)
         var str = '';

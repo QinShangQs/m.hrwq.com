@@ -249,6 +249,13 @@ class WechatController extends Controller
                         //和会员类型 变更 vip_flg
                         if ($order->pay_type == 6) {
                             $this->_user_update($order->user_id, ['vip_flg' => 2]);
+                            //增加和会员天数
+                            $cUser = User::where("id",'=',$order->user_id)->first(); 
+                            $days = 365;
+                            $left_days = get_new_vip_left_day($cUser->vip_left_day, $days);
+                            $left_days = date('Y-m-d',strtotime("+ {$days} day", strtotime()));
+                            UserPointVip::add($order->user_id, $days, 1);
+                            $this->_user_update($order->user_id, ['vip_left_day' => $left_days]);
                         }
                         //好问旁听 分成
                         if ($order->pay_type == 5) {
