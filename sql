@@ -1,4 +1,8 @@
 
+###############2017-06-13#################
+update `user` set vip_left_day = '2018-06-13' where vip_flg = 2;
+
+
 ###############2017-06-10#################
 /*增加和会员剩余天数*/
 alter table `user` add column vip_left_day date;
@@ -16,3 +20,5 @@ create table user_point_vip(
 	`deleted_at` timestamp NULL DEFAULT NULL,
   `remark` varchar(200) CHARACTER SET utf8 DEFAULT NULL COMMENT '备注'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户和会员天数记录';
+
+

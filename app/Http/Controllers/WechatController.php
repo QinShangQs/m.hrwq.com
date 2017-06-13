@@ -16,6 +16,7 @@ use App\Models\Question;
 use App\Models\WechatPayLog;
 use App\Models\IncomeScale;
 use App\Models\UserBalance;
+use App\Models\UserPointVip;
 
 class WechatController extends Controller
 {
@@ -253,7 +254,6 @@ class WechatController extends Controller
                             $cUser = User::where("id",'=',$order->user_id)->first(); 
                             $days = 365;
                             $left_days = get_new_vip_left_day($cUser->vip_left_day, $days);
-                            $left_days = date('Y-m-d',strtotime("+ {$days} day", strtotime()));
                             UserPointVip::add($order->user_id, $days, 1);
                             $this->_user_update($order->user_id, ['vip_left_day' => $left_days]);
                         }

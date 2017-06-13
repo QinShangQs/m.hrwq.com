@@ -74,6 +74,12 @@
                             <li><a href="{{route('vip')}}"><span> <img
                                                 src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                         @endif
+                        @if($data['vip_flg'] == 2 ||  $data['role'] == 2 || $data['role'] == 3)
+                        	<li><a href="{{route('vip.records')}}"><span> <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
+                        @endif
+                        
+                        
                         @if($data['role'] == 2)
                             <li data-value="0" data-state="false" class="mmo_list_button">
                                 <div class="mmo_list_button_1">+</div>
