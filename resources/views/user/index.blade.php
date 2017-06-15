@@ -70,12 +70,11 @@
   
                     </ul>
                     <ul class="mmo_list">
-                        @if($data['vip_flg'] == 1 )
-                            <li><a href="{{route('vip')}}"><span> <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
-                        @endif
-                        @if($data['vip_flg'] == 2 &&( $data['role'] == 2 || $data['role'] == 3))
-                        	<li><a href="{{route('vip.records')}}"><span> <img
+                        @if($data['vip_flg'] == 2 )
+                            <li><a href="{{route('vip.records')}}"><span> <img
+                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>                        
+                        @else
+                        	<li><a href="{{route('vip')}}"><span> <img
                                                 src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                         @endif
                         
