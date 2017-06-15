@@ -8,7 +8,7 @@
                     	<li id="tutor_apply"><a href="#"><span>加入智慧榜，帮助更多家庭&nbsp;<img src="/images/public/select_right.jpg" alt=""/></span>成为指导师</a></li>
                     	<li id="partner_apply"><a href="{{route('partner.apply')}}"><span>加盟合作，普及现代家庭教育&nbsp;<img src="/images/public/select_right.jpg" alt=""/></span>成为合伙人</a></li>
                     @endif
-                    <li><a href="{{route('question')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
+                    <li style="display: none"><a href="{{route('question')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
                     <li><a href="{{route('article',['id'=>2])}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>关于我们</a></li>
                     <li><a href="{{route('article.helpcenter',['type'=>7])}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>帮助中心</a></li>
 

@@ -27,7 +27,7 @@
                         <div class="mmo_line">
                         	<div class="mmo_title">
                         		{{$data['realname'] or $data['nickname']}}
-                        		@if($data['role']=='1'&&$data['vip_flg']=='2')
+                        		@if($data['vip_flg']=='2' && computer_vip_left_day($data['vip_left_day']) > 0)
                         			<img src="/images/my/vip-2.png" alt=""/>
                         		@else
                         			<img src="/images/my/vip-1.png" alt=""/>
@@ -64,7 +64,7 @@
                         <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
                                                                             alt=""/></span>我的问答 @if($new_answer_questions_count>0)
                                     <div>{{$new_answer_questions_count}}</div>@endif</a></li>
-                        <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
+                        <li style="display: none"><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
                                                                         alt=""/></span>家长圈子 @if($unreadTalkCommentCount)
                                     <div>{{$unreadTalkCommentCount}}</div>@endif</a></li>
   
@@ -74,7 +74,7 @@
                             <li><a href="{{route('vip')}}"><span> <img
                                                 src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                         @endif
-                        @if($data['vip_flg'] == 2 ||  $data['role'] == 2 || $data['role'] == 3)
+                        @if($data['vip_flg'] == 2 &&( $data['role'] == 2 || $data['role'] == 3))
                         	<li><a href="{{route('vip.records')}}"><span> <img
                                                 src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
                         @endif

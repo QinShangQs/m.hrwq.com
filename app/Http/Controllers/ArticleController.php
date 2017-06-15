@@ -35,7 +35,12 @@ class ArticleController extends Controller
         $requestUri = $request->getRequestUri();
         //是否已生成订单
         $order = Order::where('user_id',session('user_info')['id'])->where('pay_type',6)->where('order_type',1)->first();
-        return view('article_common', ['article' => $article, 'session_mobile' => $session_mobile, 'requestUri' => $requestUri,'order'=>$order]);
+        
+        // 当前用户
+        $user_id = session('user_info')['id'];
+        $user = User::find($user_id);
+        
+        return view('article_common', ['article' => $article, 'session_mobile' => $session_mobile, 'requestUri' => $requestUri,'order'=>$order,'user'=>$user]);
     }
 
     public function helpcenter($type)

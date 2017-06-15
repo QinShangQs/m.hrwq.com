@@ -8,6 +8,21 @@
     <div id="subject">
         <div id="main">
             <div class="my">
+            	@if($article->type==6)
+            		<div style="padding: 20px 0 10px 0;font-size: 1.8rem;color: rgba(255, 215, 0, 0.49);
+    text-align: center;">
+            			<div style="font-size: 1rem">和会员有效期</div>
+                        <div>
+                            {{ computer_vip_left_day($user['vip_left_day']) }}<span style="font-size:0.8rem">天</span>
+                            @if($user['vip_flg'] == 2)
+	                            <div style="position: absolute;right: 0;top:43px;width: 100px;">
+	                            	  <a href="{{route('vip.records')}}"><span style="color: #999;font-size: 0.3rem;">会员状态</span></a>
+	                            </div>
+	                        @endif
+                        </div>
+            		</div>
+            	@endif
+            
                 <article class="my_integral_introduce">
                     {!! $article->content !!}
                 </article>
@@ -15,7 +30,7 @@
             @if($article->type==6)
             <input type="hidden" name="requestUri" id="requestUri" value="{{$requestUri}}">
                 <div class="mbtd_button">
-                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="开通会员"></a>
+                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{$user['vip_flg'] == 1 ? '开通会员':'续费会员'}}"></a>
                     <a href="{{route('vip.active')}}"><input type="button" class="mbtd_button" value="激活会员卡"></a>
                 </div>
             @endif

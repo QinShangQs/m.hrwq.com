@@ -40,7 +40,7 @@ class VipController extends Controller
      */
     public function buy(Request $request)
     {
-        $this->_vip_abort();
+        //$this->_vip_abort();
 
         $temp = $request->input('temp');//优惠券点击
         $address_id = $request->input('address_id');// 收货地址
@@ -121,7 +121,7 @@ class VipController extends Controller
     			$order->user_id = $user_id;
     			$order->pay_type = 6;//1好课 2好看 3壹家壹 4好问提问 5好问偷听 6和会员
     			$order->order_type = 1;
-    			$order->order_name = '和会员';
+    			$order->order_name = '一年期和会员';
     			$order->free_flg = 2;
     			$last_price = $order->total_price =  Config::first()->pluck('vip_price');// 任何减免之前的价格
 
@@ -374,7 +374,7 @@ class VipController extends Controller
      */
     public function active()
     {
-        $this->_vip_abort();
+        //$this->_vip_abort();
         return view('vip.active');
     }
 

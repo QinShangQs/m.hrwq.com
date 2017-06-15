@@ -387,10 +387,14 @@ if(!function_exists('computer_vip_left_day')) {
 			$left_day = round(($d2-$d1)/3600/24);
 		}
 		
+		if($left_day < 0){
+			$left_day = 0;
+		}
+		
 		if($left_day > 365 * 10){
 			return '永久';
 		}
-		
+
 		return $left_day;
 	}
 }
@@ -405,6 +409,9 @@ if(!function_exists('get_new_vip_left_day')){
 			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
 		}else{
 			$left_days = date('Y-m-d',strtotime("+ {$days} day", strtotime($vip_left_day)));
+		}
+		if($left_days < 0){
+			$left_days = 0;
 		}
 		return $left_days;
 	}
