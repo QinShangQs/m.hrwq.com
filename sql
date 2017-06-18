@@ -1,4 +1,15 @@
 
+###############2017-06-17#################
+/*增加建议留言表*/
+create table leave_word(
+	`id` int auto_increment primary key,
+	`user_id` int not null comment '用户ID',
+	`content` varchar(1000) not null comment '建议内容',
+	`created_at` timestamp not null default '0000-00-00 00:00:00',
+	`updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+	`deleted_at` timestamp NULL DEFAULT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='建议留言表';
+
 ###############2017-06-13#################
 update `user` set vip_left_day = '2018-06-13' where vip_flg = 2;
 

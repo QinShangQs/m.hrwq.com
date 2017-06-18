@@ -812,6 +812,20 @@ transform: rotate(-45deg);
 .my_integral_introduce dd { padding-bottom:18px;}
 .my_integral_introduce dd p { font-size:12px; color:#666; line-height:18px; text-indent:24px;}
 .my_integral_introduce dd p span { padding-left:24px; display:block;}
+.my-intro-user {padding: 0.938rem 0 0 0;font-size: 0.938rem;color:#c8bf97 ;text-align: center;}
+.my-intro-user .period {margin-top: 0.3rem}
+.my-intro-user .period .day{font-size: 2rem}
+.my-intro-user .period .hot {position: absolute;right: 0;top:3.2rem;width: 100px;}
+.my-intro-user .period .hot .link {color: #999;font-size:0.938rem}
+.my-intro-user .period .hot .link li {display:block;background:#f00;border-radius:50%;width:0.4em;height:0.4em;top:0.2rem;right:1rem;position:absolute;}
+
+/*----------我-我的会员状态记录----------*/
+.my-records {height: 3rem;font-size:1rem;display: flex; background-color: #fff; margin: 0.8rem 0; justify-content: center;align-items: center;}
+.my-records-list {background-color: #fff;margin: 0 0.5rem;font-size: 0.8rem;}
+.my-records-list .item {padding: 0 0.5rem;line-height: 2rem; border: 1px solid #f6f6f6;border-bottom-color:#fff}
+
+.my-records-list .item td {width:33%}
+.my-records-list .item td:last-child {text-align:right;color:#ed6d11;}
 
 /*----------我-指导师-我的回答----------*/
 .my_instructor_my_answer {}
@@ -1198,4 +1212,36 @@ p {}
 .vcoures-item .foot .favor img{
     width: 0.65rem;
     margin: 0 0.2rem;
+}
+
+/*----------建议留言------------*/
+.leave-word{
+	margin:0 1rem;
+}
+.leave-word .title{
+	margin:0.8rem 0;
+	color:#ed6d11;
+	font-size:1rem;
+}
+
+.leave-word .content textarea{
+	width:95%;
+	height:15rem;
+	font-size:0.93rem;
+	padding:0.5rem;
+}
+
+.leave-word-footer{
+	position: fixed;
+	bottom: 0px;
+	width:100%;
+}
+
+.leave-word-footer button{
+	width:100%;
+	border:0;
+	background-color: #ed6d11;
+	font-size:1rem;
+	height:2.5rem;
+	color:#fff;
 }

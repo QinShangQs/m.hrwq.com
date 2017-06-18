@@ -268,6 +268,12 @@ Route::group(['prefix' => 'article', 'middleware' => ['FrontWechat']], function 
     Route::get('/{id}', 'ArticleController@show')->name('article');
 });
 
+//建议留言
+Route::group(['prefix' => 'leaveword', 'middleware' => ['FrontAuth']], function () {
+	Route::get('/index', 'LeaveWordController@index')->name('leaveword');
+	Route::post('/create', 'LeaveWordController@create')->name('leaveword.create');
+});
+
 /** 用户分享的事件回调 */
 Route::group(['prefix' => 'share', 'middleware' => ['FrontWechat']], function () {
     Route::post('/', 'ShareController@index')->name('share');

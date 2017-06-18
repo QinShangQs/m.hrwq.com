@@ -9,14 +9,17 @@
         <div id="main">
             <div class="my">
             	@if($article->type==6)
-            		<div style="padding: 20px 0 10px 0;font-size: 1.8rem;color: rgba(255, 215, 0, 0.49);
-    text-align: center;">
-            			<div style="font-size: 1rem">和会员有效期</div>
-                        <div>
-                            {{ computer_vip_left_day($user['vip_left_day']) }}<span style="font-size:0.8rem">天</span>
+            		<div class="my-intro-user" >
+            			<div >和会员有效期</div>
+                        <div class="period" >
+                            <span class="day">{{ computer_vip_left_day($user['vip_left_day']) }}</span><span>天</span>
                             @if($user['vip_flg'] == 2)
-	                            <div style="position: absolute;right: 0;top:43px;width: 100px;">
-	                            	  <a href="{{route('vip.records')}}"><span style="color: #999;font-size: 0.3rem;">会员状态</span></a>
+	                            <div class="hot">
+	                            	  <a href="{{route('vip.records')}}">
+	                            	  	<span class="link">会员状态
+	                            	  		<li></li>
+	                            	  	</span>
+	                            	  </a>
 	                            </div>
 	                        @endif
                         </div>
