@@ -1,9 +1,11 @@
 @extends('layout.default')
 @section('content')
+<div id="qrcode" style="display:none;margin-top:15px;"></div>
+<img id="lovebg" style="display:none" src="{{$lovebg64}}" >
 <div id="subject">
     <div id="main">
         <div class="share-love">
-            <div class="banner"><img src="/images/share/love-bg.png" alt=""/></div>
+            <div class="banner"><img id="banner" src="/images/share/love-bg.png" alt=""/></div>
             <div class="footer">
             	<div class="tip">
             		<span class="title">爱心大使二维码海报使用指南</span>
@@ -26,8 +28,42 @@
         </div>
     </div>
 </div>
+
+
+
 @endsection
 @section('script')
+	<script type="text/javascript" src="/js/qrcode.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var qrcode = new QRCode(document.getElementById("qrcode"), {
+			text: 'http://m.hrwq.com',
+			width : 100,
+			height : 100
+		});
+
+		setTimeout(function(){
+			var c = document.createElement('canvas');
+			var ctx = c.getContext('2d');
+
+			c.width = 750;
+			c.height = 1088;
+			ctx.rect(0,0,c.width,c.height);
+			ctx.fillStyle='#fff';//画布填充颜色
+			ctx.fill();
+
+			var img = new Image();
+			img.src = $('#lovebg').attr('src');
+			ctx.drawImage(img,0,0,c.width,c.height);
+			var img2 = new Image();
+			img2.src = $("#qrcode img").eq(0).attr('src');
+			ctx.drawImage(img2,315,695,120,120);
+
+			var finalSrc = c.toDataURL("image/jpeg",0.8);
+			$("#banner").attr('src', finalSrc) ;
+		},2000);
+	});
+	</script>
    	<script type="text/javascript">
 		$(function(){
 			$(".share-love .footer .detail").click(function(){

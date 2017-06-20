@@ -47,7 +47,7 @@
                         @endif
                         
                         <div class="mmo_identity">
-                            <a href="{{route('vip')}}">
+                            <a href="{{route('article',['id'=>6])}}">
                             	<div class="mmo_identity_1">
                             		<div class="grow_txt">和会员有效期</div>
                             		<div class="grow">
@@ -70,13 +70,9 @@
   
                     </ul>
                     <ul class="mmo_list">
-                        @if($data['vip_flg'] == 2 )
-                            <li><a href="{{route('vip.records')}}"><span> <img
+                        <li><a href="{{route('article',['id'=>6])}}"><span> <img
                                                 src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>                        
-                        @else
-                        	<li><a href="{{route('vip')}}"><span> <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>
-                        @endif
+                       
                         
                         
                         @if($data['role'] == 2)
