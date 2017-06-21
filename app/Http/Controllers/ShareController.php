@@ -17,10 +17,17 @@ class ShareController extends Controller
     
     public function loveAngle(){
     	$lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.png')) ;
-    	//$lovebg64 = $this->getbase64();
-//     	$lovebg64 = file_get_contents(public_path('images/share/love-bg.png'));
-//     	$lovebg64 = base64_encode($lovebg64);
-    	return view('share.love_angle', ['lovebg64'=>$lovebg64]);
+
+    	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64]);
+    }
+    
+    public function hot($id){
+    	$userinfo = user_info();
+    	if($userinfo['vip_flg'] == 2){
+    		return redirect("/vcourse");
+    	}else{
+    		return redirect("/article/6");
+    	}
     }
     
     private function base64EncodeImage ($image_file) {

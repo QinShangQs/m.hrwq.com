@@ -1,6 +1,11 @@
 @extends('layout.default')
 @section('content')
 <div id="qrcode" style="display:none;margin-top:15px;"></div>
+<canvas id="namevas" width="200px" height="15px" style="display:none">
+您的浏览器不支持canvas标签。
+</canvas>
+<img id="vasimg" style="display:none" />
+
 <img id="lovebg" style="display:none" src="{{$lovebg64}}" >
 <div id="subject">
     <div id="main">
@@ -37,15 +42,27 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var qrcode = new QRCode(document.getElementById("qrcode"), {
-			text: 'http://m.hrwq.com',
+			text: "{{ route('sharelove.hot',['id'=> $data['id'] ] ) }}",
 			width : 100,
 			height : 100
 		});
 
+		(function(){
+			var canvas = document.getElementById("namevas");
+			var ctx = canvas.getContext("2d");
+			ctx.strokeStyle = "#ed6d11";
+			ctx.stroke();
+			ctx.font="15px";
+			ctx.textAlign = 'center';
+			ctx.strokeText("我是 {{$data['nickname']}}", 100, 13);
+
+			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
+		})();
+
 		setTimeout(function(){
 			var c = document.createElement('canvas');
 			var ctx = c.getContext('2d');
-
+			
 			c.width = 750;
 			c.height = 1088;
 			ctx.rect(0,0,c.width,c.height);
@@ -58,10 +75,13 @@
 			var img2 = new Image();
 			img2.src = $("#qrcode img").eq(0).attr('src');
 			ctx.drawImage(img2,315,695,120,120);
+			var img3 = new Image();
+			img3.src = $("#vasimg").attr('src');
+			ctx.drawImage(img3,270,885,200,23);
 
-			var finalSrc = c.toDataURL("image/jpeg",0.8);
+			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;
-		},2000);
+		},1000);
 	});
 	</script>
    	<script type="text/javascript">

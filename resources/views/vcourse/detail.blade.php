@@ -423,7 +423,7 @@ $(document).ready(function(){
         if (lockp) {return;}
         //未登录
         @if(empty(@$user_info['mobile']))
-            Popup.init({
+            /*Popup.init({
                 popHtml:'<p>您尚未注册，请先完成注册。</p>',
                 popOkButton:{
                     buttonDisplay:true,
@@ -442,7 +442,7 @@ $(document).ready(function(){
                     flashSwitch:false
                 }
             });
-            return false;
+            return false;*/
         @endif
         //免费
         @if($vcourseDetail->type=='1'||@$user_info['vip_flg']=='2')
