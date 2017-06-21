@@ -42,7 +42,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var qrcode = new QRCode(document.getElementById("qrcode"), {
-			text: "{{ route('sharelove.hot',['id'=> $data['id'] ] ) }}",
+			text: "{{ route('share.hot',['id'=> $data['id'] ] ) }}",
 			width : 100,
 			height : 100
 		});

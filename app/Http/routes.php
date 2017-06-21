@@ -278,8 +278,5 @@ Route::group(['prefix' => 'leaveword', 'middleware' => ['FrontAuth']], function 
 Route::group(['prefix' => 'share', 'middleware' => ['FrontWechat']], function () {
     Route::post('/', 'ShareController@index')->name('share');
     Route::get('/love_angle', 'ShareController@loveAngle')->name('share.angle');
-});
-
-Route::group(['prefix' => 'sharelove', 'middleware' => ['FrontAuth','FrontWechat']], function () {
-	Route::get('/hot/{id}', 'ShareController@hot')->name('share.hot');
+    Route::get('/hot/{id}', 'ShareController@hot')->name('share.hot');
 });
