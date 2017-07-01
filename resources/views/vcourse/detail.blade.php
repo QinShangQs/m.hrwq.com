@@ -299,12 +299,17 @@ $(document).ready(function(){
         "preload": "none",
         "poster": poster
     }, function() {
-        this.src({
-            type: vType(),
-            src: vLink
-        });
-        var player = this;
-        player.play();
+		document.addEventListener("WeixinJSBridgeReady", function () { 
+			var player = videojs('video-embed');
+			player.src({
+	            type: vType(),
+	            src: vLink
+	        });
+			if(browserOS() == 'ios' || browserOS() == 'pc'){
+				player.play();
+			}
+		}, true); 
+		
     }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
 
     $('.lcd_banner_div').click(function(event) {

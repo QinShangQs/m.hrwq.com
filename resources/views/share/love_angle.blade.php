@@ -43,8 +43,8 @@
 	$(document).ready(function(){
 		var qrcode = new QRCode(document.getElementById("qrcode"), {
 			text: "{{ route('share.hot',['id'=> $data['id'] ] ) }}",
-			width : 100,
-			height : 100
+			width : 155,
+			height : 155
 		});
 
 		(function(){
@@ -52,10 +52,9 @@
 			var ctx = canvas.getContext("2d");
 			ctx.strokeStyle = "#ed6d11";
 			ctx.stroke();
-			ctx.font="15px";
-			ctx.textAlign = 'center';
-			ctx.strokeText("我是 {{$data['nickname']}}", 100, 13);
-
+			ctx.font="18px";
+			ctx.textAlign = '';
+			ctx.strokeText("{{$data['nickname']}}", 0, 13);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
 		})();
 
@@ -64,7 +63,7 @@
 			var ctx = c.getContext('2d');
 			
 			c.width = 750;
-			c.height = 1088;
+			c.height = 1344;
 			ctx.rect(0,0,c.width,c.height);
 			ctx.fillStyle='#fff';//画布填充颜色
 			ctx.fill();
@@ -74,10 +73,10 @@
 			ctx.drawImage(img,0,0,c.width,c.height);
 			var img2 = new Image();
 			img2.src = $("#qrcode img").eq(0).attr('src');
-			ctx.drawImage(img2,315,695,120,120);
+			ctx.drawImage(img2,295,860,155,155);
 			var img3 = new Image();
 			img3.src = $("#vasimg").attr('src');
-			ctx.drawImage(img3,270,885,200,23);
+			ctx.drawImage(img3,400,1069,400,30);
 
 			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;

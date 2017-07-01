@@ -95,3 +95,12 @@ $(document).ready(function(){//公用脚本
 		}, 600);
 	}
 });
+
+function browserOS(){
+	var u = navigator.userAgent, app = navigator.appVersion;
+	var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1;
+	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); 
+	if(isAndroid) return 'android';
+	if(isiOS) return 'ios';
+	return 'pc';
+}

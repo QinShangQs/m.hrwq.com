@@ -1110,7 +1110,7 @@ transform: rotate(-45deg);
 .share-love{
     width: 100%;
 }
-.share-love .banner{}
+.share-love .banner{margin-bottom: 2.2rem}
 .share-love .banner img{width:100%}
 .share-love .footer{
     background-color: #FFFFFF;
