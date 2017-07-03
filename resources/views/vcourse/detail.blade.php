@@ -299,17 +299,28 @@ $(document).ready(function(){
         "preload": "none",
         "poster": poster
     }, function() {
-		document.addEventListener("WeixinJSBridgeReady", function () { 
-			var player = videojs('video-embed');
+    	if(browserOS() == 'pc'){
+    		var player = videojs('video-embed');
 			player.src({
 	            type: vType(),
 	            src: vLink
 	        });
-			if(browserOS() == 'ios' || browserOS() == 'pc'){
-				player.play();
-			}
-		}, true); 
-		
+	        
+			player.play();
+		}else{
+			document.addEventListener("WeixinJSBridgeReady", function () { 
+				var player = videojs('video-embed');
+				player.src({
+		            type: vType(),
+		            src: vLink
+		        });
+		        
+		        console.log('browserOS is ' + browserOS());
+				if(browserOS() != 'android'){
+					player.play();
+				}
+			}, true);
+		}
     }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
 
     $('.lcd_banner_div').click(function(event) {
