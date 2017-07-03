@@ -16,7 +16,7 @@ class ShareController extends Controller
     }
     
     public function loveAngle(){
-    	$lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.png')) ;
+    	$lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg')) ;
 
     	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64]);
     }

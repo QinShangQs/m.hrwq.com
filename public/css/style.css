@@ -1110,8 +1110,12 @@ transform: rotate(-45deg);
 .share-love{
     width: 100%;
 }
-.share-love .banner{margin-bottom: 2.2rem}
-.share-love .banner img{width:100%}
+.share-love .banner{margin-bottom: 2.2rem;padding:0rem 2.2rem 0 2.2rem;}
+.share-love .banner img{
+	width:100%;
+	webkit-box-shadow: 0 0 15px 5px #ececec;
+    box-shadow: 0 0 15px 5px #ececec;
+	}
 .share-love .footer{
     background-color: #FFFFFF;
     padding-left: 1.12rem;

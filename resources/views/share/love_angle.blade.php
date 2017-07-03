@@ -10,7 +10,8 @@
 <div id="subject">
     <div id="main">
         <div class="share-love">
-            <div class="banner"><img id="banner" src="/images/share/love-bg.png" alt=""/></div>
+        	<div style="text-align:center;color:black;font-size:1.05rem;line-height:2.2rem">长按图片保存到相册</div>
+            <div class="banner"><img id="banner" src="/images/share/love-bg.jpg" alt=""/></div>
             <div class="footer">
             	<div class="tip">
             		<span class="title">爱心大使二维码海报使用指南</span>
@@ -50,11 +51,11 @@
 		(function(){
 			var canvas = document.getElementById("namevas");
 			var ctx = canvas.getContext("2d");
-			ctx.strokeStyle = "#ed6d11";
+			ctx.strokeStyle = "#ff6000";
 			ctx.stroke();
 			ctx.font="18px";
-			ctx.textAlign = '';
-			ctx.strokeText("{{$data['nickname']}}", 0, 13);
+			ctx.textAlign = 'Center';
+			ctx.strokeText("我是{{$data['nickname']}}", 50, 13);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
 		})();
 
@@ -73,10 +74,10 @@
 			ctx.drawImage(img,0,0,c.width,c.height);
 			var img2 = new Image();
 			img2.src = $("#qrcode img").eq(0).attr('src');
-			ctx.drawImage(img2,295,860,155,155);
+			ctx.drawImage(img2,300,860,155,155);
 			var img3 = new Image();
 			img3.src = $("#vasimg").attr('src');
-			ctx.drawImage(img3,400,1069,400,30);
+			ctx.drawImage(img3,235,1060,400,30);
 
 			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;
