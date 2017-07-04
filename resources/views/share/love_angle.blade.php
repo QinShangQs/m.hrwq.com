@@ -10,7 +10,7 @@
 <div id="subject">
     <div id="main">
         <div class="share-love">
-        	<div style="text-align:center;color:black;font-size:1.05rem;line-height:2.2rem">长按图片保存到相册</div>
+        	<div style="text-align:center;color:black;font-size:0.9rem;line-height:2.2rem">长按图片保存到相册</div>
             <div class="banner"><img id="banner" src="/images/share/love-bg.jpg" alt=""/></div>
             <div class="footer">
             	<div class="tip">
@@ -51,11 +51,11 @@
 		(function(){
 			var canvas = document.getElementById("namevas");
 			var ctx = canvas.getContext("2d");
-			ctx.strokeStyle = "#ff6000";
+			ctx.fillStyle = "#ff6000";
 			ctx.stroke();
 			ctx.font="18px";
-			ctx.textAlign = 'Center';
-			ctx.strokeText("我是{{$data['nickname']}}", 50, 13);
+			ctx.textAlign = 'center';
+			ctx.fillText("我是{{$data['nickname']}}", 100, 13);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
 		})();
 
@@ -77,7 +77,7 @@
 			ctx.drawImage(img2,300,860,155,155);
 			var img3 = new Image();
 			img3.src = $("#vasimg").attr('src');
-			ctx.drawImage(img3,235,1060,400,30);
+			ctx.drawImage(img3,150,1060,450,35);
 
 			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;
