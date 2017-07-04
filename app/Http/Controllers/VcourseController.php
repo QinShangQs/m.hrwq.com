@@ -45,8 +45,16 @@ class VcourseController extends Controller
         //热门搜索
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
+        
+        $data = file_get_contents('/mnt/sug_link.log');
+        if(!empty($data)){
+        	list($telecast, $foreshow) = explode("\n", $data);
+        }else{
+        	$telecast = '';
+        	$foreshow = '';
+        }
 
-        return view('vcourse.index', compact('vcourseList','hot_search', 'wx_js'));
+        return view('vcourse.index', compact('vcourseList','hot_search', 'wx_js','telecast','foreshow'));
     }
 
     /** 好看课程搜索 */

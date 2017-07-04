@@ -46,6 +46,16 @@
                 <div class="public_search_delete">清除搜索记录</div><!--若没有最近搜索信息,则不显示清除搜索记录-->
             </div>
             <div style="height:3rem"></div>
+            <div style="width:100%;background-color:#fff;height: 2.5rem;margin-bottom: 0.5rem;">
+            	<table style="width:100%;height:100%;text-align:center">
+            		<tr>
+            			<td><a style="font-size:1rem;" href="{{$telecast}}">直播入口</a> <img style="width:1rem" src="/images/vcourse/telecast.png"/></td>
+            			<td style="width:1%"><img style="height:1.2rem" src="/images/vcourse/line.png"/></td>
+            			<td><a style="font-size:1rem;" href="{{$foreshow}}">视频预告</a> <img style="width:0.8rem" src="/images/vcourse/foreshow.png"/></td>
+            		</tr>
+            	</table>
+            </div>
+            
             @foreach ($vcourseList as $item)
             <div class="vcoures-item">
             	<div class="title">
@@ -96,8 +106,7 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
-<script type="text/javascript" src="js/jquery.touchSlider.js"></script><!--幻灯效果-->
+
 <script type="text/javascript" src="/js/history_search.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -200,63 +209,7 @@ $(document).ready(function(){//搜索
   
 });
 </script>
-<script type="text/javascript">
-$(document).ready(function(){//幻灯效果
-    $(".main_visual").hover(function(){
-        $("#btn_prev,#btn_next").fadeIn()
-    },function(){
-        $("#btn_prev,#btn_next").fadeOut()
-    });
-    
-    $dragBln = false;
-    
-    $(".main_image").touchSlider({
-        flexible : true,
-        speed : 200,
-        btn_prev : $("#btn_prev"),
-        btn_next : $("#btn_next"),
-        paging : $(".flicking_con a"),
-        counter : function (e){
-            $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
-        }
-    });
-    
-    $(".main_image").bind("mousedown", function() {
-        $dragBln = false;
-    });
-    
-    $(".main_image").bind("dragstart", function() {
-        $dragBln = true;
-    });
-    
-    $(".main_image a").click(function(){
-        if($dragBln) {
-            return false;
-        }
-    });
-    
-    timer = setInterval(function(){
-        $("#btn_next").click();
-    }, 5000);
-    
-    $(".main_visual").hover(function(){
-        clearInterval(timer);
-    },function(){
-        timer = setInterval(function(){
-            $("#btn_next").click();
-        },5000);
-    });
-    
-    $(".main_image").bind("touchstart",function(){
-        clearInterval(timer);
-    }).bind("touchend", function(){
-        timer = setInterval(function(){
-            $("#btn_next").click();
-        }, 5000);
-    });
-    $(".main_visual").height($(".main_visual").width()/750*300);
-});
-</script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 	var lockf = false;
