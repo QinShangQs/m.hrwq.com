@@ -18,6 +18,7 @@ use App\Models\Coupon;
 use App\Models\CouponUser;
 use App\Models\UserBalance;
 use App\Models\UserPoint;
+use App\Models\UserPointVip;
 use DB,Event,Wechat;
 
 class VipController extends Controller
@@ -400,14 +401,15 @@ class VipController extends Controller
             $update['activated_vip'] = user_info('id');
 
             $user = User::find(user_info('id'));
-            if($user->vip_flg == 2) {
-                return response()->json(['code' => 5, 'message' => '当前已是和会员身份!']);
-            }
-
+            $days = 365;
+            $left_days = get_new_vip_left_day($user->vip_left_day, $days);
+            UserPointVip::add($user->id, $days, 2);
+ 
             $user_update = [];
             $user_update['vip_flg'] = 2;
             $user_update['vip_code'] = $code;
-
+            $user_update['vip_left_day'] = $left_days;
+            
             DB::beginTransaction();
             try {
                 ///更新卡号状态
