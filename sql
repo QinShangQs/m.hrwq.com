@@ -1,3 +1,14 @@
+###############2017-07-09#################
+alter table `order` add column lover_id int default 0 comment '爱心大使用户ID';
+
+###############2017-07-08#################
+/*爱心大使分成*/
+insert into income_scale(`key`,`value`,`created_at`,`updated_at`)
+values(3,'a:3:{s:7:"p_scale";s:1:"0";s:7:"t_scale";s:2:"40";s:7:"a_scale";s:2:"60";}','2017-07-08 15:36:00','2017-07-08 15:36:00');
+
+###############2017-07-06#################
+alter table `user` add column lover_id int default 0 comment '爱心大使用户ID';
+alter table `user` add column lover_time datetime comment '爱心大使ID登记时间';
 
 ###############2017-06-17#################
 /*增加建议留言表*/

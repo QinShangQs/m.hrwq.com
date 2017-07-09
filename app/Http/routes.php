@@ -36,11 +36,12 @@ Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat', 'FrontAuth']
 Route::group(['prefix' => 'wechat'], function () {
     Route::get('/qrcode', 'WechatController@qrcode')->name('wechat.qrcode');
 });
-Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat', 'FrontAuth']], function () {
+Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat']], function () {
     Route::get('/vcourse_pay', 'WechatController@vcourse_pay')->name('wechat.vcourse_pay');
     Route::get('/course_pay', 'WechatController@course_pay')->name('wechat.course_pay');
     Route::get('/vip_pay', 'WechatController@vip_pay')->name('wechat.vip_pay');
     Route::get('/opo-pay', 'WechatController@opoPay')->name('wechat.opo.pay');
+    Route::get('/vip_listen', 'WechatController@vip_listen')->name('wechat.vip_listen');
 });
 
 //好课
@@ -244,7 +245,7 @@ Route::group(['prefix'=>'vip','middleware' => ['FrontWechat']], function (){
 });
 
 /** 和会员业务 */
-Route::group(['prefix'=>'vip','middleware' => ['FrontWechat', 'FrontAuth']], function (){
+Route::group(['prefix'=>'vip','middleware' => ['FrontWechat']], function (){
     Route::any('/buy', 'VipController@buy')->name('vip.buy');
     Route::post('/create_order', 'VipController@create_order')->name('vip.create_order');
     Route::get('/active', 'VipController@active')->name('vip.active');

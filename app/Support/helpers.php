@@ -399,10 +399,14 @@ if(!function_exists('computer_vip_left_day')) {
 	}
 }
 
-/**
- * 增加天数的和会员有效期
- */
+
 if(!function_exists('get_new_vip_left_day')){
+	/**
+	 * 增加天数的和会员有效期
+	 * @param date $vip_left_day 格式date('Y-m-d')
+	 * @param int $days 新增天数
+	 * @return 新的和会员有效期格式如date('Y-m-d')
+	 */
 	function get_new_vip_left_day($vip_left_day, $days){
 		$left_days = 0;
 		if(empty($vip_left_day)){
@@ -414,5 +418,26 @@ if(!function_exists('get_new_vip_left_day')){
 			$left_days = 0;
 		}
 		return $left_days;
+	}
+}
+
+
+if(!function_exists('diff_two_days')){
+	/**
+	 * 得到两个日期间的天数
+	 * @param string $day1 date('Y-m-d H:i:s')
+	 * @param string $day2 date('Y-m-d H:i:s')
+	 * @return number 相差天数
+	 */
+	function diff_tow_days($day1, $day2){
+		$second1 = strtotime ( $day1 );
+		$second2 = strtotime ( $day2 );
+		
+		if ($second1 < $second2) {
+			$tmp = $second2;
+			$second2 = $second1;
+			$second1 = $tmp;
+		}
+		return intval( ($second1 - $second2) / 86400);
 	}
 }

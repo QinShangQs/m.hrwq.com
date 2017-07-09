@@ -218,7 +218,7 @@ class WechatController extends Controller
         $order = Order::find(request('order_id'));
         if ($order == null)
             return response()->json(['code' => 1, 'message' => '订单信息查询失败']);
-        return response()->json(['code' => 0, 'data' => $order->order_type]);
+        return response()->json(['code' => 0, 'data' => $order->order_type,'user' => user_info()]);
     }
 
     /**
@@ -226,7 +226,7 @@ class WechatController extends Controller
      */
     public function notify()
     {
-	Log::debug(\Input::fullUrl());
+		Log::debug(\Input::fullUrl());
         $payment = Wechat::payment();
         $response = $payment->handleNotify(function ($notify, $successful) {
 		Log::debug($notify);
@@ -250,13 +250,12 @@ class WechatController extends Controller
                         //和会员类型 变更 vip_flg
                         if ($order->pay_type == 6) {
                             $this->_user_update($order->user_id, ['vip_flg' => 2]);
-                            //增加和会员天数
-                            $cUser = User::where("id",'=',$order->user_id)->first(); 
-                            $days = 365;
-                            $left_days = get_new_vip_left_day($cUser->vip_left_day, $days);
-                            UserPointVip::add($order->user_id, $days, 1);
-                            $this->_user_update($order->user_id, ['vip_left_day' => $left_days]);
+                            //计算奖励和收益分成
+                            $lover_id = $this->_vip_listen($order->user_id,$order->total_price);
+                            //关联爱心大使
+                            $this->_order_update_lover($order, $lover_id);
                         }
+                        
                         //好问旁听 分成
                         if ($order->pay_type == 5) {
                             $this->_user_listen($order->pay_id);
@@ -522,6 +521,69 @@ class WechatController extends Controller
         $wechatPayLog->transaction_id = $notify->transaction_id;
         $wechatPayLog->save();
     }
+    //http://m.qs.tunnel.qydev.com/wechat/vip_listen?user_id=2795&order_amount=365
+    public function vip_listen(Request $request){
+    	echo $this->_vip_listen($request->input('user_id'), $request->input('order_amount'));
+    }
+    
+    /**
+     * 和会员会员天数计算、爱心大使分享奖励
+     * @param unknown $user_id 用户ID
+     * @param unknown $order_amount 订单金额
+     * @return 用户的爱心大使ID
+     */
+    private function _vip_listen($user_id, $order_amount){
+    	//增加和会员天数
+    	$cUser = User::where("id",'=',$user_id)->first();
+    	$days = 365;
+    	$left_days = get_new_vip_left_day($cUser->vip_left_day, $days);
+    	UserPointVip::add($cUser->id, $days, 1);
+    	$this->_user_update($cUser->id, ['vip_left_day' => $left_days]);
+    	
+    	//爱心大使分享来的用户
+    	if($cUser->lover_id != 0){
+    		$diff_day = diff_tow_days($cUser->lover_time, date('Y-m-d H:i:s'));
+    		if($diff_day <= 7){
+    			//被分享奖励
+    			$days = 7;
+    			$left_days = get_new_vip_left_day($left_days, $days);
+    			UserPointVip::add($cUser->id, $days, 3);
+    			$this->_user_update($cUser->id, ['vip_left_day' => $left_days]);
+    	
+    			//分享者奖励
+    			$lover = User::where("id",'=',$cUser->lover_id)->first();
+    			//dd($lover);
+    			if($lover->role == 1){//普通用户或和和会员
+    				$days = 15;
+    				$lover_left_days = get_new_vip_left_day($lover->vip_left_day, $days);
+    				UserPointVip::add($lover->id, $days, 4);
+    				$this->_user_update($lover->id, ['vip_left_day' => $lover_left_days]);
+    			} else if($lover->role == 2 || $lover->role == 3){//导师
+    				//爱心大使和会员支付后收益分成
+    				$incomeScale = IncomeScale::where('key', '3')->first();
+    				$incomeScaleArr = unserialize($incomeScale->value);
+    				if ($lover->role == 2){//指导师
+    					$amount = $order_amount * $incomeScaleArr['t_scale'] / 100;
+    				}else if($lover->role == 3){//合伙人，以提问人比例替代
+    					$amount = $order_amount * $incomeScaleArr['a_scale'] / 100;
+    				}
+    				$lover->increment('current_balance', $amount);  //总收益 & 余额 ++
+    				$lover->increment('balance', $amount);
+    				//用户余额记录
+    				$user_balance = [];
+    				$user_balance['user_id'] = $lover->id;
+    				$user_balance['amount'] = $amount;
+    				$user_balance['operate_type'] = '1';
+    				$user_balance['source'] = '9';
+    				$user_balance['remark'] = "推荐{$cUser->nickname}成为和会员";
+    				UserBalance::create($user_balance);
+    				Log::info('lover_relation', ['id='.$lover->id.":".$lover->nickname.$user_balance['remark']]);
+    			} 
+    		}
+    	}
+    	
+    	return $cUser->lover_id;
+    }
 
     /**
      * 订单状态更新
@@ -532,6 +594,17 @@ class WechatController extends Controller
         $order->pay_method = '1';
         $order->order_type = '2';
         $order->save();
+    }
+    
+    /**
+     * 更新订单爱心大使
+     * @param unknown $order
+     * @param unknown $lover_id
+     */
+    private function _order_update_lover($order, $lover_id)
+    {
+    	$order->lover_id = $lover_id;
+    	$order->save();
     }
 
     private function _user_update($uid, $update)

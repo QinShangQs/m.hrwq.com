@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Session;
 use Route;
-use App;
+use App,Log;
 use App\Models\User;
 class FrontWechat
 {
@@ -18,6 +18,13 @@ class FrontWechat
      */
     public function handle($request, Closure $next)
     {
+    	$lover_id = 0;
+    	$lover_time = null;
+    	if(preg_match('/share\/hot\/(\d+)/i', $request->path(), $out)){
+    		$lover_id = $out[1];
+    		$lover_time = date('Y-m-d H:i:s');
+    	}
+    	
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
             if (strpos($user_agent, 'MicroMessenger') !== false ) {
@@ -41,6 +48,19 @@ class FrontWechat
                     if ($request->session()->get('user_info')) {
                         return $next($request);
                     }
+                    
+                    //通过爱心大使成为用户，但没有注册，且不是和会员，同时关联关系大于7天，则建立新的关系
+                    if($lover_id != 0 && $user_info['lover_id'] != 0 && empty($user_info['mobile']) && $user_info['vip_flg'] == 1){
+                    	$diff_day = diff_tow_days($user_info['lover_time'], date('Y-m-d H:i:s'));
+//                     	var_dump($diff_day);
+//                     	dd($user_info);
+                    	if($diff_day > 7){
+                    		Log::info('lover_relation', ['用户'.$user_info['id']."与".$user_info['lover_id']."取消关系"]);
+                    		User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
+                    		Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
+                    	}
+                    }
+                    
                     User::whereOpenid($wechat_user['openid'])->update(['last_login' => date('Y-m-d H:i:s', time())]);
                     $request->session()->set('user_info', $user_info->toArray());
                 } elseif ($user_info && $user_info['id'] > 0&&$user_info['block']=='2') {
@@ -69,6 +89,9 @@ class FrontWechat
                         $userModel->nickname = $wechat_user['nickname'];
                         $userModel->profileIcon = '/'.$profileIcon;
                         $userModel->sex = $wechat_user['sex'];
+                        
+                        $userModel->lover_id = $lover_id;
+                        $userModel->lover_time = $lover_time;
                         if($userModel->save()){
                             $request->session()->set('user_info', $userModel->toArray());
                             return $next($request);

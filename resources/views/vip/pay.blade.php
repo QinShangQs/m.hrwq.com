@@ -46,7 +46,12 @@ function checkStatus() {
         data: {order_id: "{{$order->id}}"},
         success: function (res) {
             if (res.code == 0 && res.data == "2") {
-                location.href = '{{route('user')}}';
+                if(res.user.mobile){
+                	location.href = '{{route('user')}}';
+                }else{
+                	location.href = '{{route('user.login')}}';
+                }
+                
             }
         },
         error: function () {
