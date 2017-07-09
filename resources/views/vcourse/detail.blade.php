@@ -237,7 +237,14 @@ $(document).ready(function(){
 
         return type;
     };
-    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;"></video>');
+
+    @if($vcourseDetail->cover)
+        var poster = '{{ config('constants.admin_url').$vcourseDetail->cover}}';
+    @else
+        var poster = vLink + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
+    @endif;
+    
+    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" poster="'+poster+'"></video>');
     $('#video-container').empty();
     $('#video-container').append(player);
 
@@ -263,12 +270,7 @@ $(document).ready(function(){
                 buttonName:"我要加入",
                 buttonfunction:function(){
                 	location.href='{{ url("article/6") }}';
-//                      @if(@$user_info['vip_flg']=='2')
-//                     	 location.href='{{ url(".buy") }}';
-//                      @else
-//                     	 location.href='{{ url("/user/login?url=/vcourse/detail/".@$vcourseDetail->id) }}';
-//                      @endif
-                     return false;
+                    return false;
                 }
             },
             popCancelButton:{
@@ -283,21 +285,16 @@ $(document).ready(function(){
       };
     };
 
-    @if($vcourseDetail->cover)
-        var poster = '{{ config('constants.admin_url').$vcourseDetail->cover}}';
-    @else
-        var poster = vLink + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
-    @endif;
-
     //已经参加课程或收费课程试看或vip
     @if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
+	var waitingPub = null;
     videojs('video-embed', {
         "width": "100%",
         "height": videoHight,
         "controls": true,
         "autoplay": false,
-        "preload": "none",
-        "poster": poster
+        "preload": "auto",
+        //"poster": poster
     }, function() {
     	if(browserOS() == 'pc'){
     		var player = videojs('video-embed');
@@ -312,12 +309,21 @@ $(document).ready(function(){
 				var player = videojs('video-embed');
 				player.src({
 		            type: vType(),
-		            src: vLink
+		            src: vLink,
 		        });
 		        
 		        console.log('browserOS is ' + browserOS());
 				if(browserOS() != 'android'){
 					player.play();
+					
+					waitingPub = Popup.init({
+                        popTitle:"",
+                        popHtml:"正在加载，请稍后...",
+                        popFlash:{
+                            flashSwitch:true,
+                            flashTime:3000,
+                        }
+                    });
 				}
 			}, true);
 		}
