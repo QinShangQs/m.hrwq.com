@@ -1,8 +1,17 @@
 ###############2017-07-09#################
+/*爱心大使指导师分成*/
+update income_scale set `value` = 'a:3:{s:7:"p_scale";s:2:"60";s:7:"t_scale";s:2:"40";s:7:"a_scale";s:1:"0";}'
+where `key` = 3;
+
+/*爱心大使合伙人分成*/
+insert into income_scale(`key`,`value`,`created_at`,`updated_at`)
+values(4,'a:3:{s:7:"p_scale";s:2:"40";s:7:"t_scale";s:2:"60";s:7:"a_scale";s:1:"0";}','2017-07-08 15:36:00','2017-07-08 15:36:00');
+
+###############2017-07-09#################
 alter table `order` add column lover_id int default 0 comment '爱心大使用户ID';
 
 ###############2017-07-08#################
-/*爱心大使分成*/
+/*爱心大使指导师分成*/
 insert into income_scale(`key`,`value`,`created_at`,`updated_at`)
 values(3,'a:3:{s:7:"p_scale";s:1:"0";s:7:"t_scale";s:2:"40";s:7:"a_scale";s:2:"60";}','2017-07-08 15:36:00','2017-07-08 15:36:00');
 
