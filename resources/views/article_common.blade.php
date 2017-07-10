@@ -13,7 +13,7 @@
             			<div >和会员有效期</div>
                         <div class="period" >
                             <span class="day">{{ computer_vip_left_day($user['vip_left_day']) }}</span><span>天</span>
-                            @if(computer_vip_left_day($user['vip_left_day']) > 0)
+                            @if($pointVipCount > 0)
 	                            <div class="hot">
 	                            	  <a href="{{route('vip.records')}}">
 	                            	  	<span class="link">会员状态

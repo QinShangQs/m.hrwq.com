@@ -12,6 +12,7 @@
 namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\UserPointVip;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -39,8 +40,11 @@ class ArticleController extends Controller
         // 当前用户
         $user_id = session('user_info')['id'];
         $user = User::find($user_id);
+        //和会员天数记录
+        $pointVipCount = UserPointVip::where('user_id', $user_id)->count();
         
-        return view('article_common', ['article' => $article, 'session_mobile' => $session_mobile, 'requestUri' => $requestUri,'order'=>$order,'user'=>$user]);
+        return view('article_common', ['article' => $article, 'session_mobile' => $session_mobile, 
+        		'requestUri' => $requestUri,'order'=>$order,'user'=>$user,'pointVipCount'=>$pointVipCount]);
     }
 
     public function helpcenter($type)

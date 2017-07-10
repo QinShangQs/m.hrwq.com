@@ -27,7 +27,7 @@
                         <div class="mmo_line">
                         	<div class="mmo_title">
                         		{{$data['realname'] or $data['nickname']}}
-                        		@if($data['vip_flg']=='2' && computer_vip_left_day($data['vip_left_day']) > 0)
+                        		@if(computer_vip_left_day($data['vip_left_day']) > 0)
                         			<img src="/images/my/vip-2.png" alt=""/>
                         		@else
                         			<img src="/images/my/vip-1.png" alt=""/>

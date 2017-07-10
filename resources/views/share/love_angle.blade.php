@@ -27,7 +27,11 @@
             			长按图片即可保存您的专属二维码图片至手机相册。如果您想邀请他人加入好父母学院，通过微信将您的二维码图片发送给他，让他长按识别二维码，按提示操作即可加入。
             		</p>
             		<p>
-            			<b>3、成为爱心大使的好处是？</b>
+            			<b>3、成为爱心大使的好处是？</b><br/>
+            			<div style="display: none">
+            			当您朋友扫描您的二维码成功开通和会员后，您和他都将额外获得15天的和会员资格奖励，奖励期间享有所有付费和会员的权限。
+分享教子好知识本身就快乐：将自己教育孩子的体悟和充满了期望的二维码图片分享到您的社交圈，帮助身边的人关注家庭教育，成为更智慧的父母，为下一代的健康成长和华人家庭教育的普及，做出点滴推动。
+            			</div>
             		</p>
             	</div>
             </div>
@@ -53,7 +57,7 @@
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "#ff6000";
 			ctx.stroke();
-			ctx.font="18px";
+			ctx.font="13px Microsoft YaHei";
 			ctx.textAlign = 'center';
 			ctx.fillText("我是{{$data['nickname']}}", 100, 13);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
