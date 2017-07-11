@@ -1,3 +1,6 @@
+###############2017-07-10#################
+/*将会员卡激活但是没有会员天数的用户增加天数*/
+update `user` set vip_left_day = '2018-07-12' where vip_flg = 2 and vip_left_day is null
 ###############2017-07-09#################
 /*爱心大使指导师分成*/
 update income_scale set `value` = 'a:3:{s:7:"p_scale";s:2:"60";s:7:"t_scale";s:2:"40";s:7:"a_scale";s:1:"0";}'
