@@ -461,14 +461,15 @@ class UserController extends Controller
                     $user_info['id'] = $userModel->id;
                     $user_info['nickname'] = $userModel->nickname;
                     $request->session()->set('user_info', $user_info);
-
+                    
                     $url = $request->input('url');
                     DB::commit();
                     get_score(1);
                     return response()->json(['status' => true, 'msg' => '绑定成功', 'url' => $url]);
                 } catch (\Exception $e) {
+                	Log::error('手机号注册',[$e]);
                     DB::rollBack();
-                    return response()->json(['status' => false, 'msg' => '绑定失败']);
+                    return response()->json(['status' => false, 'msg' => '手机绑定失败']);
                 }
             }
         }

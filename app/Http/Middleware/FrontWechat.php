@@ -41,24 +41,29 @@ class FrontWechat
                 if (empty($request->session()->get('wechat_user'))) {
                     return redirect('/wechat/auth?url='.$request->getRequestUri());
                 }
+                
                 $wechat_user = $request->session()->get('wechat_user');
                 $user_info = User::whereOpenid($wechat_user['openid'])->first();
-
+               
                 if ($user_info && $user_info['id'] > 0&&$user_info['block']=='1') {
-                    if ($request->session()->get('user_info')) {
-                        return $next($request);
-                    }
-                    
-                    //通过爱心大使成为用户，但没有注册，且不是和会员，同时关联关系大于7天，则建立新的关系
-                    if($lover_id != 0 && $user_info['lover_id'] != 0 && empty($user_info['mobile']) && $user_info['vip_flg'] == 1){
-                    	$diff_day = diff_tow_days($user_info['lover_time'], date('Y-m-d H:i:s'));
-//                     	var_dump($diff_day);
-//                     	dd($user_info);
-                    	if($diff_day > 7){
-                    		Log::info('lover_relation', ['用户'.$user_info['id']."与".$user_info['lover_id']."取消关系"]);
+                    //爱心大使ID不为0，且用户是非会员
+                    if($lover_id != 0 && $user_info['vip_flg'] == 1){
+                    	if($user_info['lover_id'] == 0){//没有关联关系，建立关系
                     		User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
                     		Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
+                    	}else{
+                    		$diff_day = diff_tow_days($user_info['lover_time'], date('Y-m-d H:i:s'));
+                    		//关联关系大于7天，则建立新的关系
+                    		if($diff_day > 7){
+                    			Log::info('lover_relation', ['用户'.$user_info['id']."与".$user_info['lover_id']."取消关系"]);
+                    			User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
+                    			Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
+                    		}
                     	}
+                    }
+
+                    if ($request->session()->get('user_info')) {
+                    	return $next($request);
                     }
                     
                     User::whereOpenid($wechat_user['openid'])->update(['last_login' => date('Y-m-d H:i:s', time())]);

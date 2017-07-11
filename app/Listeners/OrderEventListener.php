@@ -186,19 +186,19 @@ class OrderEventListener
                 //和会员
                 case 6:
                     //会员开通成功，给用户提示
-                    send_sms([$order->user->mobile], '恭喜您成为全球华人幸福家庭俱乐部终身和会员，为您准备的会员礼盒已经发出，请注意查收。和而不同，润物无声，祝你生活愉快！');
+                    send_sms([$order->user->mobile], '亲爱的家人，恭喜您成功开通和会员！成为学习型父母，构建学习型家庭，助您生活愉快！');
                     $notice = Wechat::notice();
                     $notice->send([
                         'touser' => $order->user->openid,
                         'template_id' => '7hXsOVA4WE3nGyta1UQRqUOtDP6C1D5ymR-E46_X1Ts',
-                        'url' => route('vip'),
+                        'url' => route('user'),
                         'topcolor' => '#f7f7f7',
                         'data' => [
                             'first' => '和会员开通提示',
                             'keyword1'=>'和会员',
                             'keyword2'=> (string)$order->pay_time,
-                            'keyword3'=> '恭喜你成为全球华人幸福家庭俱乐部终身和会员',
-                            'remark'=> '与全国优秀父母做朋友，享受5大会员特权'
+                            'keyword3'=> '恭喜你成功加入和润万青父母学院',
+                            'remark'=> '点击此处查看详情'
                         ],
                     ]);
                     break;

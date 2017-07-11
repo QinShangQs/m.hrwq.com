@@ -1,5 +1,17 @@
 @extends('layout.default')
 @section('content')
+<style>
+#mde_input_city_dummy {
+	border: none;
+    font-size: 0.75rem;
+    padding: 0.5rem 0;
+}
+</style>
+
+	<div class="win-qrcode"
+	 style="display:none;background:url(../images/login/win-qrcode.png);z-index:100;width:100%;height:100%;position: absolute; background-size: contain;">
+	</div>
+	
     <div id="subject">
         <div id="main">
             <div class="login">
@@ -7,49 +19,60 @@
                     <input type='hidden' name='_token' value="{{csrf_token()}}">
                     <input type='hidden' name='url' value="{{$url}}">
                     <input type='hidden' name='invite_user' value="{{$invite_user}}">
-                    <div class="login_div">
-                        <div class="login_banner"><img src="{{$bannerUrl}}" alt=""/></div>
-                    </div>
-                    <div class="login_div">
-                        <div style="border-bottom:1px solid #f6f6f6;">
-                            <ul class="mde_list" style="padding:0 41px;font-size:18px;margin-bottom:0px;background:url(../images/look/address_bg.png) 18px center no-repeat;"><li>
-                            <div class="mde_list_title" style="font-size:18px;">所在城市</div>
-                            <div class="mde_list_input">
-                                <ul id="mde_input_city">
-                                    @if(!empty($area))
-                                        @foreach($area as $parent)
-                                            <li data-area-id="{{$parent['area_id']}}">
-                                                <span>{{$parent['area_name']}}</span>
-                                                @if(!empty($parent['children']))
-                                                    <ul>
-                                                        @foreach($parent['children'] as $child)
-                                                            <li data-area-id="{{$child['area_id']}}">
-                                                                <span>{{$child['area_name']}}</span>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                                <input type="hidden" name="province" value="{{$userInfo['province']}}">
-                                <input type="hidden" name="city" value="{{$userInfo['city']}}">
-                            </div>
-                            </li></ul>
-                        </div>
-                        <div class="login_div_input"><input type="text" placeholder="输入手机号" name="login_phone"
-                                                            class="login_phone"></div>
-                        <div class="login_div_input">
-                            <input type="text" placeholder="验证码" name="login_code" class="login_code">
-                            <div class="login_code1">获取验证码</div>
-                            <div class="login_code2">获取验证码（5）</div>
-                        </div>
-                        <div class="login_div_input" style="font-size:14px;margin-left:70px;line-height: 44px;">
-                        <input type="checkbox" style="width:15px;height:15px;margin:0px;padding:0px; padding-top:2px;" checked="checked" class="chkclass" />阅读并接受<a style="font-size:14px;color:#999" href="{{route('article',['id'=>1])}}">《和润万青服务协议》</a>
-                        </div>
-                    </div>
-                    <div class="login_div_button"><input type="submit" value="确定" class="login_button"></div>
+                    
+                    <div class="login-form" style="color: #999;font-size:0.75rem;margin:4.16rem 1.2rem 1rem 1.2rem;padding:0 0.75rem;background-color:#fff">
+               			<div class="tip" style="padding-top: 0.75rem;padding-bottom: 1.8rem;">开通成功！为保障您的账号安全，请绑定手机号。</div>
+               			<table style="width:100%">
+               				<tr style="height:2.62rem;border-bottom:1px #ddd solid">
+               					<td><img src="/images/look/address_bg.png"/></td>
+               					<td>
+	               					<ul id="mde_input_city">
+	                                    @if(!empty($area))
+	                                        @foreach($area as $parent)
+	                                            <li data-area-id="{{$parent['area_id']}}">
+	                                                <span>{{$parent['area_name']}}</span>
+	                                                @if(!empty($parent['children']))
+	                                                    <ul>
+	                                                        @foreach($parent['children'] as $child)
+	                                                            <li data-area-id="{{$child['area_id']}}">
+	                                                                <span>{{$child['area_name']}}</span>
+	                                                            </li>
+	                                                        @endforeach
+	                                                    </ul>
+	                                                @endif
+	                                            </li>
+	                                        @endforeach
+	                                    @endif
+	                                </ul>
+	                                <input type="hidden" name="province" value="{{$userInfo['province']}}">
+	                                <input type="hidden" name="city" value="{{$userInfo['city']}}">
+                                </td>
+               				</tr>
+               				<tr style="height:2.62rem;border-bottom:1px #ddd solid">
+               					<td><img src="/images/login/login_input_bg1.png"></td>
+               					<td><input type="text" placeholder="输入手机号" name="login_phone" style="border: none;font-size: 0.75rem;padding: 0.5rem 0;"></td>
+               				</tr>               				
+               				<tr style="height:2.62rem;border-bottom:1px #ddd solid">
+               					<td><img src="/images/login/login_input_bg2.png"></td>
+               					<td style="position: relative;">
+               						<input type="text" placeholder="验证码" name="login_code" style="border: none;font-size: 0.75rem;padding: 0.5rem 0;">
+		                            <div class="login_code1" style="right: 0;font-size: 0.75rem;height: 1.24rem;line-height: 1.24rem;width: 4.687rem;top: 0.6rem;">获取验证码</div>
+		                            <div class="login_code2" style="right: 0;font-size: 0.75rem;height: 1.24rem;line-height: 1.24rem;width: 5.687rem;top: 0.6rem;">获取验证码（5）</div>
+               					</td>
+               				</tr>
+               				<tr>
+               					<td colspan="2" align=center style="padding-top: 5.125rem">
+               						<input type="submit" value="确定" class="login_button" style="font-size:1.125rem;width:100%;height:2.5rem;border:none;color:#fff;background-color: #ed6d11">
+               					</td>
+               				</tr>
+               				<tr>
+	               				<td colspan="2" align=center style="padding:1.25rem 0">
+	               					点击“确定”按钮，即表示同意 <a style="color:#666;font-size:0.75rem" href="{{route('article',['id'=>1])}}">《会员服务协议》</a>
+	               				</td>
+               				</tr>
+               			</table>
+               		</div>
+              
                 </form>
             </div>
         </div>
@@ -141,7 +164,7 @@
                 mode: "scroller",
                 display: "bottom",
                 lang: "zh",
-                placeholder: "请选择所在城市",
+                placeholder: "所在城市",
                 labels: ['省', '市'],
                 formatResult: function (array) { //返回自定义格式结果
                     $('input[name="province"]').val('');
@@ -252,19 +275,7 @@
                 var code = $('input[name="login_code"]').val();
                 var province = $('input[name="province"]').val();
                 var city = $('input[name="city"]').val();
-                //判断是否已经阅读服务协议
-                if($(".chkclass").is(':checked')==false){
-                	Popup.init({
-                        popHtml: '<p>请选择已阅读并接受和润万青服务协议</p>',
-                        popFlash: {
-                            flashSwitch: true,
-                            flashTime: 2000,
-                            flashfunction: function () {
-                            }
-                        }
-                    });
-                    return false;
-                }
+                
                 if (province == ""||city == "") {
                     Popup.init({
                         popHtml: '<p>请选择所在城市</p>',
@@ -310,14 +321,12 @@
                             popHtml: '<p>' + data.msg + '</p>',
                             popFlash: {
                                 flashSwitch: true,
-                                flashTime: 2000,
+                                flashTime: 1000,
                             }
                         });
-                        if (data.url) {
-                            location.href = '{{ url($url) }}';
-                        } else {
-                            location.href = '{{ url("/") }}';
-                        }
+
+                        $(".win-qrcode").show();
+
                     } else {
                         Popup.init({
                             popHtml: '<p>' + data.msg + '</p>',
@@ -326,6 +335,7 @@
                                 flashTime: 2000,
                             }
                         });
+                       
                         lock = false;
                     }
                 }, 'json')
