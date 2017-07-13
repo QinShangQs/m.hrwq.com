@@ -49,9 +49,9 @@
             <div style="width:100%;background-color:#fff;height: 2.5rem;margin-bottom: 0.5rem;">
             	<table style="width:100%;height:100%;text-align:center">
             		<tr>
-            			<td><a style="font-size:1rem;" href="{{$telecast}}">直播入口</a> <img style="width:1rem" src="/images/vcourse/telecast.png"/></td>
+            			<td><a style="font-size:1rem;" href="{{$telecast}}">进入直播</a> <img style="width:1rem" src="/images/vcourse/telecast.png"/></td>
             			<td style="width:1%"><img style="height:1.2rem" src="/images/vcourse/line.png"/></td>
-            			<td><a style="font-size:1rem;" href="{{$foreshow}}">视频预告</a> <img style="width:0.8rem" src="/images/vcourse/foreshow.png"/></td>
+            			<td><a style="font-size:1rem;" href="{{$foreshow}}">精彩预告</a> <img style="width:0.8rem" src="/images/vcourse/foreshow.png"/></td>
             		</tr>
             	</table>
             </div>

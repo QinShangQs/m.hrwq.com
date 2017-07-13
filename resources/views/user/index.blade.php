@@ -71,7 +71,7 @@
                     </ul>
                     <ul class="mmo_list">
                         <li><a href="{{route('article',['id'=>6])}}"><span> <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>                        
+                                                src="/images/public/select_right.jpg" alt=""/></span>会员动态</a></li>                        
                        
                         
                         

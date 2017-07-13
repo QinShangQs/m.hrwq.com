@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>@yield('title','和润万青')</title>
+    <title>@yield('title','和润万青父母学院')</title>
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="format-detection" content="telephone=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -17,7 +17,7 @@
 @if(request('from'))
 <script>
 if ($('#nav').length==0) {
-    $("body").append('<a href="/" class="return_index" style="bottom:160px;right:23px;"></a>');
+    $("body").append('<a href="/vcourse" class="return_index" style="bottom:160px;right:23px;"></a>');
 }
 </script>
 @endif

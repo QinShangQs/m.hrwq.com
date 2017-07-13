@@ -28,8 +28,8 @@ $(document).ready(function () {
     wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"), false) ?>);
     wx.ready(function () {
         wx.onMenuShareAppMessage({
-            title: '哇！父母原来应该这样做', // 分享标题
-            desc: '和润万青，让教育孩子变得简单', // 分享描述
+            title: '365天，一起成为学习型父母', // 分享标题
+            desc: '用超凡的格局，教出孩子更好未来', // 分享描述
             link: '{{route('vip')}}?from=singlemessage', // 分享链接
             imgUrl: '{{url('/images/my/my_about_us_img.png')}}', // 分享图标
             type: '', // 分享类型,music、video或link，不填默认为link
@@ -42,7 +42,7 @@ $(document).ready(function () {
             }
         });
         wx.onMenuShareTimeline({
-            title: '哇！父母原来应该这样做', // 分享标题
+            title: '365天，一起成为学习型父母，构建学习型家庭', // 分享标题
             link: '{{route('vip')}}?from=singlemessage', // 分享链接
             imgUrl: '{{url('/images/my/my_about_us_img.png')}}', // 分享图标
             success: function () {
