@@ -1,5 +1,5 @@
 @extends('layout.default')
-@section('title', '好父母学院')
+@section('title', '和润万青父母学院')
 @section('content')
 <div id="subject">
     <div id="main">
