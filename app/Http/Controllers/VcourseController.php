@@ -46,8 +46,8 @@ class VcourseController extends Controller
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
         
-        //$data = file_get_contents('/mnt/sug_link.log');
-        $data = file_get_contents('D:/sug_link.log');
+        $data = file_get_contents('/mnt/sug_link.log');
+        //$data = file_get_contents('D:/sug_link.log');
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{
