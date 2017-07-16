@@ -25,7 +25,7 @@ class QuestionEventListener
             'topcolor' => '#f7f7f7',
             'data' => [
                 'first' => '订单状态提示',
-                'keyword1'=>'好问',
+                'keyword1'=>'问答',
                 'keyword2'=> (string)$question->answer_date,
                 'keyword3'=> '亲爱的家人，'.$question->answer_user->nickname.'已认真回答你的提问。',
                 'remark'=> '您的问答每被旁听1次，您都将获得0.5元奖励，快分享给好友旁听吧！'

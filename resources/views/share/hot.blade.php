@@ -38,7 +38,7 @@ body{
         		<img style="width:6.25rem;height:1.71rem;margin-top:1rem" src="/images/share/join-btn.png"/>
         	</a>
         </div>
-        <audio id="audio1" preload="preload" loop="loop" style="display: none" src="http://oflmtu502.bkt.clouddn.com/%E9%9F%B3%E9%A2%91%20%E6%95%99%E8%82%B2%E8%A7%82.mp3">
+        <audio id="audio1" preload="auto" loop="loop" style="display: none" src="http://oflmtu502.bkt.clouddn.com/%E9%9F%B3%E9%A2%91%20%E6%95%99%E8%82%B2%E8%A7%82.mp3">
         </audio>
     </div>
 </div>
@@ -57,6 +57,10 @@ function playPause(){
     	$('#play-img').attr('src','/images/share/audio-pause.png');
     }
 }
+
+$(document).on('touchstart', function() {
+	audio1.load()
+})
 
 </script>
    	

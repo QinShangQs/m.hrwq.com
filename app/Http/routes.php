@@ -114,7 +114,7 @@ Route::group(['prefix' => 'vcourse', 'middleware' => ['FrontWechat']], function 
     Route::post('/recommend_list', 'VcourseController@recommend_list')->name('vcourse.recommend_list');
 
 });
-Route::group(['prefix' => 'vcourse', 'middleware' => ['FrontWechat', 'FrontAuth']], function () {
+Route::group(['prefix' => 'vcourse', 'middleware' => ['FrontWechat']], function () {
     Route::post('/order_free', 'VcourseController@order_free')->name('vcourse.order_free');
     Route::get('/order/{id}/', 'VcourseController@order')->name('vcourse.order');
     Route::get('/coupon/{id}/', 'VcourseController@coupon')->name('vcourse.coupon');

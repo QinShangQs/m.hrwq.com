@@ -201,7 +201,7 @@
                     }
                 });
                 wx.onMenuShareTimeline({
-                    title: '我看到一个非常好的父母课堂，可能很适合你哟', // 分享标题
+                    title: '{!! strip_tags($course->title)!!}', // 分享标题
                     link: '{{route('course.detail',['id'=>$course->id])}}?from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {

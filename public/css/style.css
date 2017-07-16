@@ -52,15 +52,24 @@ article li { list-style: initial; }
 #nav li { width:25%; float:left; overflow:hidden;}
 #nav li a { display:block; width:35px; margin:0 auto; height:40px;}
 .nav_1 { background:url(../images/public/navs_11.png) left top no-repeat; background-size:100%;}
-.nav_2 { background:url(../images/public/navs_21.png) left top no-repeat; background-size:100%;}
+.nav_2 { background:url(../images/public/navs_21.png) left top no-repeat; background-size:65%;}
 .nav_3 { background:url(../images/public/nav_31.png) left top no-repeat; background-size:100%;}
 .nav_4 { background:url(../images/public/navs_41.png) left top no-repeat; background-size:100%;}
 .nav_5 { background:url(../images/public/nav_51.png) left top no-repeat; background-size:100%;}
 .selected .nav_1 { background:url(../images/public/navs_12.png) left top no-repeat; background-size:100%;}
-.selected .nav_2 { background:url(../images/public/navs_22.png) left top no-repeat; background-size:100%;}
+.selected .nav_2 { background:url(../images/public/navs_22.png) left top no-repeat; background-size:65%;}
 .selected .nav_3 { background:url(../images/public/nav_32.png) left top no-repeat; background-size:100%;}
 .selected .nav_4 { background:url(../images/public/navs_42.png) left top no-repeat; background-size:100%;}
 .selected .nav_5 { background:url(../images/public/nav_52.png) left top no-repeat; background-size:100%;}
+
+@media screen and (min-width: 400px) {
+    .nav_2 {
+	    background-size:65%;
+	}
+	.selected .nav_2{
+		background-size:65%;
+	}
+}
 
 /*----------弹窗----------*/
 .popupWindow_hp { position:fixed; left:0px; top:0px; z-index:10000; width:100%; height:100%; background:url(../images/public/translucent.png) left top repeat;}

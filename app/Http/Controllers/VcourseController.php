@@ -46,7 +46,8 @@ class VcourseController extends Controller
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
         
-        $data = file_get_contents('/mnt/sug_link.log');
+        //$data = file_get_contents('/mnt/sug_link.log');
+        $data = file_get_contents('D:/sug_link.log');
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{
@@ -164,7 +165,9 @@ class VcourseController extends Controller
             ->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
         $wx_js = Wechat::js();
 
-        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js'));
+        $vip_left_day = computer_vip_left_day(@$user_info['vip_left_day']);
+        
+        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js','vip_left_day'));
     }
 
     /** 好看课程添加收藏 */

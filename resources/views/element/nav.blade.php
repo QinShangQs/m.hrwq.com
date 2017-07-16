@@ -1,5 +1,5 @@
 <ul id="nav"><!--导航，所在li需添加类selected-->
-    <li @if($selected_item == 'nav2')class="selected" @endif><a class="nav_2" href="{{route('vcourse')}}" title="视频"></a></li>
+    <li @if($selected_item == 'nav2')class="selected" @endif><a class="nav_2" style="margin-top: 0.1rem" href="{{route('vcourse')}}" title="听课"></a></li>
     <?php //<li @if($selected_item == 'nav3')class="selected" @endif><a class="nav_3" href="{{route('opo')}}" title="壹家壹"></a></li>?>
     <li @if($selected_item == 'nav4')class="selected" @endif><a class="nav_4" href="{{route('question')}}?selected_tab=2" title="问答"></a></li>
     <li @if($selected_item == 'nav1')class="selected" @endif><a class="nav_1" href="{{route('course')}}" title="课程"></a></li>

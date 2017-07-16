@@ -30,7 +30,7 @@ class OrderEventListener
             $order->pay_time = (string)Carbon::now();
             $order->save();
             switch ($order->pay_type) {
-                case 1: //好课
+                case 1: //线下
                     //发送二维码
 //                    $wechat = new Application(config('wechat'));
 //                    $staff = $wechat->staff;
@@ -62,7 +62,7 @@ class OrderEventListener
                             'topcolor' => '#f7f7f7',
                             'data' => [
                                 'first' => '订单已支付',
-                                'keyword1'=> '好课',
+                                'keyword1'=> '线下',
                                 'keyword2'=> (string)$order->pay_time,
                                 'keyword3'=> $order->course->title,
                                 'remark'=> '让教育孩子变得简单。恭喜你成功报名'.$order->course->title.'，请提前安排好行程。
@@ -95,7 +95,7 @@ class OrderEventListener
                                 'topcolor' => '#f7f7f7',
                                 'data' => [
                                     'first' => '合伙人订单推送',
-                                    'keyword1'=> '好课',
+                                    'keyword1'=> '线下',
                                     'keyword2'=> (string)$order->pay_time,
                                     'keyword3'=> $order->course->title,
                                     'remark'=> '您所负责的区域有顾客下单，请及时关注。'
@@ -108,7 +108,7 @@ class OrderEventListener
                     }
 
                     break;
-                case 2: //好看
+                case 2: //听课
                     //微信公众号推送消息
                     $notice = Wechat::notice();
                     $userId = $openid;
@@ -117,7 +117,7 @@ class OrderEventListener
                     $color = '#FF0000';
                     $data = array(
                              "first"  => "亲爱的家人，恭喜你成功购买".$order->order_name,
-                             "keyword1"   => "好看",
+                             "keyword1"   => "听课",
                              "keyword2"  => "".$order->created_at,
                              "keyword3"  => $order->order_name,
                              "remark" => "记得在线记笔记、写作业，可以获得积分哦！用学习跟上孩子的成长。祝您生活愉快。",
@@ -148,7 +148,7 @@ class OrderEventListener
                         ],
                     ]);
                     break;
-                case 4: //好问提问
+                case 4: //问答提问
                     $notice = Wechat::notice();
                     //给提问者通知
                     $notice->send([
@@ -158,7 +158,7 @@ class OrderEventListener
                         'topcolor' => '#f7f7f7',
                         'data' => [
                             'first' => '订单状态提示',
-                            'keyword1'=>'好问',
+                            'keyword1'=>'问答',
                             'keyword2'=> (string)$order->pay_time,
                             'keyword3'=> $order->order_name,
                             'remark'=> '亲爱的家人，你的问题已成功送达给'.($order->question->answer_user->nickname).'，我们将提醒其在48小时内回答你的问题。'
@@ -173,14 +173,14 @@ class OrderEventListener
                         'topcolor' => '#f7f7f7',
                         'data' => [
                             'first' => '（指导师）家长咨询提示',
-                            'keyword1'=>'好问',
+                            'keyword1'=>'问答',
                             'keyword2'=> (string)$order->pay_time,
                             'keyword3'=> $order->order_name,
                             'remark'=> '魅力爆棚了！亲爱的家人，你有新的提问！请在48小时内组织好语言，清晰明了地回答ta的问题，分享家庭成长经历，传播幸福正能量，赚取满满成就感！'
                         ],
                     ]);
                     break;
-                //好问偷听
+                //问答偷听
                 case 5:
                     break;
                 //和会员
