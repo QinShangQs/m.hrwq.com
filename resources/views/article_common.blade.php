@@ -16,7 +16,7 @@
                             @if($pointVipCount > 0)
 	                            <div class="hot">
 	                            	  <a href="{{route('vip.records')}}">
-	                            	  	<span class="link">会员状态
+	                            	  	<span class="link">会员动态
 	                            	  		<li></li>
 	                            	  	</span>
 	                            	  </a>

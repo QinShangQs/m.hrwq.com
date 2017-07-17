@@ -57,9 +57,9 @@
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "#ff6000";
 			ctx.stroke();
-			ctx.font="13px Microsoft YaHei";
+			ctx.font="14px Microsoft YaHei";
 			ctx.textAlign = 'center';
-			ctx.fillText("我是{{$data['nickname']}}", 100, 13);
+			ctx.fillText("我是{{$data['nickname']}}", 100, 12);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
 		})();
 

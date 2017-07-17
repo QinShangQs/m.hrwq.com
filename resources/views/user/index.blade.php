@@ -38,13 +38,11 @@
                         		<!--  @if($order_read_num>0)<span>{{$order_read_num}}</span>@endif</a>-->
                         		| 
                         		<a href="{{route('my.orders')}}">订单</a></div>
-                        </div>
-                        
-                        @if($data['role'] != 2 )
+                        </div>                        
+                   
                         <div class="mmo_love">
 							<a href="{{route('share.angle')}}">爱心大使&nbsp;></a>                      	
-                        </div>
-                        @endif
+                        </div>                     
                         
                         <div class="mmo_identity">
                             <a href="{{route('article',['id'=>6])}}">
@@ -71,7 +69,7 @@
                     </ul>
                     <ul class="mmo_list">
                         <li><a href="{{route('article',['id'=>6])}}"><span> <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>会员动态</a></li>                        
+                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>                        
                        
                         
                         

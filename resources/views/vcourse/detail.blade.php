@@ -1,5 +1,4 @@
 @extends('layout.default')
-@section('title','和润好父母学院')
 @section('content')
 <link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <style>
@@ -188,6 +187,9 @@
         </div>
     </div>
 </div>
+
+<div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
+</div>
 @endsection
 @section('script')
 <!--Mobiscroll插件调用文件开始-->
@@ -275,16 +277,13 @@ $(document).ready(function(){
             });
 
 
+      
     $("#share-logo").click(function(){
-    	Popup.init({
-            popTitle:"",
-            popHtml:"请点击右上角3个点，选择分享，谢谢！",
-            popFlash:{
-                flashSwitch:true,
-                flashTime:1000,
-            }
-        });
+    	$(".win-share").show();
     });
+    $(".win-share").click(function(){
+    	$(".win-share").hide();
+     });
             
     var videoHight = 360/680*$(".lcd_banner_img").width();
     $(".lcd_banner_img").height(videoHight);
