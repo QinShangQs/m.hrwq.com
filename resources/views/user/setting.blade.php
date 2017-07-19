@@ -4,6 +4,7 @@
         <div class="my">
             <div class="my_member_ordinary">
                 <ul class="mmo_list">
+                	<li><a href="{{route('user.profile')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>个人中心</a></li>
                 	@if($data['role'] == 1 )
                     	<li id="tutor_apply"><a href="#"><span>&nbsp;<img src="/images/public/select_right.jpg" alt=""/></span>成为指导师</a></li>
                     	<li id="partner_apply"><a href="{{route('partner.apply')}}"><span>&nbsp;<img src="/images/public/select_right.jpg" alt=""/></span>加盟合作</a></li>

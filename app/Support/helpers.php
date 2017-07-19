@@ -223,9 +223,10 @@ if (!function_exists('set_audio_state')) {
         $item->audio_msg = '1元旁听';
 
         $vip_flg = $user_info['vip_flg'];
+        $vip_left_day = computer_vip_left_day($user_info['vip_left_day']);
 
         //vip免费听 / 指导师本身 免费听
-        if ($vip_flg == 2 || $item->tutor_id == $user_info['id']) {
+        if ($vip_left_day > 0 || $item->tutor_id == $user_info['id']) {
             $item->audio_type = 3;
             $item->audio_msg = '点击旁听';
         } else {

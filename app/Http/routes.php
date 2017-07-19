@@ -280,4 +280,5 @@ Route::group(['prefix' => 'share', 'middleware' => ['FrontWechat']], function ()
     Route::post('/', 'ShareController@index')->name('share');
     Route::get('/love_angle', 'ShareController@loveAngle')->name('share.angle');
     Route::get('/hot/{id}', 'ShareController@hot')->name('share.hot');
+    Route::get('/audio', 'ShareController@audio')->name('share.audio');
 });

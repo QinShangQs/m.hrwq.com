@@ -30,6 +30,10 @@ class ShareController extends Controller
     	}
     }
     
+    public function audio(){
+    	return view('share.hot');
+    }
+    
     private function base64EncodeImage ($image_file) {
     	$base64_image = '';
     	$image_info = getimagesize($image_file);
