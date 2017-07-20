@@ -11,8 +11,8 @@
     <div id="main">
         <div class="share-love">
         	<div style="text-align:center;color:black;font-size:0.9rem;line-height:2.2rem">长按图片保存到相册</div>
-            <div class="banner"><img id="banner" src="/images/share/love-bg.jpg" alt=""/></div>
-            <div class="footer">
+            <div class="banner" style="margin-bottom:1rem"><img id="banner" src="/images/share/love-bg.jpg" alt=""/></div>
+            <div class="footer" style="position: static; bottom: initial; left: initial;right: initial;">
             	<div class="tip">
             		<span class="title">爱心大使二维码海报使用指南</span>
             		<span class="detail">了解详情  <span class="forward"></span></span>
@@ -20,18 +20,19 @@
             	<div class="content" style="display: none">
             		<p>
             			<b>1、我居然是爱心大使？</b><br/>
-            			没错，您已经是和润好父母学院的爱心大使了。爱心大使肩负“完善自我，帮助他人”的美好使命。我们时刻以你为荣哦。
+            			没错，您已经是和润万青父母学院的爱心大使啦。爱心大使肩负“完善自我，帮助他人”的美好使命。我们时刻以你为荣哦。
             		</p>
+            		
             		<p>
             			<b>2、怎么使用您的专属爱心大使二维码呢？</b><br/>
-            			长按图片即可保存您的专属二维码图片至手机相册。如果您想邀请他人加入好父母学院，通过微信将您的二维码图片发送给他，让他长按识别二维码，按提示操作即可加入。
+            			长按图片即可保存您的专属二维码图片至手机相册。如果您想邀请他人加入好父母学院，通过微信将您的二维码图片发送给他，让他长按识别二维码，按照提示操作即可加入。
             		</p>
+            		<a id="p2" href="#"></a>
             		<p>
             			<b>3、成为爱心大使的好处是？</b><br/>
-            			<div style="display: none">
-            			当您朋友扫描您的二维码成功开通和会员后，您和他都将额外获得15天的和会员资格奖励，奖励期间享有所有付费和会员的权限。
-分享教子好知识本身就快乐：将自己教育孩子的体悟和充满了期望的二维码图片分享到您的社交圈，帮助身边的人关注家庭教育，成为更智慧的父母，为下一代的健康成长和华人家庭教育的普及，做出点滴推动。
-            			</div>
+            			当您朋友扫描您的二维码成功加入好父母学院后，您和对方都将获得7天的会员资格奖励。奖励期间，您享有所有付费会员的权限。
+分享教子好知识本身就快乐：将自己教育孩子的体悟和充满了期望的二维码图片分享到您的社交圈，帮助身边的人成为更智慧的父母，让更多孩子在学习型家庭中收获美好人生。
+            			
             		</p>
             	</div>
             </div>
@@ -94,9 +95,12 @@
 				if($(".share-love .footer .content").css('display') == 'none'){
 					$(".share-love .footer .content").show();
 					$(".share-love .footer .forward").addClass('forward-selected');
+					window.location.hash = "#p2";
+
 				}else{
 					$(".share-love .footer .content").hide();
 					$(".share-love .footer .forward").removeClass('forward-selected');
+					window.location.hash = "#";
 				}
 			});
 		});
