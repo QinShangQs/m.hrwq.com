@@ -14,7 +14,10 @@
                         	<span class="money">
                         	 <a href="{{route('user.wallet')}}">
                         		<img src="/images/my/money.png"/>
-                        		<!-- @if($myWalletCount)<span>{{$myWalletCount}}</span>@endif -->
+                        		@if($balanceCount)
+                        			<img style="width: 0.3rem;height: 0.3rem;margin-left: -0.4rem;vertical-align: top;"
+                        			 src="/images/public/point.png"/>
+                        		@endif
                         	 </a>
                         	</span>
                         	<span class="setting">

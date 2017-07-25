@@ -57,6 +57,7 @@ class UserController extends Controller
             'questions_to_answer_count' => $questionsToAnswerCount,
             'new_answer_questions_count' => $newAnswerQuestionsCount,
             'tutorCourse' => $tutorCourse,
+        	'balanceCount' => $balanceCount,
             'myWalletCount' => $myWalletCount,
             'partnerNewOrderCount'=>$partnerNewOrderCount,
             'unreadTalkCommentCount' => $unreadTalkCommentCount

@@ -1,5 +1,13 @@
 @extends('layout.default')
 @section('content')
+<style>
+::-webkit-scrollbar {width: 5px;height: 5px;}                        
+::-webkit-scrollbar-track,::-webkit-scrollbar-thumb {border-radius: 999px;border:0px solid transparent;}
+::-webkit-scrollbar-track {box-shadow: 1px 1px 5px rgba(100,100,100,.2) inset;}
+::-webkit-scrollbar-thumb {min-height: 20px;background-clip: content-box;box-shadow: 0 0 0 5px rgba(100,100,100,.5) inset;}
+::-webkit-scrollbar-corner {background:;transparent}-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+</style>
+
 <div id="qrcode" style="display:none;margin-top:15px;"></div>
 <canvas id="namevas" width="200px" height="15px" style="display:none">
 您的浏览器不支持canvas标签。
@@ -12,12 +20,12 @@
         <div class="share-love">
         	<div style="text-align:center;color:black;font-size:0.9rem;line-height:2.2rem">长按图片保存到相册</div>
             <div class="banner" style="margin-bottom:1rem"><img id="banner" src="/images/share/love-bg.jpg" alt=""/></div>
-            <div class="footer" style="position: static; bottom: initial; left: initial;right: initial;">
+            <div class="footer" >
             	<div class="tip">
             		<span class="title">爱心大使二维码海报使用指南</span>
             		<span class="detail">了解详情  <span class="forward"></span></span>
             	</div>
-            	<div class="content" style="display: none">
+            	<div class="content" style="display: none;height: 15rem;overflow-y: scroll;">
             		<p>
             			<b>1、我居然是爱心大使？</b><br/>
             			没错，您已经是和润万青父母学院的爱心大使啦。爱心大使肩负“完善自我，帮助他人”的美好使命。我们时刻以你为荣哦。
