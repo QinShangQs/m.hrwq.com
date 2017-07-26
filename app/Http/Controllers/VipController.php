@@ -418,7 +418,7 @@ class VipController extends Controller
                 $user->update($user_update);
 
                 DB::commit();
-                return response()->json(['code' => 0, 'message' => '激活成功!']);
+                return response()->json(['code' => 0, 'message' => '激活成功!','mobile'=>$user['mobile']]);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json(['code' => 3, 'message' => '激活失败!']);

@@ -63,7 +63,7 @@
             		<a href="{{route('vcourse.detail',['id'=>$item->id])}}"><img src="/images/vcourse/look.png" /></a>
             	</div>
             	<div class="time">
-            		{{ $item->created_at}}            		
+            		{{ explode(' ',$item->created_at)[0]}}            		
             	</div>
             	
             	@if($item->vcourse_des)

@@ -89,14 +89,26 @@
                         }
                     });
                     if(res.code == 0){
+                        var _popHtml = '恭喜！您的和会员身份已激活成功，赶快完成注册吧！';
+                        if(res.mobile){
+                        	_popHtml = "恭喜！您的和会员身份已激活成功！尊享视频免费、旁听免费特权，快去体验吧！";
+                        }
+                        
                         Popup.init({
-                            popHtml:"恭喜！您的和会员身份已激活成功！尊享视频免费、旁听免费特权，快去体验吧！",
+                            popHtml: _popHtml,
                             popFlash:{
                                 flashSwitch:false
                             },popOkButton:{
                                 buttonDisplay:true,
                                 buttonName:"好",
-                                buttonfunction:  function(){location.href = '{{route('user')}}';}
+                                buttonfunction:  function(){
+                                    if(res.mobile){
+                                    	location.href = '{{route('user')}}';
+                                    }else{
+                                    	location.href = '{{route('user.login')}}';
+                                    }
+                                    
+                                }
                             }
                         });
                     }
