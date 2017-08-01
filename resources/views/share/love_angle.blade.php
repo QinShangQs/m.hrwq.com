@@ -65,7 +65,7 @@
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "#ff6000";
 			ctx.stroke();
-			ctx.font="14px Microsoft YaHei";
+			ctx.font="13px Microsoft YaHei";
 			ctx.textAlign = 'center';
 			ctx.fillText("我是{{$data['nickname']}}", 100, 12);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 
@@ -86,10 +86,10 @@
 			ctx.drawImage(img,0,0,c.width,c.height);
 			var img2 = new Image();
 			img2.src = $("#qrcode img").eq(0).attr('src');
-			ctx.drawImage(img2,300,860,155,155);
+			ctx.drawImage(img2,295,855,155,155);
 			var img3 = new Image();
 			img3.src = $("#vasimg").attr('src');
-			ctx.drawImage(img3,150,1060,450,35);
+			ctx.drawImage(img3,150,1062,450,35);
 
 			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;
