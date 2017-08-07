@@ -27,11 +27,11 @@
 				wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"), false) ?>);
 					wx.ready(function () {
 				            wx.onMenuShareAppMessage({
-				                title: '和润好父母，每周学习半小时，一起教出孩子好未来', // 分享标题
-				                desc: '学习家庭教育，做中国好父母', // 分享描述
+				                title: '365天，和全国精英家长一起，成为更懂教育的父母', // 分享标题
+				                desc: '我们穷尽一生的时间爱孩子，却很少关注自身的提升', // 分享描述
 				                //link: '{{route('course')}}?from=singlemessage', // 分享链接
 				                link: $.UrlUpdateParams(window.location.href, "from", 'singlemessage'), // 分享链接
-				                imgUrl: '{{url('/images/my/my_about_us_img.png')}}', // 分享图标
+				                imgUrl: '{{url('/images/my/dis_in_love.jpg')}}', // 分享图标
 				                type: '', // 分享类型,music、video或link，不填默认为link
 				                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 				                success: function () {
@@ -42,9 +42,9 @@
 				                }
 				            });
 				            wx.onMenuShareTimeline({
-				                title: '和润好父母，每周学习半小时，一起教出孩子好未来', // 分享标题
+				                title: '365天，和全国精英家长一起，成为更懂教育的父母', // 分享标题
 				                link: $.UrlUpdateParams(window.location.href, "from", 'singlemessage'), // 分享链接
-				                imgUrl: '{{url('/images/my/my_about_us_img.png')}}', // 分享图标
+				                imgUrl: '{{url('/images/my/dis_in_love.jpg')}}', // 分享图标
 				                success: function () {
 				                    // 用户确认分享后执行的回调函数
 				                },
