@@ -21,7 +21,7 @@
                     <input type='hidden' name='invite_user' value="{{$invite_user}}">
                     
                     <div class="login-form" style="color: #999;font-size:0.75rem;margin:4.16rem 1.2rem 1rem 1.2rem;padding:0 0.75rem;background-color:#fff">
-               			<div class="tip" style="padding-top: 0.75rem;padding-bottom: 1.8rem;">为保障您的账号安全，请绑定手机号。</div>
+               			<div class="tip" style="padding-top: 0.75rem;padding-bottom: 1.8rem;">注册后即可获得7天和会员奖励，收听全部完整课程</div>
                			<table style="width:100%">
                				<tr style="height:2.62rem;border-bottom:1px #ddd solid">
                					<td><img src="/images/look/address_bg.png"/></td>

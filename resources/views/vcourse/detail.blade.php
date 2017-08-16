@@ -330,28 +330,52 @@ $(document).ready(function(){
 
     var videoEnd = function(){
       if ($('#video-container').data('flg')=='free') {
-         Popup.init({
-        	popTitle:'试看结束',
-            popHtml:'<p>加入好父母学院，观看每周一期完整视频</p>',
-            popOkButton:{
-                buttonDisplay:true,
-                buttonName:"我要加入",
-                buttonfunction:function(){
-                	location.href='{{ url("article/6") }}';
-                    return false;
-                }
-            },
-            popCancelButton:{
-                buttonDisplay:true,
-                buttonName:"我不关心",
-                buttonfunction:function(){}
-            },
-            popFlash:{
-                flashSwitch:false
-            }
-        });
+    	  @if(empty(@$user_info['mobile']))
+    		  Popup.init({
+                	popTitle:'试看结束',
+                    popHtml:'<p>完成注册可获得7天会员奖励，期间可收听父母学院全部完整版课程</p>',                
+                    popOkButton:{
+                        buttonDisplay:true,
+                        buttonName:"立即注册",
+                        buttonfunction:function(){
+                        	location.href="{{ route('user.login') }}";
+                            return false;
+                        }
+                    },
+                    popCancelButton:{
+                        buttonDisplay:true,
+                        buttonName:"狠心离开",
+                        buttonfunction:function(){}
+                    },
+                    popFlash:{
+                        flashSwitch:false
+                    }
+                });
+          @else
+        	  Popup.init({
+              	popTitle:'试看结束',
+                  popHtml:'<p>加入好父母学院，观看每周一期完整视频</p>',                
+                  popOkButton:{
+                      buttonDisplay:true,
+                      buttonName:"我要加入",
+                      buttonfunction:function(){
+                      	location.href='{{ url("article/6") }}';
+                          return false;
+                      }
+                  },
+                  popCancelButton:{
+                      buttonDisplay:true,
+                      buttonName:"我不关心",
+                      buttonfunction:function(){}
+                  },
+                  popFlash:{
+                      flashSwitch:false
+                  }
+              });
+          @endif
       };
     };
+    
 	//alert('{{$vip_left_day}}');
     //已经参加课程或收费课程试看或vip
     //if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')

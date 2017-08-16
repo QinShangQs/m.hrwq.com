@@ -34,9 +34,18 @@ body{
             </div>
         </div>
         <div style="text-align:center">
-        	<a href="{{route('article',['id'=>6])}}">
-        		<img style="width:6.25rem;height:1.71rem;margin-top:1rem" src="/images/share/join-btn.png"/>
-        	</a>
+        	@if($user['mobile'])
+	        	<a href="{{route('article',['id'=>6])}}">
+	        		<img style="width:6.25rem;height:1.71rem;margin-top:1rem" src="/images/share/join-btn.png"/>
+	        	</a>
+        	@else
+	        	<a href="{{route('user.login')}}">
+	        		<img style="width:8.125rem;height:2.15rem;margin-top:1rem" src="/images/share/register-btn.png"/>
+	        	</a>
+	        	<p style="font-size:0.9rem;color:#999999;text-align:center;margin-top:0.4rem">
+	        		注册即可获得7天会员体验期
+	        	</p>
+        	@endif
         </div>
         <audio id="audio1" preload="auto" loop="loop" style="display: none" src="http://oflmtu502.bkt.clouddn.com/%E9%9F%B3%E9%A2%91%20%E6%95%99%E8%82%B2%E8%A7%822.mp3">
         </audio>

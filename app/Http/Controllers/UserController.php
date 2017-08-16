@@ -29,6 +29,7 @@ use Qiniu\Processing\PersistentFop;
 use App\Models\Question;
 use App\Models\QuestionListener;
 use App\Models\UserFavor;
+use App\Models\UserPointVip;
 use App\Models\Order;
 use Log, DB, Event;
 use Carbon\Carbon;
@@ -455,13 +456,14 @@ class UserController extends Controller
                         }
                     }
 
-
                     $userModel->save();
                     $user_info['openid'] = $userModel->openid;
                     $user_info['mobile'] = $userModel->mobile;
                     $user_info['id'] = $userModel->id;
                     $user_info['nickname'] = $userModel->nickname;
                     $request->session()->set('user_info', $user_info);
+                    
+                    $this->_register_vip_ward();
                     
                     $url = $request->input('url');
                     DB::commit();
@@ -476,6 +478,24 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * 注册奖励天数
+     */
+    private function  _register_vip_ward(){
+    	$user = user_info();
+    	$days = 7;
+    	$left_days = get_new_vip_left_day($user['vip_left_day'], $days);
+    	UserPointVip::add($user['id'], $days, 5);//注册奖励
+    	User::find($user['id'])->update(['vip_left_day' => $left_days]);
+    	
+    	if($user['lover_id'] > 0){
+    		$lover = User::where("id",'=',$user['lover_id'])->first();
+    		$lover_left_days = get_new_vip_left_day($lover->vip_left_day, $days);
+    		UserPointVip::add($lover->id, $days, 4);
+    		User::find($lover->id)->update(['vip_left_day' => $lover_left_days]);
+    	}
+    }
+    
     private function _send_coupon($coupon_id, $user_id, $come_from)
     {
         if ($coupon_id && $user_id) {

@@ -38,15 +38,10 @@
                         	</div>                        	
                         	<div class="mmo_right_menu">
                         		<a href="{{route('my.courses')}}">收藏</a> 
-                        		<!--  @if($order_read_num>0)<span>{{$order_read_num}}</span>@endif</a>-->
                         		| 
                         		<a href="{{route('my.orders')}}">订单</a></div>
                         </div>                        
-                   
-                        <div class="mmo_love">
-							<a href="{{route('share.angle')}}">爱心大使&nbsp;></a>                      	
-                        </div>                     
-                        
+
                         <div class="mmo_identity">
                             <a href="{{route('article',['id'=>6])}}">
                             	<div class="mmo_identity_1">
@@ -57,9 +52,26 @@
                             		</div>
                             	</div>
                             </a>
-                        </div>                        
+                        </div>      
+                                          
                     </div>
-                    <ul class="mmo_list">
+                    
+                    <ul class="mmo_list" style="margin-top:0px;border-top: 1px solid #f6f6f6;">
+                    	 <li>
+                    	 	@if(empty(@$data['mobile']))
+                    	 	<a href="{{route('user.login')}}">                    	 	
+                    	 	@else
+                    	 	<a href="{{route('share.angle')}}">
+                    	 	@endif
+                    	 		<span style="font-size:0.5rem" >
+                    	 			立领七天会员&nbsp;<img src="/images/my/new-tip.png" style="width: 1.3rem;"/>&nbsp;
+                    	 			<span><img src="/images/public/select_right.jpg" alt=""/></span>
+                    	 		</span>
+                    	 	爱心大使
+                    	 	</a>
+                    	</li>
+                    </ul>
+                   <ul class="mmo_list">
                         <li><a href="{{route('my.notes')}}"><span><img src="/images/public/select_right.jpg"
                                                                        alt=""/></span>作业&笔记</a></li>
                         <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
