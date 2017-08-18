@@ -52,13 +52,13 @@ class FrontWechat
                     		User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
                     		Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
                     	}else{
-                    		$diff_day = diff_tow_days($user_info['lover_time'], date('Y-m-d H:i:s'));
-                    		//关联关系大于7天，则建立新的关系
-                    		if($diff_day > 7){
-                    			Log::info('lover_relation', ['用户'.$user_info['id']."与".$user_info['lover_id']."取消关系"]);
-                    			User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
-                    			Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
-                    		}
+//                     		$diff_day = diff_tow_days($user_info['lover_time'], date('Y-m-d H:i:s'));
+//                     		//关联关系大于7天，则建立新的关系
+//                     		if($diff_day > 7){
+//                     			Log::info('lover_relation', ['用户'.$user_info['id']."与".$user_info['lover_id']."取消关系"]);
+//                     			User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
+//                     			Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
+//                     		}
                     	}
                     }
 

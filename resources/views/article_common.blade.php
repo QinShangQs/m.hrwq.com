@@ -31,13 +31,14 @@
                 </article>
             </div>
             @if($article->type==6)
-            <input type="hidden" name="requestUri" id="requestUri" value="{{$requestUri}}">
-                <div class="mbtd_button" style="position:static;">
+            	<input type="hidden" name="requestUri" id="requestUri" value="{{$requestUri}}">
+            	<div style="margin-bottom:.5rem;text-align:center">
+	                <a href="{{route('vip.active')}}" 
+	                    style="font-size: 1rem;color: #666666;text-decoration: underline; font-style: italic;">已有会员卡用户请点击此激活</a>
+                </div>  
+                <div class="mbtd_button" style="margin-bottom: 2rem">
                     <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{$user['vip_flg'] == 1 ? '开通会员':'续费会员'}}" style="width: 95%;background-color: #ed6d11"></a>
-                    <div style="height:1rem"></div>
-                    <a href="{{route('vip.active')}}" 
-                    style="font-size: 1rem;color: #666666;text-decoration: underline; font-style: italic;">已有会员卡用户请点击此激活</a>  
-                 </div>
+                </div>
             @endif
         </div>
     </div>

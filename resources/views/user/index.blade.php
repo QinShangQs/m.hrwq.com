@@ -63,8 +63,8 @@
                     	 	@else
                     	 	<a href="{{route('share.angle')}}">
                     	 	@endif
-                    	 		<span style="font-size:0.5rem" >
-                    	 			立领七天会员&nbsp;<img src="/images/my/new-tip.png" style="width: 1.3rem;"/>&nbsp;
+                    	 		<span style="font-size:13px" >
+                    	 			邀请好友注册立得7天会员&nbsp;<img src="/images/my/new-tip.png" style="width: 1.4rem;"/>&nbsp;
                     	 			<span><img src="/images/public/select_right.jpg" alt=""/></span>
                     	 		</span>
                     	 	爱心大使

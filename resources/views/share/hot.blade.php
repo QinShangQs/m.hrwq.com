@@ -9,11 +9,12 @@ body{
 
 .play-container{
 	position:absolute;
-	top:12rem;
+	top:12.3rem;
 	z-index:10;
 	display:flex;
 	width:100%;
 	justify-content: center;
+	background-color: #fff;
 }
 
 @media screen and (min-width: 400px) {
@@ -42,7 +43,7 @@ body{
 	        	<a href="{{route('user.login')}}">
 	        		<img style="width:8.125rem;height:2.15rem;margin-top:1rem" src="/images/share/register-btn.png"/>
 	        	</a>
-	        	<p style="font-size:0.9rem;color:#999999;text-align:center;margin-top:0.4rem">
+	        	<p style="font-size:.95rem;color:#999999;text-align:center;margin-top:0.15rem;margin-bottom:0.55rem">
 	        		注册即可获得7天会员体验期
 	        	</p>
         	@endif

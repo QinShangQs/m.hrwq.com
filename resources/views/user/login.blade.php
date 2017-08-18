@@ -9,7 +9,8 @@
 </style>
 
 	<div class="win-qrcode"
-	 style="display:none;background:url(../images/login/win-qrcode.png);z-index:100;width:100%;height:100%;position: absolute; background-size: contain;">
+	 style="display:none;z-index:100;width:100%;height:100%;position: absolute; background-size: contain;">
+	 	<img src="/images/login/win-qrcode.png" style="width:100%;height:100%;"/>
 	</div>
 	
     <div id="subject">
