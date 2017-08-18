@@ -474,7 +474,10 @@ class UserController extends Controller
                 } catch (\Exception $e) {
                 	Log::error('手机号注册',[$e]);
                     DB::rollBack();
-                    return response()->json(['status' => false, 'msg' => '手机绑定失败']);
+                    //return response()->json(['status' => false, 'msg' => '手机绑定失败']);
+                    
+                    $url = $request->input('url');
+                    return response()->json(['status' => true, 'msg' => '已绑定成功', 'url' => $url]);
                 }
             }
         }

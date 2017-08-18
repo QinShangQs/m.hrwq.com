@@ -17,8 +17,8 @@ class RegisterPeopleEventListener {
 		//推荐成功通知
 		$notice->send([
 				'touser' => $user->openid,
-				'template_id' => '_4amRiyCsiyXPX39Kdyqrv1ULhm_lQvdRBCwY4wLycw',
-				//'template_id' => '4INUjSnTAocBSKT4n0XXAL1xsQSiFgruRHX6QJfZ2_U',//正式
+				//'template_id' => '_4amRiyCsiyXPX39Kdyqrv1ULhm_lQvdRBCwY4wLycw',
+				'template_id' => '4INUjSnTAocBSKT4n0XXAL1xsQSiFgruRHX6QJfZ2_U',//正式
 				'url' => route('user'),
 				'topcolor' => '#f7f7f7',
 				'data' => [
