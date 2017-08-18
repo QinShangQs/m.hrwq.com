@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\QuestionAnswered;
+use App\Events\RegisterPeople;
 use App\Models\Carousel;
 use App\Models\TalkComment;
 use App\Models\UserPoint;
@@ -33,6 +34,7 @@ use App\Models\UserPointVip;
 use App\Models\Order;
 use Log, DB, Event;
 use Carbon\Carbon;
+use App\Events\App\Events;
 
 class UserController extends Controller
 {
@@ -493,6 +495,8 @@ class UserController extends Controller
     		$lover_left_days = get_new_vip_left_day($lover->vip_left_day, $days);
     		UserPointVip::add($lover->id, $days, 4);
     		User::find($lover->id)->update(['vip_left_day' => $lover_left_days]);
+    		
+    		Event::fire(new RegisterPeople($lover));    		
     	}
     }
     
