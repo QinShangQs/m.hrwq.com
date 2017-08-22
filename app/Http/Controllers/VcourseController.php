@@ -47,7 +47,8 @@ class VcourseController extends Controller
         $wx_js = Wechat::js();
         
         //$data = file_get_contents('/mnt/sug_link.log');
-        $data = file_get_contents('D:/sug_link.log');
+        //$data = file_get_contents('D:/sug_link.log');
+        $data = file_get_contents('E:/sug_link.log');
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{

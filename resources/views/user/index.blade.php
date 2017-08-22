@@ -101,10 +101,7 @@
                                                     src="/images/public/select_right.jpg"
                                                     alt=""/></span>&nbsp;&nbsp;我的主页</a>
                                 </li>
-                                <li data-value="0" class="mmo_list_li" style="display:none;"><a
-                                            href="{{route('tutor.answers')}}"><span><img
-                                                    src="/images/public/select_right.jpg" alt=""/></span>&nbsp;&nbsp;我的回答 @if($questions_to_answer_count)<div>{{$questions_to_answer_count}}</div>@endif</a>
-                                </li>
+  
                             @endif
                             <li data-value="0" class="mmo_list_li" style="display:none;"><a
                                         href="{{route('tutor.complete')}}"><span><img

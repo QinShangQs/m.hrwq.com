@@ -20,13 +20,13 @@
                             </li>
                             <li>
                                 <div class="mbtd_list_title">性别</div>
-                                <div class="mbtd_list_select">
-                                    <select name="sex" class="mbtd_select_sex">
-                                        @foreach(config('constants.user_sex') as $key =>$label)
-                                            <option value="{{$key}}"
-                                                    @if($key == $user->sex) selected @endif>{{$label}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="">
+                                	<div style="display: flex;flex-direction: row;height: 46px;justify-content: flex-start; align-items: center;">
+                                	&nbsp;@foreach(config('constants.user_sex') as $key =>$label)
+                                		<input type="radio" name="sex" value="{{$key}}" @if($key == $user->sex) checked @endif />
+                                		<span>{{$label}}&nbsp;</span>
+                                    @endforeach
+                                	</div>
                                 </div>
                             </li>
                             <li>
@@ -55,8 +55,8 @@
                                 </div>
                                 <input type="hidden" name="tutor_cover" value="{{$user->tutor_cover}}">
                             </dd>
-                            <dt>向我提问需支付</dt>
-                            <dd><input type="text" value="{{$user->tutor_price}}" class="mmop_price" name="tutor_price" placeholder="1-100元"></dd>
+                            <dt style="display: none">向我提问需支付</dt>
+                            <dd style="display: none"><input type="text" value="{{$user->tutor_price}}" class="mmop_price" name="tutor_price" placeholder="1-100元"></dd>
                             <dt>个人介绍</dt>
                             <dd><textarea class="mmop_textarea" name="tutor_introduction" placeholder="20-150字，从家庭教育中的成长经历、感悟、擅长技能及孩子的转变情况等角度，介绍下自己是怎样一位父母，或者作为父母自己是怎样看待家庭教育的。">{{$user->tutor_introduction}}</textarea></dd>
                         </dl>

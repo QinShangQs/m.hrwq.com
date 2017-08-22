@@ -66,7 +66,7 @@ class TutorController extends Controller
             'address'=>'required',
             'tutor_honor'=>'required',
             'tutor_cover'=>'required',
-            'tutor_price'=>'required|numeric|min:1|max:100',
+            //'tutor_price'=>'required|numeric|min:1|max:100',
             'tutor_introduction'=>'required|min:20|max:150',
         ], [], [
             'realname'=>'真实姓名',
@@ -78,8 +78,8 @@ class TutorController extends Controller
             'tutor_price'=>'价格',
             'tutor_introduction'=>'个人介绍',
         ]);
-        if(request('tutor_price') < 1)
-            return response()->json(['code' => 3, 'message' => '指导师价格应不少于 1 元']);
+        //if(request('tutor_price') < 1)
+            //return response()->json(['code' => 3, 'message' => '指导师价格应不少于 1 元']);
 
         $userTutorApply = new UserTutorApply();
         $userTutorApply->user_id = $user->id;
