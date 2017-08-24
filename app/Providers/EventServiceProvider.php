@@ -19,6 +19,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Listeners\OrderEventListener',
         'App\Listeners\QuestionEventListener',
     	'App\Listeners\RegisterPeopleEventListener',
+    	'App\Listeners\VipLeftDayEventListener',
     ];
     /**
      * Register any other events for your application.
