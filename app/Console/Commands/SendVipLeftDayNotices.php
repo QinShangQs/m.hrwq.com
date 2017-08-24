@@ -44,7 +44,8 @@ class SendVipLeftDayNotices extends Command
         $users = DB::select("select *, DATEDIFF(vip_left_day,CURDATE()) as left_day from `user` order by vip_left_day desc");
        	foreach ($users as $k=>$user){
        		if(is_numeric($user->left_day) && $user->left_day < 0){
-       			DB::update("update `user` set vip_left_day = ? where id = ? ", [NULL, $user->id]);
+       			//置空剩余天数，修改为普通会员
+       			DB::update("update `user` set vip_left_day = ? and vip_flg = ? where id = ? ", [NULL, 1, $user->id]);
 				Log::info("置空NULL vip_left_day user_id = {$user->id}");
        		}else{
        			Event::fire(new VipLeftDay($user));
