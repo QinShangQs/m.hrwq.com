@@ -92,7 +92,7 @@ $("#vip_open").click(function(e){
     
     @if(empty(user_info()['mobile']))
 		Popup.init({
-            popHtml:'完成注册后，才可激活会员卡。',
+            popHtml:'完成注册后，才可成为和会员。',
             popFlash:{
                 flashSwitch:true,
                 flashTime:2000
