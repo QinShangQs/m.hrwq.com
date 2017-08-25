@@ -83,8 +83,16 @@
   
                     </ul>
                     <ul class="mmo_list">
-                        <li><a href="{{route('article',['id'=>6])}}"><span> <img
-                                                src="/images/public/select_right.jpg" alt=""/></span>会员状态</a></li>                        
+                        <li>
+                        	<a href="{{route('article',['id'=>6])}}">
+                        		<span> <img src="/images/public/select_right.jpg" alt=""/></span>
+                        		@if(computer_vip_left_day($data['vip_left_day']) > 0)
+                        			会员续费
+                        		@else
+                        			开通会员
+                        		@endif
+                        	</a>
+                        </li>                        
                        
                         
                         

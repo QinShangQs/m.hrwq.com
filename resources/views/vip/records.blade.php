@@ -4,7 +4,7 @@
         <div id="main">
             <div class="my">
             	<div class="my-records">
-            		会员状态
+            		会员动态
             	</div>
             	<div class="my-records-list">
             		@foreach($data->user_point_vip as $item)

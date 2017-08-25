@@ -57,11 +57,11 @@
             
             @if($vcourseDetail->type=='2')
             <div style="width:100%;text-align:right;padding-top:0.65rem;padding-bottom:0.65rem;color:#666666;font-size:0.65rem;">
-            	@if($vip_left_day == 0)
-        		 	非会员可以试看10分钟 <a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
-        		 	 href="{{route('article',['id'=>6])}}">开通会员</a>
+            	@if(!$user_info['mobile'])
+        		 	注册即可领取7天会员，收听完整课程<a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
+        		 	 href="{{route('user.login')}}">立即领取</a>
 	        	@else
-	        		好知识要一起分享&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
+	        		邀请给好友收听并注册，可获赠7天会员奖励&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
 	        	@endif
             </div>
             @endif
@@ -251,7 +251,8 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '{{strip_tags($vcourseDetail->title)}}', // 分享标题
                     desc: '我看到一个很好的家长课堂，可能很适合你呦', // 分享描述
-                    link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+                    //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}",
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -264,7 +265,8 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '{{strip_tags($vcourseDetail->title)}}', // 分享标题
-                    link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+                    //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}",
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -330,7 +332,7 @@ $(document).ready(function(){
 
     var videoEnd = function(){
       if ($('#video-container').data('flg')=='free') {
-    	  @if(empty(@$user_info['mobile']))
+    	  @if(empty($user_info['mobile']))
     		  Popup.init({
                 	popTitle:'试看结束',
                     popHtml:'<p>完成注册可获得7天会员奖励，期间可收听父母学院全部完整版课程</p>',                
@@ -351,6 +353,27 @@ $(document).ready(function(){
                         flashSwitch:false
                     }
                 });
+          @elseif($vip_left_day == 0)
+          	Popup.init({
+              	popTitle:'试看结束',
+                  popHtml:'<p>成为和会员可收听父母学院每周更新的完整版课程</p>',                
+                  popOkButton:{
+                      buttonDisplay:true,
+                      buttonName:"立即加入",
+                      buttonfunction:function(){
+                      	location.href='{{ url("article/6") }}';
+                          return false;
+                      }
+                  },
+                  popCancelButton:{
+                      buttonDisplay:true,
+                      buttonName:"我不关心",
+                      buttonfunction:function(){}
+                  },
+                  popFlash:{
+                      flashSwitch:false
+                  }
+              });
           @else
         	  Popup.init({
               	popTitle:'试看结束',
