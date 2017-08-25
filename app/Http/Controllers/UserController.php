@@ -497,9 +497,11 @@ class UserController extends Controller
     		$lover = User::where("id",'=',$user['lover_id'])->first();
     		//if($lover->role == 1){//普通用户或和会员
 	    	$lover_left_days = get_new_vip_left_day($lover->vip_left_day, $days);
-	    	UserPointVip::add($lover->id, $days, 4);
-	    	User::find($lover->id)->update(['vip_left_day' => $lover_left_days]);
-	    		
+	    	$updateResult = User::find($lover->id)->update(['vip_left_day' => $lover_left_days]);
+	    	Log::info('register_vip_ward lover_id='.$lover->lover_id." lover_left_days=".$lover_left_days." updateResult=".$updateResult);
+	    	if($updateResult){
+	    		UserPointVip::add($lover->id, $days, 4);
+	    	}
 	    	$lover->nickname = $user['nickname'];
 	    	Event::fire(new RegisterPeople($lover));
     		//}    		

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderPaid;
+use App\Events\RegisterPeople;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -575,8 +576,7 @@ class WechatController extends Controller
     	$left_days = get_new_vip_left_day($cUser->vip_left_day, $days);
     	UserPointVip::add($cUser->id, $days, 1);
     	$this->_user_update($cUser->id, ['vip_left_day' => $left_days]);
-    	
-    	
+
     	//关联爱心大使
     	$this->_order_update_lover($order, $cUser->lover_id);
     	
@@ -589,7 +589,9 @@ class WechatController extends Controller
     			$left_days = get_new_vip_left_day($left_days, $days);
     			UserPointVip::add($cUser->id, $days, 3);
     			$this->_user_update($cUser->id, ['vip_left_day' => $left_days]);
-    	
+    			
+    			//是否发送通知
+    			$sendNotice = false;
     			//分享者奖励
     			$lover = User::where("id",'=',$cUser->lover_id)->first();
     			//dd($lover->role);
@@ -606,10 +608,17 @@ class WechatController extends Controller
     					$incomeScale = IncomeScale::where('key', '3')->first();
     					$incomeScaleArr = unserialize($incomeScale->value);
     					$amount = $order->price * $incomeScaleArr['t_scale'] / 100;
+    					$sendNotice = true;
     				}else if($lover->role == 3){//合伙人，以提问人比例替代
-    					$incomeScale = IncomeScale::where('key', '4')->first();
-    					$incomeScaleArr = unserialize($incomeScale->value);
-    					$amount = $order->price * $incomeScaleArr['t_scale'] / 100;
+    					if($cUser->city == $lover->city){//同城					
+    						$incomeScale = IncomeScale::where('key', '4')->first();
+    						$incomeScaleArr = unserialize($incomeScale->value);
+    						$amount = $order->price * $incomeScaleArr['t_scale'] / 100;
+    						$sendNotice = true;
+    						Log::info('lover_relation', [$lover->nickname."与".$cUser->nickname."在同一城市，得收益"]);
+    					}else{
+    						Log::info('lover_relation', [$lover->nickname."与".$cUser->nickname."不再同一城市"]);
+    					}
     				}
     				//dd($incomeScale);
     				$lover->increment('current_balance', $amount);  //总收益 & 余额 ++
@@ -627,6 +636,11 @@ class WechatController extends Controller
     				$this->_log_income_log_type($user_id, 2, $order->id, $order->order_code, 
     						$amount, $order->pay_type, $user_balance['remark']."分成");
     				Log::info('lover_relation', ['id='.$lover->id.":".$lover->nickname.$user_balance['remark']]);
+    				
+    				if($sendNotice){
+    					$lover->nickname = $cUser->nickname;
+    					Event::fire(new RegisterPeople($lover, true));
+    				}
     			} 
     		}
     	}

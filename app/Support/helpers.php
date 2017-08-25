@@ -418,6 +418,10 @@ if(!function_exists('get_new_vip_left_day')){
 		if($left_days < 0){
 			$left_days = 0;
 		}
+		if(computer_vip_left_day($left_days) <= 0){
+			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
+		}
+		
 		return $left_days;
 	}
 }

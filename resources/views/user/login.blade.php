@@ -326,8 +326,12 @@
                             }
                         });
 
-                        $(".win-qrcode").show();
-
+						var backUrl = '{{$url}}';
+						if(backUrl){
+							location.href = backUrl;
+						}else{
+							$(".win-qrcode").show();
+						}                        
                     } else {
                         Popup.init({
                             popHtml: '<p>' + data.msg + '</p>',

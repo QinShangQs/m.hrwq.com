@@ -37,7 +37,7 @@
 	                    style="font-size: 1rem;color: #666666;text-decoration: underline; font-style: italic;">已有会员卡用户请点击此激活</a>
                 </div>  
                 <div class="mbtd_button" style="margin-bottom: 2rem">
-                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{$user['vip_flg'] == 1 ? '开通会员':'续费会员'}}" style="width: 95%;background-color: #ed6d11"></a>
+                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{computer_vip_left_day($user['vip_left_day']) > 0 ? '续费会员':'开通会员'}}" style="width: 95%;background-color: #ed6d11"></a>
                 </div>
             @endif
         </div>
@@ -89,6 +89,21 @@
 //向ta提问
 $("#vip_open").click(function(e){
     e.preventDefault();
+    
+    @if(empty(user_info()['mobile']))
+		Popup.init({
+            popHtml:'完成注册后，才可激活会员卡。',
+            popFlash:{
+                flashSwitch:true,
+                flashTime:2000
+            }
+        });
+    	setTimeout(function(){
+        	location.href = "/user/login?url="+location.pathname;
+        },2000);
+    	return;
+	@endif
+    
     @if($order)
         location.href="{{route('wechat.vip_pay')}}";
     @else

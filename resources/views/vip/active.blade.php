@@ -63,6 +63,21 @@
 <script>
     $(document).ready(function(){
         $('.active_btn').click(function(){
+
+			@if(empty(user_info()['mobile']))
+				Popup.init({
+                    popHtml:'完成注册后，才可激活会员卡。',
+                    popFlash:{
+                        flashSwitch:true,
+                        flashTime:2000
+                    }
+                });
+            	setTimeout(function(){
+                	location.href = "/user/login?url="+location.pathname;
+                },2000);
+            	return;
+			@endif
+            
             var code = $.trim($('#card_no').val());
             if(code=='') {
                 Popup.init({
