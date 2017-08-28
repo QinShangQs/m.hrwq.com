@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use Wechat;
+use Log;
 
 class VipLeftDayEventListener {
 	public function subscribe($events) {
@@ -25,6 +26,9 @@ class VipLeftDayEventListener {
 
 		$user = $event->user;
 		$notice = Wechat::notice();
+		
+		Log::info("vip_left_day 通知  user_id = {$user->id}");
+		
 		//推荐成功通知
 		$notice->send([
 				'touser' => $user->openid,

@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Events\VipLeftDay;
-use Event;
+use Log, Event;
 
 class SendVipLeftDayNotices extends Command
 {

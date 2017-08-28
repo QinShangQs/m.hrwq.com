@@ -61,7 +61,7 @@
         		 	注册即可领取7天会员，收听完整课程<a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
         		 	 href="{{route('user.login')}}">立即领取</a>
 	        	@else
-	        		邀请给好友收听并注册，可获赠7天会员奖励&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
+	        		邀请好友收听并注册，立得7天会员奖励&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
 	        	@endif
             </div>
             @endif
