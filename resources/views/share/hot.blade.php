@@ -42,7 +42,7 @@ body{
 	        		注册即可获得7天会员体验期
 	        	</p>
         </div>
-        <audio id="audio1" preload="auto" loop="loop" style="display: none" src="http://oflmtu502.bkt.clouddn.com/%E6%95%99%E8%82%B2%E8%A7%823.mp3">
+        <audio id="audio1" preload="auto" loop="loop" style="display: none" src="http://oflmtu502.bkt.clouddn.com/%E6%95%99%E8%82%B2%E8%A7%82-%E6%85%A2.mp3">
         </audio>
     </div>
 </div>
