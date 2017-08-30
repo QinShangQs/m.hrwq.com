@@ -21,7 +21,12 @@ class ShareController extends Controller
     	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64]);
     }
     
-    public function hot($id){
+    public function hot($id){    	
+    	$back = request('back');
+    	if(!empty($back)){
+    		return redirect($back);
+    	}
+    	
     	$userinfo = user_info();
     	if($userinfo['vip_flg'] == 2){
     		return redirect("/vcourse");

@@ -34,7 +34,7 @@ class VipLeftDayEventListener {
 				'touser' => $user->openid,
 				//'template_id' => '6k5ewbm_oKb9oWRBEzGD3ev2J9ST6vQAwz7GOc9P8eU',
 				'template_id' => 'tXoTWyFqxISHKZBpmkSdWbKbZPFi4KljM-QTzJ51xw4',//正式
-				'url' => route('user'),
+				'url' => "http://m.hrwq.com/user",
 				'topcolor' => '#f7f7f7',
 				'data' => [
 						'first' => $first."\n",

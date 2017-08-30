@@ -57,7 +57,7 @@
             
             @if($vcourseDetail->type=='2')
             <div style="width:100%;text-align:right;padding-top:0.65rem;padding-bottom:0.65rem;color:#666666;font-size:0.65rem;">
-            	@if(!$user_info['mobile'])
+            	@if(!@$user_info['mobile'])
         		 	注册即可领取7天会员，收听完整课程<a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
         		 	 href="{{route('user.login')}}">立即领取</a>
 	        	@else
@@ -244,15 +244,19 @@
 </style>
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript">
+function replace_china_char(str){
+	return str.replace('&ldquo;',"“").replace('&rdquo;',"”");
+}
+                
 $(document).ready(function(){
     uParse('article');
     wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"),false) ?>);
             wx.ready(function(){
                 wx.onMenuShareAppMessage({
-                    title: '{{strip_tags($vcourseDetail->title)}}', // 分享标题
+                    title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
                     desc: '我看到一个很好的家长课堂，可能很适合你呦', // 分享描述
                     //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
-                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}",
+                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -264,9 +268,9 @@ $(document).ready(function(){
                     }
                 });
                 wx.onMenuShareTimeline({
-                    title: '{{strip_tags($vcourseDetail->title)}}', // 分享标题
+                    title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
                     //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
-                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}",
+                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
                     imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -332,7 +336,7 @@ $(document).ready(function(){
 
     var videoEnd = function(){
       if ($('#video-container').data('flg')=='free') {
-    	  @if(empty($user_info['mobile']))
+    	  @if(empty(@$user_info['mobile']))
     		  Popup.init({
                 	popTitle:'试看结束',
                     popHtml:'<p>完成注册可获得7天会员奖励，期间可收听父母学院全部完整版课程</p>',                
