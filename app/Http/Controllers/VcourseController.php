@@ -35,7 +35,7 @@ class VcourseController extends Controller
         if (($search_key = $request->input('search_key'))) {
         	$builder->where('title', 'like', '%' . $search_key . '%');
         }
-        $vcourseList = $builder->take(20)->orderBy('vcourse.'.$sortField, 'desc')->get();
+        $vcourseList = $builder->take(100)->orderBy('vcourse.'.$sortField, 'desc')->get();
         if($userid = session('user_info')['id']){
         	foreach ($vcourseList as $k => $v){
         		$v->userFavor = UserFavor::whereUserId($userid)->whereFavorId($v->id)->whereFavorType('2')->first();
@@ -46,8 +46,9 @@ class VcourseController extends Controller
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
         
-        //$data = file_get_contents('/mnt/sug_link.log');
-        $data = file_get_contents('D:/sug_link.log');
+        $data = file_get_contents('/mnt/sug_link.log');
+        //$data = file_get_contents('D:/sug_link.log');
+        //$data = file_get_contents('E:/sug_link.log');
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{
