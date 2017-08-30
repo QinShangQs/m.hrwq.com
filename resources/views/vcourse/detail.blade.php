@@ -245,7 +245,7 @@
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript">
 function replace_china_char(str){
-	return str.replace('&ldquo;',"“").replace('&rdquo;',"”");
+	return str.replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”");
 }
                 
 $(document).ready(function(){
