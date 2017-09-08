@@ -158,9 +158,10 @@ class VcourseController extends Controller
             ->whereVisible('1')
             // ->orWhere('user_id','=',$user_info['id'])
             ->where('user_id', '!=', @$user_info['id'])
-            ->orderBy('vcourse_mark.likes', 'desc')
             ->orderBy('vcourse_mark.created_at', 'desc')
+            ->orderBy('vcourse_mark.likes', 'desc')
             ->get();
+
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
             ->whereNotNull('vcourse.video_tran')

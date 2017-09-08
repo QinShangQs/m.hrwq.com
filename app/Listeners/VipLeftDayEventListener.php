@@ -29,19 +29,24 @@ class VipLeftDayEventListener {
 		
 		Log::info("vip_left_day 通知  user_id = {$user->id}");
 		
-		//推荐成功通知
-		$notice->send([
-				'touser' => $user->openid,
-				//'template_id' => '6k5ewbm_oKb9oWRBEzGD3ev2J9ST6vQAwz7GOc9P8eU',
-				'template_id' => 'tXoTWyFqxISHKZBpmkSdWbKbZPFi4KljM-QTzJ51xw4',//正式
-				'url' => "http://m.hrwq.com/user",
-				'topcolor' => '#f7f7f7',
-				'data' => [
-						'first' => $first."\n",
-						'keyword1'=> date("Y-m-d",strtotime($user->created_at) )."\n",
-						'keyword2'=> $user->vip_left_day."\n",
-						'remark'=> '点击此处查看详情'
-				],
-		]);
+		try {
+			//推荐成功通知
+			$notice->send([
+					'touser' => $user->openid,
+					//'template_id' => '6k5ewbm_oKb9oWRBEzGD3ev2J9ST6vQAwz7GOc9P8eU',
+					'template_id' => 'tXoTWyFqxISHKZBpmkSdWbKbZPFi4KljM-QTzJ51xw4',//正式
+					'url' => "http://m.hrwq.com/user",
+					'topcolor' => '#f7f7f7',
+					'data' => [
+							'first' => $first."\n",
+							'keyword1'=> date("Y-m-d",strtotime($user->created_at) )."\n",
+							'keyword2'=> $user->vip_left_day."\n",
+							'remark'=> '点击此处查看详情'
+					],
+			]);
+		}catch(\Exception $e){
+			Log::warning("发生异常：".$e->getMessage());
+		}
+		
 	}
 }
