@@ -37,7 +37,7 @@
 	                    style="font-size: 1rem;color: #666666;text-decoration: underline; font-style: italic;">已有会员卡用户请点击此激活</a>
                 </div>  
                 <div class="mbtd_button" style="margin-bottom: 2rem">
-                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{computer_vip_left_day($user['vip_left_day']) > 0 ? '续费会员':'开通会员'}}" style="width: 95%;background-color: #ed6d11"></a>
+                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{(computer_vip_left_day($user['vip_left_day']) > 0 && @user_info()['finish_order']) ? '续费会员':'开通会员'}}" style="width: 95%;background-color: #ed6d11"></a>
                 </div>
             @endif
         </div>

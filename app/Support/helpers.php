@@ -188,6 +188,10 @@ if (!function_exists('user_info')) {
             return session('user_info')['id'];
         } else {
             $user_info = App\Models\User::find(session('user_info')['id'])->toArray();
+            
+            $order = App\Models\Order::where('user_id',$user_info['id'])->where('pay_type',6)->whereIn('order_type',[2,4])->first();
+            $user_info['finish_order'] = $order;
+            
             return $key ? (isset($user_info[$key]) ? $user_info[$key] : '') : $user_info;
         }
     }

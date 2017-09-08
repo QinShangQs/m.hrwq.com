@@ -46,9 +46,12 @@ class VcourseController extends Controller
         $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
         $wx_js = Wechat::js();
         
-        $data = file_get_contents('/mnt/sug_link.log');
-        //$data = file_get_contents('D:/sug_link.log');
-        //$data = file_get_contents('E:/sug_link.log');
+        if(preg_match('/^win/i', PHP_OS)){
+        	$data = file_get_contents('E:/sug_link.log');
+        }else{
+        	$data = file_get_contents('/mnt/sug_link.log');
+        }
+        
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{
@@ -146,7 +149,7 @@ class VcourseController extends Controller
             // ->whereVisible('1')
             // ->orWhere('user_id','=',$user_info['id'])
             ->where('user_id', '=', @$user_info['id'])
-            ->orderBy('vcourse_mark.id', 'desc')
+            ->orderBy('vcourse_mark.created_at', 'desc')
             ->get();
         $vcourseMarkListB = VcourseMark::whereVcourseId($id)->with('user')->with(['like_record' => function ($query) use ($user_info) {
             $query->where('like_type', '2');
@@ -156,7 +159,7 @@ class VcourseController extends Controller
             // ->orWhere('user_id','=',$user_info['id'])
             ->where('user_id', '!=', @$user_info['id'])
             ->orderBy('vcourse_mark.likes', 'desc')
-            ->orderBy('vcourse_mark.id', 'desc')
+            ->orderBy('vcourse_mark.created_at', 'desc')
             ->get();
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')

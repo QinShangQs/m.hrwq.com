@@ -86,7 +86,7 @@
                         <li>
                         	<a href="{{route('article',['id'=>6])}}">
                         		<span> <img src="/images/public/select_right.jpg" alt=""/></span>
-                        		@if(computer_vip_left_day($data['vip_left_day']) > 0)
+                        		@if(computer_vip_left_day($data['vip_left_day']) > 0 && @user_info()['finish_order'])
                         			会员续费
                         		@else
                         			开通会员
