@@ -143,7 +143,42 @@
         </div>
     </div>
 @endsection
+
 @section('script')
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"), false) ?>);
+	    wx.ready(function () {
+	        wx.onMenuShareAppMessage({
+	            title: '365天，和全国精英家长一起，成为更懂教育的父母', // 分享标题
+	            desc: '我们穷尽一生的时间爱孩子，却很少关注自身的提升', // 分享描述
+	            link: '{{route('user')}}?from=singlemessage', // 分享链接
+	            imgUrl: '{{url('/images/my/dis_in_love.jpg')}}', // 分享图标
+	            type: '', // 分享类型,music、video或link，不填默认为link
+	            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+	            success: function () {
+	                // 用户确认分享后执行的回调函数
+	            },
+	            cancel: function () {
+	                // 用户取消分享后执行的回调函数
+	            }
+	        });
+	        wx.onMenuShareTimeline({
+	            title: '365天，和全国精英家长一起，成为更懂教育的父母', // 分享标题
+	            link: '{{route('user')}}?from=singlemessage', // 分享链接
+	            imgUrl: '{{url('/images/my/dis_in_love.jpg')}}', // 分享图标
+	            success: function () {
+	                // 用户确认分享后执行的回调函数
+	            },
+	            cancel: function () {
+	                // 用户取消分享后执行的回调函数
+	            }
+	        });
+	    });
+	});
+</script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $(".mmo_list_button").click(function () {//伸缩菜单
