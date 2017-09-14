@@ -93,7 +93,7 @@
                         		@endif
                         	</a>
                         </li>                        
-                       
+                       <li><a href="{{route('leaveword')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
                         
                         
                         @if($data['role'] == 2)
