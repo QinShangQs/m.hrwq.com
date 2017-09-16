@@ -582,7 +582,8 @@ class WechatController extends Controller
     	
     	//爱心大使分享来的用户
     	if($cUser->lover_id != 0){
-    		$diff_day = diff_tow_days($cUser->lover_time, date('Y-m-d H:i:s'));
+    		//$diff_day = diff_tow_days($cUser->lover_time, date('Y-m-d H:i:s'));
+    		$diff_day = 1;
     		if($diff_day <= 7){
     			//被分享奖励
     			$days = 7;
