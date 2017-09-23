@@ -56,3 +56,7 @@ create table user_point_vip(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户和会员天数记录';
 
 
+###############2017-09-23#################
+/*增加和会员注册时间*/
+alter table `user` add column `register_at` datetime default null comment '手机号注册时间';
+

@@ -73,7 +73,7 @@
                     </ul>
                    <ul class="mmo_list">
                         <li><a href="{{route('my.notes')}}"><span><img src="/images/public/select_right.jpg"
-                                                                       alt=""/></span>作业&笔记</a></li>
+                                                                       alt=""/></span>我的作业</a></li>
                         <li><a href="{{route('user.question')}}"><span><img src="/images/public/select_right.jpg"
                                                                             alt=""/></span>我的问答 @if($new_answer_questions_count>0)
                                     <div>{{$new_answer_questions_count}}</div>@endif</a></li>

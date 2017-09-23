@@ -56,12 +56,12 @@
             @endif
             
             @if($vcourseDetail->type=='2')
-            <div style="width:100%;text-align:right;padding-top:0.65rem;padding-bottom:0.65rem;color:#666666;font-size:0.65rem;">
+            <div style="width:100%;text-align:right;line-height: 1.875rem;color:#666666;font-size:0.65rem;">
             	@if(!@$user_info['mobile'])
-        		 	注册即可领取7天会员，收听完整课程<a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
-        		 	 href="{{route('user.login')}}">立即领取</a>
+        		 	注册即可领取7天会员，收听完整课程&nbsp;&nbsp;<a style="margin-right: 1.25rem;color: white;border-radius: 5px;font-size:0.60rem;padding: 0.15rem;background-color:#ed6d11"
+        		 	 href="{{route('user.login')}}">&nbsp;立即注册&nbsp;</a>
 	        	@else
-	        		邀请好友收听并注册，立得7天会员奖励&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
+	        		邀请好友收听并注册，立得7天会员奖励&nbsp;&nbsp;<img id="share-logo" style="margin-right: 1.25rem;width:0.75rem;vertical-align: text-top;" src="/images/vcourse/share-logo.png"/>
 	        	@endif
             </div>
             @endif
@@ -105,28 +105,10 @@
                     </dl>
                 </div>
                 <div class="lcd_div_2" >
-                    <div class="lcd_div_2_title">课程作业：{{ $vcourseDetail->work }}</div>
-                    @if(count($vcourseDetail->order)>0)
-                    <form class="lcd_div_2_form">
-                        <input type="hidden" name="vcourse_id" value="{{$vcourseDetail->id}}"/>
-                        <input type='hidden' name='_token' value="{{csrf_token()}}">
-                        <div class="lcd_div_2_form_textarea"><textarea id="lcd_div_2_form_textarea" placeholder="勤记笔记，随时随地查看，永不丢失，不少于20字符。" name="mark_content"></textarea></div>
-                        <div class="lcd_div_2_form_select1">
-                            <input type="text" id="lcd_div_2_form_select1_dummy" class="" placeholder="" readonly="">
-                            <select id="lcd_div_2_form_select1" class="dw-hsel" tabindex="-1" name="mark_type">
-                              <option value="2" selected="">作业</option>
-                              <option value="1">笔记</option>
-                            </select>
-                        </div>
-                        <div class="lcd_div_2_form_select2" style="display: none;">
-                            <input type="text" id="lcd_div_2_form_select2_dummy" class="" placeholder="" readonly=""><select id="lcd_div_2_form_select2" class="dw-hsel" tabindex="-1" name="visible">
-                              <option value="2" selected="">私密</option>
-                              <option value="1">公开</option>
-                            </select>
-                        </div>
-                        <div class="lcd_div_2_form_button"><input type="submit" value="提交"></div>
-                    </form>
-                    @endif
+                    <div class="lcd_div_2_title" style="font-size: 0.9375rem;padding-top: 0.90rem;padding-bottom: 0.90rem;padding-right: 0px;">
+                    	<span style="width: 0.1875rem;height:1.875rem;background-color: #ed6d11">&nbsp;</span>&nbsp;	
+                    	课程作业：{{ $vcourseDetail->work }}
+                    </div>                    
                    
                     @if(count($vcourseMarkListA)>0||count($vcourseMarkListB)>0)
                         <ul class="lcd_div_2_list">
@@ -139,13 +121,13 @@
                             <div class="lcd_div_2_list_zambia" data-id="{{$item->id}}"><span id='like_{{$item->id}}'>{{$item->likes}}</span> @if(count($item->like_record)>0)<img src="/images/public/zambia_on.png" alt=""/>@else<img src="/images/public/zambia.png" alt=""/>@endif</div><!--data-id为本条信息的id，用来想处理页面传送点赞的信息-->
                         </li>
                         @endforeach
-                        @foreach($vcourseMarkListB as $item)
+                        @foreach($vcourseMarkListB as $k => $item)
                         <li>
                             <div class="lcd_div_2_list_img"><img src="{{url(@$item->user->profileIcon)}}" alt=""/></div>
                             <div class="lcd_div_2_list_title">{{@$item->user->nickname}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_time">{{@date('Y-m-d',strtotime($item->created_at))}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_p"><span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>{{$item->mark_content}}</div><!--需要链接直接加a标签就行-->
-                            <div class="lcd_div_2_list_zambia" data-id="{{$item->id}}"><span id='like_{{$item->id}}'>{{$item->likes?$item->likes:''}}</span> @if(count($item->like_record)>0)<img src="/images/public/zambia_on.png" alt=""/>@else<img src="/images/public/zambia.png" alt=""/>@endif</div><!--data-id为本条信息的id，用来想处理页面传送点赞的信息-->
+                            <div class="lcd_div_2_list_zambia" data-id="{{$item->id}}">@if($k == 0) <img src="/images/vcourse/v-hot-detail.png" style="width:2.68rem"> @endif<span id='like_{{$item->id}}'>{{$item->likes?$item->likes:''}}</span> @if(count($item->like_record)>0)<img src="/images/public/zambia_on.png" alt=""/>@else<img src="/images/public/zambia.png" alt=""/>@endif</div><!--data-id为本条信息的id，用来想处理页面传送点赞的信息-->
                         </li>
                         @endforeach
                         </ul>
@@ -190,6 +172,52 @@
 
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
 </div>
+
+@if(count($vcourseDetail->order)>0)
+		<form style="position: fixed;bottom: 0px;
+			background-color: #fff;border-top: 1px solid #ccc;
+			width: 100%;box-sizing: border-box; ">
+        	<input type="hidden" name="vcourse_id" value="{{$vcourseDetail->id}}"/>
+        	<input type='hidden' name='_token' value="{{csrf_token()}}">
+        	<div id="mark-input-tip" style="width:100%;display: flex;flex-direction: row;align-items: center;margin: 0.625rem 0 0.625rem 0;">
+        		<span onclick="$('#mark-input-tip').hide();$('.lcd_div_2_form').show();" 
+        			 style="padding-left:.5rem;font-size:0.56rem;width:13rem;background-color: #f7f7f7;color:#bfbfbf;line-height:1.527rem;border-radius:20px;border:1px solid #bfbfbf;margin: 0 1.25rem 0 1.25rem;">
+        			<img src="/images/vcourse/v-pan-detail.png" style="width:0.84rem;"/>
+        			&nbsp;写作业聊教子感悟
+        		</span>
+        		<img src="/images/vcourse/v-detail.png" 
+        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_1').addClass('selected');$('.lcd_div div').hide();$('.lcd_div_1').show();location.hash='lcd_tab_1'" 
+        			style="width:1.84rem;margin-right:1.375rem"/>
+        		<img src="/images/vcourse/v-suggest.png" 
+        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_3').addClass('selected');$('.lcd_div div').hide();$('.lcd_div_3').show();location.hash='lcd_tab_3';"
+        			style="width:1.84rem;"/>
+        	</div>
+        	<div style="display:none" class="lcd_div_2_form">
+        			<div class="lcd_div_2_form_textarea">
+        				<textarea id="lcd_div_2_form_textarea" 
+        					placeholder="勤记笔记，随时随地查看，永不丢失，不少于20字符。" 
+        					name="mark_content" style="width: 90%;border-bottom: 1px solid #ccc;"></textarea>
+        			</div>
+                    <div class="lcd_div_2_form_select1">
+                       <input type="text" id="lcd_div_2_form_select1_dummy" class="" placeholder="" readonly="">
+                       <select id="lcd_div_2_form_select1" class="dw-hsel" tabindex="-1" name="mark_type">
+                          <option value="2" selected="">作业</option>
+                          <option value="1">笔记</option>
+                       </select>
+                     </div>
+                    <div class="lcd_div_2_form_select2" style="display: none;">
+                        <input type="text" id="lcd_div_2_form_select2_dummy" class="" placeholder="" readonly="">
+                        <select id="lcd_div_2_form_select2" class="dw-hsel" tabindex="-1" name="visible">
+                           <option value="2" selected="">私密</option>
+                           <option value="1">公开</option>
+                         </select>
+                    </div>
+                    <div class="lcd_div_2_form_button"><input type="submit" value="提交"></div>
+        	</div>
+        	 
+		</form>
+@endif
+
 @endsection
 @section('script')
 <!--Mobiscroll插件调用文件开始-->
@@ -283,6 +311,10 @@ $(document).ready(function(){
             });
 
 
+    $('.lcd_div').click(function(){
+    	$('#mark-input-tip').show();
+    	$('.lcd_div_2_form').hide();
+    });
       
     $("#share-logo").click(function(){
     	$(".win-share").show();
@@ -469,7 +501,7 @@ $(document).ready(function(){
     @endif
 
     var lockm = false;
-    $(".lcd_div_2_form_button").click(function(){//提交作业笔记表单
+    $(".lcd_div_2_form_button input").click(function(){//提交作业笔记表单
         if (lockm) {return;}
         if($("#lcd_div_2_form_textarea").val().length<10){
             alert("填写的作业笔记信息不能少于10个字符");
@@ -506,6 +538,17 @@ $(document).ready(function(){
                 
                 $('#lcd_div_2_form_textarea').val('');
                 lockm = false;
+
+                Popup.init({
+                    popTitle:'提示',
+                    popHtml:'<p>'+data.msg+'</p>',
+                    popFlash:{
+                        flashSwitch:true,
+                        flashTime:1000,
+                    }
+                });
+
+                $('.lcd_div').click();
             }else{
                Popup.init({
                         popTitle:'失败',

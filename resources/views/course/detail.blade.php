@@ -134,6 +134,12 @@
 @include('element.share')
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	if($("iframe").length > 0){
+		$("iframe").width('100%')
+	}
+});
+                
     var subscribe = '{{$subscribe}}';
     $(document).ready(function(){
 	uParse('article');

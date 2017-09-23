@@ -435,6 +435,7 @@ class UserController extends Controller
                     $userModel->mobile = $request->input('login_phone');
                     $userModel->province = $request->input('province');
                     $userModel->city = $request->input('city');
+                    $userModel->register_at = date('Y-m-d H:i:s');
                 } else {
                     return response()->json(['status' => false, 'msg' => '绑定失败']);
                 }
