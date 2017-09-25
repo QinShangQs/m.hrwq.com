@@ -5,8 +5,8 @@
             <div class="my">
                 <div class="my_task_note">
                     <div class="mtn_title">
-                        <div class="mtn_title_1 select">作业</div>
-                        <div class="mtn_title_2">笔记</div>
+                        <div class="mtn_title_1 select" style="width:100%">作业</div>
+                        <!-- <div class="mtn_title_2">笔记</div> -->
                     </div>
                     <div class="mtn_div">
                         <div class="mtn_div_1">

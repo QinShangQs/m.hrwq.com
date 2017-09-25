@@ -10,6 +10,28 @@
 	    background-repeat: no-repeat;
 	    background-position: center;
     }
+    
+    .show-mark-tip {
+	    width: 100%;
+	    text-align: center;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    height: 1.5rem;
+	}
+    
+    .show-mark-tip .img {
+	    width: 1.01rem;
+	    -moz-transform: rotate(-180deg);
+	    -webkit-transform: rotate(-180deg);
+    	transform: rotate(-180deg);
+    	vertical-align: super;
+    }
+    .show-mark-tip .selected {
+	    -moz-transform: rotate(0deg);
+	    -webkit-transform: rotate(0deg);
+    	transform: rotate(0deg);
+    }
 </style>
 <script src="/qiniu/js/videojs/video.min.js"></script>
 <div id="subject">
@@ -67,7 +89,7 @@
             @endif
             
            
-            <ul class="lcd_tab">
+            <ul class="lcd_tab" style="display:none">
                 <li id="lcd_tab_1" >课程详情</li>
                 <li id="lcd_tab_2" class="selected">作业&笔记</li>
                 <li id="lcd_tab_3">推荐课程</li>
@@ -179,26 +201,33 @@
 			width: 100%;box-sizing: border-box; ">
         	<input type="hidden" name="vcourse_id" value="{{$vcourseDetail->id}}"/>
         	<input type='hidden' name='_token' value="{{csrf_token()}}">
-        	<div id="mark-input-tip" style="width:100%;display: flex;flex-direction: row;align-items: center;margin: 0.625rem 0 0.625rem 0;">
+        	<div class="show-mark-tip" >
+        		<img class="img" src="/images/vcourse/v-down-detail.png"/>
+        	</div>
+        	
+        	<div id="mark-input-tip" style="width:100%;display: flex;flex-direction: row;align-items: center;margin: 0 0 0.625rem 0;">
         		<span onclick="$('#mark-input-tip').hide();$('.lcd_div_2_form').show();" 
-        			 style="padding-left:.5rem;font-size:0.56rem;width:13rem;background-color: #f7f7f7;color:#bfbfbf;line-height:1.527rem;border-radius:20px;border:1px solid #bfbfbf;margin: 0 1.25rem 0 1.25rem;">
+        			 style="padding:0.05rem 0 0.05rem.5rem;;font-size:0.9375rem;width:13rem;background-color: #f7f7f7;color:#bfbfbf;line-height:1.718rem;border-radius:20px;border:1px solid #bfbfbf;margin: 0 1.25rem 0 1.25rem;">
         			<img src="/images/vcourse/v-pan-detail.png" style="width:0.84rem;"/>
         			&nbsp;写作业聊教子感悟
         		</span>
         		<img src="/images/vcourse/v-detail.png" 
-        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_1').addClass('selected');$('.lcd_div div').hide();$('.lcd_div_1').show();location.hash='lcd_tab_1'" 
+        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_1').addClass('selected');$('.lcd_div>div').hide();$('.lcd_div_1').show();" 
         			style="width:1.84rem;margin-right:1.375rem"/>
         		<img src="/images/vcourse/v-suggest.png" 
-        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_3').addClass('selected');$('.lcd_div div').hide();$('.lcd_div_3').show();location.hash='lcd_tab_3';"
+        			onclick="$('.lcd_tab li').removeClass('selected');$('#lcd_tab_3').addClass('selected');$('.lcd_div>div').hide();$('.lcd_div_3').show();"
         			style="width:1.84rem;"/>
         	</div>
         	<div style="display:none" class="lcd_div_2_form">
-        			<div class="lcd_div_2_form_textarea">
+        			<div class="lcd_div_2_form_textarea" style="text-align: center">
         				<textarea id="lcd_div_2_form_textarea" 
         					placeholder="勤记笔记，随时随地查看，永不丢失，不少于20字符。" 
-        					name="mark_content" style="width: 90%;border-bottom: 1px solid #ccc;"></textarea>
+        					name="mark_content" 
+        					style="width: 21.875rem;border: 1px solid #ed6d11;box-sizing: border-box;
+    							height: 7.9rem;border-radius: 5px;background-color: #fcfcfc;
+    							color: #bcbbbb;font-size: 0.82rem; padding: 0.5rem;"></textarea>
         			</div>
-                    <div class="lcd_div_2_form_select1">
+                    <div class="lcd_div_2_form_select1" style="display: none">
                        <input type="text" id="lcd_div_2_form_select1_dummy" class="" placeholder="" readonly="">
                        <select id="lcd_div_2_form_select1" class="dw-hsel" tabindex="-1" name="mark_type">
                           <option value="2" selected="">作业</option>
@@ -212,7 +241,11 @@
                            <option value="1">公开</option>
                          </select>
                     </div>
-                    <div class="lcd_div_2_form_button"><input type="submit" value="提交"></div>
+                    <div class="lcd_div_2_form_button" style="text-align: center;padding-top: 0px;">
+                    	<input type="submit" value="提交"
+                    	style="background-color: #ed6d11;color: #fff;width: 8rem;
+                    	border-radius: 5px;padding: 0.2rem;box-sizing: content-box;">
+                    </div>
         	</div>
         	 
 		</form>
@@ -311,11 +344,19 @@ $(document).ready(function(){
             });
 
 
-    $('.lcd_div').click(function(){
-    	$('#mark-input-tip').show();
-    	$('.lcd_div_2_form').hide();
-    });
-      
+	$('.show-mark-tip').click(function(){
+		if($('#mark-input-tip').css('display') != 'none'){
+			$(this).find('img').addClass('selected');
+		}else{
+			$(this).find('img').removeClass('selected');
+		}
+		$('#mark-input-tip').toggle();
+		$('.lcd_div_2_form').toggle();
+		
+		$('.lcd_div>div').hide();
+		$('.lcd_div_2').show();
+	});
+            
     $("#share-logo").click(function(){
     	$(".win-share").show();
     });
@@ -548,7 +589,7 @@ $(document).ready(function(){
                     }
                 });
 
-                $('.lcd_div').click();
+                $('.show-mark-tip').click();
             }else{
                Popup.init({
                         popTitle:'失败',
