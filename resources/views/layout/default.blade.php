@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/css/style.css?20170718">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/public.js?20170718"></script>
+    <script type="text/javascript" src="/js/public.js?2017092622"></script>
     @yield("style")
 </head>
 <body>

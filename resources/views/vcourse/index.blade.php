@@ -4,63 +4,79 @@
 <div id="subject">
     <div id="main">
         <div class="good_looking">            
-            <div class="public_search"  style="display:block;" >
-                <form class="public_search_form">
-                    <div class="public_search_form_div"><input class="public_search_form_input" type="text" name="search_key" value="{{request('search_key')}}" placeholder="搜索讲师/课程" ></div>
-                    <div class="public-search-menu">
-                    	<img src="/images/vcourse/menu.png"/>
-                    	<div class="list" style="display:none">
-                    		@if(request('ob') == 'created_at')
-                    			<div desc="created_at" class="item selected">更新时间</div>
-                    			<div desc="view_cnt" class="item">观看人数</div>
-                    		@else
-                    			<div desc="created_at" class="item">更新时间</div>
-                    			<div desc="view_cnt" class="item  selected">观看人数</div>
-                    		@endif
-                    	</div>
+
+        @if(count($carouselList)>0)
+            <div class="public_slide">
+                <div class="main_visual">
+                    <div class="flicking_con">
+                        @foreach ($carouselList as $item)
+                        <a href="#">{{ $item->id }}</a>
+                        @endforeach
                     </div>
-                </form>
-                <div class="public_search_hot" style="display: none">
-                    <div>搜索"<span>东风</span>"</div>
-                </div>
-                <dl class="public_search_quick" style="display: none">
-                    <dt>热门搜索</dt>
-                    <dd>
-                        @if(isset($hot_search)&&count($hot_search)>0)
+                    <div class="main_image">
                         <ul>
-                            @foreach($hot_search as $item)
-                                 <li data-value="{{$item}}">{{$item}}</li><!--data-value为要检索的内容-->
+                           @foreach($carouselList as $item)
+                                @if($item->redirect_type == 1)
+                                <li> <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                    </span></li>
+                                @elseif($item->redirect_type == 2)
+                                <li>
+                                    <a href="{{$item->redirect_url}}">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                    </span>
+                                    </a>
+                                @else
+                                 <li><a href="{{route('course.staticlink',['id'=>$item->id])}}">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                    </span>
+                                    </a>
+                                @endif
                             @endforeach
                         </ul>
-                        @endif
-                        <div class="clearboth"></div>
-                    </dd>
-                    <dt class="public_search_delete_con">最近搜索</dt><!--若没有最近搜索信息，则此dt和下面的dd不显示-->
-                    <dd class="public_search_delete_con">
-                        <ul class="h-search-item">
-
-                        </ul>
-                        <div class="clearboth"></div>
-                    </dd>
-                </dl>
-                <div class="public_search_delete">清除搜索记录</div><!--若没有最近搜索信息,则不显示清除搜索记录-->
+                        <a href="javascript:;" id="btn_prev"></a>
+                        <a href="javascript:;" id="btn_next"></a>
+                    </div>
+                </div>
             </div>
-            <div style="height:3rem"></div>
-            <div style="width:100%;background-color:#fff;height: 2.5rem;margin-bottom: 0.5rem;">
-            	<table style="width:100%;height:100%;text-align:center">
-            		<tr>
-            			<td><a style="font-size:1rem;" href="{{$telecast}}">进入直播</a> <img style="width:1rem" src="/images/vcourse/telecast.png"/></td>
-            			<td style="width:1%"><img style="height:1.2rem" src="/images/vcourse/line.png"/></td>
-            			<td><a style="font-size:1rem;" href="{{$foreshow}}">精彩预告</a> <img style="width:0.8rem" src="/images/vcourse/foreshow.png"/></td>
-            		</tr>
-            	</table>
+            @endif
+            
+            <div style="height:3.125rem;display:flex;flex-direction: row;justify-content: space-around;
+    				align-items: center;background-color: white; border-bottom: 1px solid #f6f6f6;">
+    			@if(request('ob') == 'created_at')
+    				<img src="/images/vcourse/zuixin-2.png" style="width:1.468rem"/>
+    			@else
+    				<img src="/images/vcourse/zuixin-1.png" style="width:1.468rem"
+    					onclick="location.href='{{route('vcourse')}}?ob=created_at'"
+    				/>
+    			@endif
+    			
+    			@if(request('ob') == 'view_cnt')
+    				<img src="/images/vcourse/zuire-2.png" style="width:1.468rem"/>
+    			@else
+    				<img src="/images/vcourse/zuire-1.png" style="width:1.468rem"
+    					onclick="location.href='{{route('vcourse')}}?ob=view_cnt'"
+    				/>
+    			@endif
+    			
+    			@if(request('ob') == 'biting')
+    				<img src="/images/vcourse/biting-2.png" style="width:1.468rem"/>
+    			@else
+    				<img src="/images/vcourse/biting-1.png" style="width:1.468rem"
+    					onclick="location.href='{{route('vcourse')}}?ob=biting'"
+    				/>
+    			@endif
+    			
+            	<a href="{{$telecast}}">
+            		<img src="/images/vcourse/zhibo-1.png" style="width:1.468rem"/>
+            	</a>
             </div>
+            
             
             @foreach ($vcourseList as $item)
             <div class="vcoures-item">
             	<div class="title">
             		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">{{ $item->title }}</a>
-            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}"><img src="/images/vcourse/look.png" /></a>
+            		<a href="{{route('vcourse.detail',['id'=>$item->id])}}"><img src="/images/vcourse/look_listen.png" /></a>
             	</div>
             	<div class="time">
             		{{ explode(' ',$item->created_at)[0]}}            		

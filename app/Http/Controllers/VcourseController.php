@@ -25,27 +25,34 @@ class VcourseController extends Controller
     /** 好看课程首页 */
     public function index(Request $request)
     {
+    	//轮播图
+    	$carouselList = Carousel::whereUseType('2')->orderBy('sort', 'desc')->get();
+    	
         $builder = Vcourse::whereStatus('2')
             ->whereNotNull('vcourse.video_tran')
             ->whereNotNull('vcourse.video_free')
             ->whereNotNull('vcourse.bucket');
-
+        
         $sortField = $request->input('ob','created_at');
         $request['ob'] = $sortField;
-        if (($search_key = $request->input('search_key'))) {
-        	$builder->where('title', 'like', '%' . $search_key . '%');
+        
+        if($sortField == 'biting'){
+        	//推荐课程
+        	$vcourseList = $builder->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
+        }else{
+        	if (($search_key = $request->input('search_key'))) {
+        		$builder->where('title', 'like', '%' . $search_key . '%');
+        	}
+        	$vcourseList = $builder->take(100)->orderBy('vcourse.'.$sortField, 'desc')->get();
         }
-        $vcourseList = $builder->take(100)->orderBy('vcourse.'.$sortField, 'desc')->get();
+
         if($userid = session('user_info')['id']){
         	foreach ($vcourseList as $k => $v){
         		$v->userFavor = UserFavor::whereUserId($userid)->whereFavorId($v->id)->whereFavorType('2')->first();
         	}
         }
-        
-        //热门搜索
-        $hot_search = HotSearch::where('type', 1)->orderBy('sort', 'desc')->lists('title');
-        $wx_js = Wechat::js();
-        
+       
+        $wx_js = Wechat::js();        
         if(preg_match('/^win/i', PHP_OS)){
         	$data = file_get_contents('E:/sug_link.log');
         }else{
@@ -59,7 +66,7 @@ class VcourseController extends Controller
         	$foreshow = '';
         }
 
-        return view('vcourse.index', compact('vcourseList','hot_search', 'wx_js','telecast','foreshow'));
+        return view('vcourse.index', compact('carouselList','vcourseList', 'wx_js','telecast','foreshow'));
     }
 
     /** 好看课程搜索 */
