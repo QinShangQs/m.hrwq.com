@@ -22,12 +22,12 @@
                                 @elseif($item->redirect_type == 2)
                                 <li>
                                     <a href="{{$item->redirect_url}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%">
                                     </span>
                                     </a>
                                 @else
                                  <li><a href="{{route('course.staticlink',['id'=>$item->id])}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%">
                                     </span>
                                     </a>
                                 @endif
@@ -122,9 +122,62 @@
 </div>
 @endsection
 @section('script')
-
+<script type="text/javascript" src="/js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
+<script type="text/javascript" src="/js/jquery.touchSlider.js"></script><!--幻灯效果-->
 <script type="text/javascript" src="/js/history_search.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	$(document).ready(function(){
+		$dragBln = false;
+
+        $(".main_image").touchSlider({
+            flexible : true,
+            speed : 200,
+            btn_prev : $("#btn_prev"),
+            btn_next : $("#btn_next"),
+            paging : $(".flicking_con a"),
+            counter : function (e){
+                $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+            }
+        });
+
+        $(".main_image").bind("mousedown", function() {
+            $dragBln = false;
+        });
+
+        $(".main_image").bind("dragstart", function() {
+            $dragBln = true;
+        });
+
+        $(".main_image a").click(function(){
+            if($dragBln) {
+                return false;
+            }
+        });
+
+        timer = setInterval(function(){
+            $("#btn_next").click();
+        }, 5000);
+
+        $(".main_visual").hover(function(){
+            clearInterval(timer);
+        },function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            },5000);
+        });
+
+        $(".main_image").bind("touchstart",function(){
+            clearInterval(timer);
+        }).bind("touchend", function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            }, 5000);
+        });
+        //$(".main_visual").height($(".main_visual").width()/750*300);
+	});
+</script>
+
 <script>
 $(document).ready(function(){//搜索
             wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"),false) ?>);
