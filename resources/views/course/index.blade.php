@@ -32,31 +32,6 @@
                     </dl>
                     <div class="public_search_delete">清除搜索记录</div><!--若没有最近搜索信息,则不显示清除搜索记录-->
                 </div>
-                <div class="public_slide">
-                    <div class="main_visual">
-                        <div class="flicking_con">
-                            @foreach($carousels as $key => $carousel)
-                                <a href="#">{{$key+1}}</a>
-                            @endforeach
-                        </div>
-                        <div class="main_image">
-                            <ul>
-                                @foreach($carousels as $carousel)
-                                @if($carousel->redirect_type == 1)
-                                <li><span class="img_1" style="background:url({{$carousel->image_url}}) left top no-repeat; background-size:100%;"></span></li>
-                                @elseif($carousel->redirect_type == 2)
-                                <li><a href="{{$carousel->redirect_url}}"><span class="img_1" style="background:url({{$carousel->image_url}}) left top no-repeat; background-size:100%;"></span></a></li>
-                                @else
-                                 <li><a href="{{route('course.staticlink',['id'=>$carousel->id])}}"><span class="img_1" style="background:url({{$carousel->image_url}}) left top no-repeat; background-size:100%;"></span></a></li>
-                                @endif
-                                @endforeach
-                                
-                            </ul>
-                            <a href="javascript:;" id="btn_prev"></a>
-                            <a href="javascript:;" id="btn_next"></a>
-                        </div>
-                    </div>
-                </div>
                 <div class="gl_div gl_div3" style="padding-top:0;">
                     <ul class="gl_list2">
                         @if(count($courses)>0)

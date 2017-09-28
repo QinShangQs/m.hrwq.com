@@ -40,37 +40,42 @@
             </div>
             @endif
             
-            <div style="height:3.125rem;display:flex;flex-direction: row;justify-content: space-around;
-    				align-items: center;background-color: white; border-bottom: 1px solid #f6f6f6;">
-    			@if(request('ob') == 'created_at')
-    				<img src="/images/vcourse/zuixin-2.png" style="width:1.468rem"/>
-    			@else
-    				<img src="/images/vcourse/zuixin-1.png" style="width:1.468rem"
-    					onclick="location.href='{{route('vcourse')}}?ob=created_at'"
-    				/>
-    			@endif
-    			
-    			@if(request('ob') == 'view_cnt')
-    				<img src="/images/vcourse/zuire-2.png" style="width:1.468rem"/>
-    			@else
-    				<img src="/images/vcourse/zuire-1.png" style="width:1.468rem"
-    					onclick="location.href='{{route('vcourse')}}?ob=view_cnt'"
-    				/>
-    			@endif
-    			
-    			@if(request('ob') == 'biting')
-    				<img src="/images/vcourse/biting-2.png" style="width:1.468rem"/>
-    			@else
-    				<img src="/images/vcourse/biting-1.png" style="width:1.468rem"
-    					onclick="location.href='{{route('vcourse')}}?ob=biting'"
-    				/>
-    			@endif
-    			
-            	<a href="{{$telecast}}">
-            		<img src="/images/vcourse/zhibo-1.png" style="width:1.468rem"/>
-            	</a>
-            </div>
-            
+            <table border=0 style="width:100%;background-color:#fff;height:3.125rem;border-bottom: 1px solid #f6f6f6;">
+            	<tr>
+            		<td align='center' valign="middle">
+            			@if(request('ob') == 'created_at')
+		    				<img src="/images/vcourse/zuixin-2.png" style="width:1.468rem"/>
+		    			@else
+		    				<img src="/images/vcourse/zuixin-1.png" style="width:1.468rem"
+		    					onclick="location.href='{{route('vcourse')}}?ob=created_at'"
+		    				/>
+		    			@endif
+            		</td>
+            		<td align='center' valign="middle">
+            			@if(request('ob') == 'view_cnt')
+		    				<img src="/images/vcourse/zuire-2.png" style="width:1.468rem"/>
+		    			@else
+		    				<img src="/images/vcourse/zuire-1.png" style="width:1.468rem"
+		    					onclick="location.href='{{route('vcourse')}}?ob=view_cnt'"
+		    				/>
+		    			@endif
+            		</td>
+            		<td align='center' valign="middle">
+            			@if(request('ob') == 'biting')
+		    				<img src="/images/vcourse/biting-2.png" style="width:1.468rem"/>
+		    			@else
+		    				<img src="/images/vcourse/biting-1.png" style="width:1.468rem"
+		    					onclick="location.href='{{route('vcourse')}}?ob=biting'"
+		    				/>
+		    			@endif
+            		</td>
+            		<td align='center' valign="middle">
+            			<a href="{{$telecast}}">
+		            		<img src="/images/vcourse/zhibo-1.png" style="width:1.468rem"/>
+		            	</a>
+            		</td>
+            	</tr>
+            </table>
             
             @foreach ($vcourseList as $item)
             <div class="vcoures-item">

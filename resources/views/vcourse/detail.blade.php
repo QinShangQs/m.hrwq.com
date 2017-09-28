@@ -221,7 +221,7 @@
         	<div style="display:none" class="lcd_div_2_form">
         			<div class="lcd_div_2_form_textarea" style="text-align: center">
         				<textarea id="lcd_div_2_form_textarea" 
-        					placeholder="勤记笔记，随时随地查看，永不丢失，不少于20字符。" 
+        					placeholder="写作业聊教子感悟，做更懂教育的父母。" 
         					name="mark_content" 
         					style="width: 21.875rem;border: 1px solid #ed6d11;box-sizing: border-box;
     							height: 7.9rem;border-radius: 5px;background-color: #fcfcfc;
