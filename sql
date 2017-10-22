@@ -60,3 +60,19 @@ create table user_point_vip(
 /*增加和会员注册时间*/
 alter table `user` add column `register_at` datetime default null comment '手机号注册时间';
 
+###############2017-10-22#################
+create table wechat_push
+(
+  id int unsigned auto_increment primary key,
+  title varchar(255) default '' comment '客服消息名称',
+  url varchar(255) default '' comment '文章链接',
+  picurl varchar(255) default '' comment '图片链接',
+  description varchar(1000) default '' comment '文章简介',
+  push_time varchar(20) default '' comment '推送时间',  
+  send_total bigint default 0 comment '推送总数',
+  send_success bigint default 0 comment '推送成功数',
+  `created_at` timestamp not null default '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='推送客服消息'
+
