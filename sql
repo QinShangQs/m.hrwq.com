@@ -76,3 +76,5 @@ create table wechat_push
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='推送客服消息'
 
+###############2017-11-04#################
+alter table `vcourse_mark` add column parent_id int default 0 comment '父ID 0为一级ID';

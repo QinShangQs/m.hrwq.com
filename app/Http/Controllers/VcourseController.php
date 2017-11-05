@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Wechat, Event, DB;
+use App\Events\MarkReplay;
 
 class VcourseController extends Controller
 {
@@ -149,25 +150,8 @@ class VcourseController extends Controller
         //收藏情况
         $userFavor = UserFavor::whereUserId(@$user_info['id'])->whereFavorId($id)->whereFavorType('2')->first();
         //作业&笔记
-        $vcourseMarkListA = VcourseMark::whereVcourseId($id)->with('user')->with(['like_record' => function ($query) use ($user_info) {
-            $query->where('like_type', '2');
-            $query->where('user_id', @$user_info['id']);
-        }])
-            // ->whereVisible('1')
-            // ->orWhere('user_id','=',$user_info['id'])
-            ->where('user_id', '=', @$user_info['id'])
-            ->orderBy('vcourse_mark.created_at', 'desc')
-            ->get();
-        $vcourseMarkListB = VcourseMark::whereVcourseId($id)->with('user')->with(['like_record' => function ($query) use ($user_info) {
-            $query->where('like_type', '2');
-            $query->where('user_id', @$user_info['id']);
-        }])
-            ->whereVisible('1')
-            // ->orWhere('user_id','=',$user_info['id'])
-            ->where('user_id', '!=', @$user_info['id'])
-            ->orderBy('vcourse_mark.likes', 'desc')
-            ->orderBy('vcourse_mark.created_at', 'desc')            
-            ->get();
+        $vcourseMarkListA = $this->get_mark_lists($user_info,$id);
+        $vcourseMarkListB = $this->get_mark_lists($user_info,$id, 1);
 
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
@@ -181,6 +165,31 @@ class VcourseController extends Controller
         
         return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js','vip_left_day'));
     }
+    
+    private function get_mark_lists($user_info,$vcourseId,$visible = -1){
+    	$builder = VcourseMark::whereVcourseId($vcourseId)->with('user')->with(['like_record' => function ($query) use ($user_info) {
+	    		$query->where('like_type', '2');
+	    		$query->where('user_id', @$user_info['id']);
+	    	}]);
+    	
+    	if($visible != -1){
+    		$builder->whereVisible('1');
+    	}
+	    
+	    $parentMarkList = $builder->where('user_id', '!=', @$user_info['id'])
+	    	->where('parent_id', '=', 0)
+	    	->orderBy('vcourse_mark.likes', 'desc')
+	    	->orderBy('vcourse_mark.created_at', 'desc')
+	    	->get();
+    	
+	    foreach ($parentMarkList as $k => $v){
+	    	$parentMarkList[$k]['subs'] = VcourseMark::whereParentId($v['id'])
+	    			->orderBy('vcourse_mark.created_at', 'asc')->get();
+	    }
+    	
+	    return $parentMarkList;
+    }
+    
 
     /** 好看课程添加收藏 */
     public function add_favor(Request $request)
@@ -266,7 +275,7 @@ class VcourseController extends Controller
                 $scoretype = '7';
             }
             $vcourseMark->mark_content = $request->input('mark_content');
-
+            $vcourseMark->parent_id = $request->input('parent_id', 0);
             $user_id = session('user_info')['id'];// 当前登录者
             $vcourseMark->user_id = $user_id;
 
@@ -274,9 +283,19 @@ class VcourseController extends Controller
                 get_score($scoretype);
                 $vcourseMarkInfo = VcourseMark::whereId($vcourseMark->id)->with('user')->first();
                 $vcourseMarkInfo->user->profileIcon = @url($vcourseMarkInfo->user->profileIcon);
-                return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(), 'msg' => '作业&笔记提交成功']);
+                
+                if($vcourseMark->parent_id > 0){
+                	Event::fire(new MarkReplay($request->input('vcourse_title', ''),
+                	 	$request->input('parent_openid', ''), 
+                	 	$vcourseMarkInfo->user->nickname, 
+                	 	$request->input('mark_content')));
+                }
+                
+                return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(), 
+                		'msg' =>  $vcourseMark->parent_id > 0 ? '回复成功': '作业&笔记提交成功'
+                ]);
             } else {
-                return response()->json(['status' => false, 'msg' => '作业&笔记提交失败']);
+                return response()->json(['status' => false, 'msg' =>   $vcourseMark->parent_id > 0 ? '回复失败': '作业&笔记提交失败']);
             }
         }
     }

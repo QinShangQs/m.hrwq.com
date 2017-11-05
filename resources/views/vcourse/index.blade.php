@@ -69,11 +69,6 @@
 		    				/>
 		    			@endif
             		</td>
-            		<td align='center' valign="middle">
-            			<a href="{{$telecast}}">
-		            		<img src="/images/vcourse/zhibo-1.png" style="width:1.468rem"/>
-		            	</a>
-            		</td>
             	</tr>
             </table>
             

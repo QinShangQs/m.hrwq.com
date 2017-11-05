@@ -450,3 +450,24 @@ if(!function_exists('diff_two_days')){
 		return intval( ($second1 - $second2) / 86400);
 	}
 }
+
+/**
+ * 获取直播地址
+ * @return Ambigous <string, multitype:>
+ */
+function _get_telecast_link (){
+	if(preg_match('/^win/i', PHP_OS)){
+		$data = file_get_contents('E:/sug_link.log');
+	}else{
+		$data = file_get_contents('/mnt/sug_link.log');
+	}
+	
+	if(!empty($data)){
+		list($telecast, $foreshow) = explode("\n", $data);
+	}else{
+		$telecast = '';
+		$foreshow = '';
+	}
+	
+	return $telecast;
+}

@@ -139,7 +139,31 @@
                             <div class="lcd_div_2_list_img"><img src="{{url($item->user->profileIcon)}}" alt=""/></div>
                             <div class="lcd_div_2_list_title">{{@$item->user->nickname}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_time">{{@date('Y-m-d',strtotime($item->created_at))}}</div><!--需要链接直接加a标签就行-->
-                            <div class="lcd_div_2_list_p"><span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>{{$item->mark_content}}</div><!--需要链接直接加a标签就行-->
+                            <div class="lcd_div_2_list_p">
+                            	<span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>
+                            	{{$item->mark_content}}
+                            	<div><a href="javascript:replay('{{@$item->user->openid}}',{{$item->id}},'{{@$item->user->nickname}}')" style="color:#52a3ff;cursor: pointer;">回复</a></div>
+                            	<div id="replay-{{$item->id}}">
+                            	@if(count($item->subs) > 0)
+	                            	<div class='replay-list'>
+	                            		@foreach($item->subs as $sk=>$sv)                           				                            				
+	                            				@if($sk > 1)
+	                            					<div class="replay-list-item-hide" style="display:none">
+	                            				@else
+	                            					<div>
+	                            				@endif 	 
+	                            					{{@$sv->user->nickname}}: {{$sv->mark_content}}
+	                            					<!-- <a href="javascript:replay({{$sv->id}},'{{@$sv->user->nickname}}')" style="color:#52a3ff;cursor: pointer;">回复</a> -->
+	                            				</div>	                            			                           			
+	                            		@endforeach
+	                            	</div>
+                            		
+                            		@if(count($item->subs) > 2)
+                            			<div onclick="replayListMore(this)"><a href="javascript:;" style="font-size:12px;color:#52a3ff;">查看更多 >></a></div>
+                            		@endif
+                            	@endif
+                            	</div>
+                            </div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_zambia" data-id="{{$item->id}}"><span id='like_{{$item->id}}'>{{$item->likes}}</span> @if(count($item->like_record)>0)<img src="/images/public/zambia_on.png" alt=""/>@else<img src="/images/public/zambia.png" alt=""/>@endif</div><!--data-id为本条信息的id，用来想处理页面传送点赞的信息-->
                         </li>
                         @endforeach
@@ -148,7 +172,10 @@
                             <div class="lcd_div_2_list_img"><img src="{{url(@$item->user->profileIcon)}}" alt=""/></div>
                             <div class="lcd_div_2_list_title">{{@$item->user->nickname}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_time">{{@date('Y-m-d',strtotime($item->created_at))}}</div><!--需要链接直接加a标签就行-->
-                            <div class="lcd_div_2_list_p"><span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>{{$item->mark_content}}</div><!--需要链接直接加a标签就行-->
+                            <div class="lcd_div_2_list_p">
+                            	<span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>
+                            	{{$item->mark_content}}
+                            </div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_zambia" data-id="{{$item->id}}">@if($k == 0) <img src="/images/vcourse/v-hot-detail.png" style="width:2.68rem"> @endif<span id='like_{{$item->id}}'>{{$item->likes?$item->likes:''}}</span> @if(count($item->like_record)>0)<img src="/images/public/zambia_on.png" alt=""/>@else<img src="/images/public/zambia.png" alt=""/>@endif</div><!--data-id为本条信息的id，用来想处理页面传送点赞的信息-->
                         </li>
                         @endforeach
@@ -195,8 +222,36 @@
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
 </div>
 
+<form id="replay-form" style="position: fixed;bottom: 0px;
+			background-color: #fff;border-top: 1px solid #ccc;
+			width: 100%;box-sizing: border-box;display:none;    z-index: 10000; ">
+			<input type="hidden" id="replay-parent-openid" name="parent_openid" />
+			<input type="hidden" id="replay-vcourse-title" name="vcourse_title" value="{{$vcourseDetail->title}}"/>
+			<input type="hidden" id="replay-form-parent-id" name="parent_id" value="0" />
+        	<input type="hidden" name="vcourse_id" value="{{$vcourseDetail->id}}"/>
+        	<input type='hidden' name='_token' value="{{csrf_token()}}">
+        	<input type='hidden' name='mark_type' value='2' />
+        	<div class="lcd_div_2_form" style="padding-top:10px">
+        			<div class="lcd_div_2_form_textarea" style="text-align: center">
+        				<textarea id="replay-form-textarea" 
+        					placeholder="xxx 回复 xxx" 
+        					name="mark_content" 
+        					style="width: 21.875rem;border: 1px solid #ed6d11;box-sizing: border-box;
+    							height: 7.9rem;border-radius: 5px;background-color: #fcfcfc;
+    							color: #bcbbbb;font-size: 0.82rem; padding: 0.5rem;"></textarea>
+        			</div>
+                    <div style="text-align: center;padding-top: 0px;padding-bottom:5px">
+                    	<input id="replay-form-submit" type="submit" value="回复"
+                    	style="border:none;background-color: #ed6d11;color: #fff;width: 8rem;
+                    	border-radius: 5px;padding: 0.2rem;box-sizing: content-box;">
+                    	
+                    	<a style="font-size:0.875rem" href="javascript:closeReplay()">关闭</a>
+                    </div>
+        	</div>
+</form>
+
 @if(count($vcourseDetail->order)>0)
-		<form style="position: fixed;bottom: 0px;
+		<form id="mark-form" style="position: fixed;bottom: 0px;
 			background-color: #fff;border-top: 1px solid #ccc;
 			width: 100%;box-sizing: border-box; ">
         	<input type="hidden" name="vcourse_id" value="{{$vcourseDetail->id}}"/>
@@ -247,7 +302,6 @@
                     	border-radius: 5px;padding: 0.2rem;box-sizing: content-box;">
                     </div>
         	</div>
-        	 
 		</form>
 @endif
 
@@ -301,6 +355,13 @@
 	    /* height: 5rem; */
 	    background-repeat: no-repeat;
 	    background-position: center;
+    }
+    
+    .replay-list {
+    	background-color: #F6F6F6;
+    	padding: 0.5rem;
+    	border-radius: 5px; 
+    	font-size: 12px;
     }
 </style>
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
@@ -543,12 +604,32 @@ $(document).ready(function(){
 
     var lockm = false;
     $(".lcd_div_2_form_button input").click(function(){//提交作业笔记表单
+    	@if(empty(@$user_info['mobile']))
+    		Popup.init({
+            	popTitle:'',
+                popHtml:'<p>注册后即可参与课程作业</p>',                
+                popOkButton:{
+                    buttonDisplay:true,
+                    buttonName:"立即注册",
+                    buttonfunction:function(){
+                    	location.href="{{ route('user.login') }}";
+                        return false;
+                    }
+                },
+                popFlash:{
+                    flashSwitch:false
+                }
+            });
+        	return false;
+        @endif
+
+        
         if (lockm) {return;}
         if($("#lcd_div_2_form_textarea").val().length<10){
             alert("填写的作业笔记信息不能少于10个字符");
             return false;
         }
-        var form_data = $('form').serialize();
+        var form_data = $('#mark-form').serialize();
         lockm = true;
         $.post("{{route('vcourse.add_mark')}}", form_data,function(data){
             if(data.status){
@@ -784,5 +865,121 @@ $(document).ready(function(){
         },'json')
     });
 });
+</script>
+
+<script type="text/javascript">
+	function replay (parent_openid,parent_id, replay_user){
+		parent_openid = 'obpqNs_GdrHPLOGJig50qNcFZRGk';
+		$("#replay-parent-openid").val(parent_openid)
+		$("#replay-vcourse-title").val('{{$vcourseDetail->title}}')
+		$('#replay-form-parent-id').val(parent_id);
+		$('#replay-form-textarea').attr('placeholder', '回复 '+replay_user);
+		$("#replay-form").show();
+	}
+
+	function closeReplay(){
+		$("#replay-parent-openid").val('');
+		$('#replay-form-parent-id').val(0);
+		$('#replay-form-textarea').attr('placeholder', '');
+		$("#replay-form").hide();
+	}
+
+	function replayListMore(div){
+		var itemHides = $(div).parent().find('.replay-list .replay-list-item-hide');
+		if($(div).find('a').eq(0).text() == '查看更多 >>'){
+			itemHides.show();
+			$(div).find('a').eq(0).text('隐藏更多');
+		}else{
+			itemHides.hide();
+			$(div).find('a').eq(0).text('查看更多 >>');
+		}
+		
+	}
+
+	$("#replay-form-submit").click(function(){//提交作业笔记表单
+    	@if(empty(@$user_info['mobile']))
+    		Popup.init({
+            	popTitle:'',
+                popHtml:'<p>注册后即可参与课程作业</p>',                
+                popOkButton:{
+                    buttonDisplay:true,
+                    buttonName:"立即注册",
+                    buttonfunction:function(){
+                    	location.href="{{ route('user.login') }}";
+                        return false;
+                    }
+                },
+                popFlash:{
+                    flashSwitch:false
+                }
+            });
+        	return false;
+        @endif
+        
+        //if (lockm) {return;}
+        if($("#replay-form-textarea").val().length<10){
+            alert("填写的回复信息不能少于10个字符");
+            return false;
+        }
+        var form_data = $('#replay-form').serialize();
+        var parent_id = $('#replay-form-parent-id').val();
+        lockm = true;
+        $.post("{{route('vcourse.add_mark')}}", form_data,function(data){
+            if(data.status){
+                var mark_data = jQuery.parseJSON(data.vcourseMarkInfo);
+                var mark_ul_li ='';
+				var replayList = $('#replay-' + parent_id).find('.replay-list').eq(0);
+				if(replayList.length == 0){
+					replayList = $('<div class="replay-list"></div');
+					replayList.append('<div>'+mark_data.user.nickname+':'+mark_data.mark_content+'</div>')
+					$('#replay-' + parent_id).append(replayList);
+				}else{
+					replayList.append('<div>'+mark_data.user.nickname+':'+mark_data.mark_content+'</div>')
+				} 
+
+                $('#replay-form-textarea').val('');
+                lockm = false;
+
+                Popup.init({
+                    popTitle:'提示',
+                    popHtml:'<p>'+data.msg+'</p>',
+                    popFlash:{
+                        flashSwitch:true,
+                        flashTime:1000,
+                    }
+                });
+
+                $('#replay-form').hide();
+            }else{
+               Popup.init({
+                        popTitle:'失败',
+                        popHtml:'<p>'+data.msg+'</p>',
+                        popFlash:{
+                            flashSwitch:true,
+                            flashTime:2000,
+                        }
+                    });
+               lockm = false;
+            }
+        },'json')
+        .fail( function( jqXHR ) {
+            if (jqXHR.status == 422){
+                var str = '';
+                $.each($.parseJSON(jqXHR.responseText), function (key, value) {
+                    str += value+'<br>';
+                });
+                Popup.init({
+                        popTitle:'失败',
+                        popHtml:'<p>'+str+'</p>',
+                        popFlash:{
+                            flashSwitch:true,
+                            flashTime:2000,
+                        }
+                    });
+                lockm = false;
+            }
+        });
+        return false;
+    });
 </script>
 @endsection

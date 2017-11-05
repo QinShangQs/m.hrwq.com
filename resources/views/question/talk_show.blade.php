@@ -24,13 +24,7 @@
                         </div>
                     </div>
                     <div class="gacd_div">
-                        <div class="gacd_title"><div>温馨提示</div></div>
-                        <div class="gacd_div_3">
-                            <p>尊敬的用户您好，互助榜是和润万青提供给所有用户沟通交流的平台，但仅做参考，如果想得到更及时、优质的答案，请到智慧榜向认证优秀家长提问。</p>
-                        </div>
-                    </div>
-                    <div class="gacd_div">
-                        <div class="gacd_title"><div>{{count($talk->comments)>0 ? '全部评论' : '暂无评论'}}</div></div>
+                        <div class="gacd_title"><div>{{count($talk->comments)>0 ? '全部回复' : '暂无回复'}}</div></div>
                         <ul class="gacd_div_list">
                             @foreach($talk->comments as $comment)
                                 <li>

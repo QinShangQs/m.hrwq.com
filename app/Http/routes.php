@@ -49,9 +49,10 @@ Route::group([], function () {
     Route::get('/block_index', 'CourseController@block_index')->name('course.block_index');
 });
 Route::group(['middleware' => ['FrontWechat']], function () {
-    Route::get('/', 'CourseController@index')->name('course');
+    Route::get('/', 'VcourseController@index')->name('vcourse');
 });
 Route::group(['prefix' => 'course', 'middleware' => ['FrontWechat']], function () {
+	Route::get('/', 'CourseController@index')->name('course');
     Route::get('/search', 'CourseController@search')->name('course.search');
     Route::get('/detail/{id?}', 'CourseController@detail')->name('course.detail');
     Route::post('/course_list', 'CourseController@course_list')->name('course.course_list');
