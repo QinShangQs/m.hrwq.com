@@ -19,6 +19,7 @@ use App\Models\Order;
 use App\Models\UserFavor;
 use App\Models\LikeRecord;
 use App\Models\QuestionListener;
+use App\Models\Carousel;
 
 use DB,Wechat;
 
@@ -26,34 +27,18 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        //问题榜标签
-        $question_tags = QuestionTag::with(['tag' => function ($query) {
-            $query->withTrashed();
-        }])->select(['*', \DB::raw('COUNT(id) as num')])->groupBy('tag_id')->orderBy('num', 'desc')->limit(4)->get();
-
+    	//轮播图
+    	$carouselList = Carousel::whereUseType('4')->orderBy('sort', 'desc')->get();
         //互助榜标签
         $talk_tags = TalkTag::with(['tag' => function ($query) {
             $query->withTrashed();
         }])->select('*', \DB::raw('COUNT(id) as num'))->groupBy('tag_id')->orderBy('num', 'desc')->limit(4)->get();
 
-        //热门搜索
-        $hot_search = HotSearch::where('type', 3)->orderBy('sort', 'desc')->lists('title');
-
-        //置顶指导师
-        $teachers_top = $this->teacher_top_data($request);
-        $teachers_top_uid = $teachers_top->pluck('id');
-        $teachers_top_uid_json = $teachers_top_uid->toJson();
-
-        //指导师
-        $teachers = $this->teacher_list($request, $teachers_top_uid->toArray());
-        //语音问题
-        $questions = $this->question_list($request);
-
         //互助榜
         $talks = $this->talk_list($request);
         $wx_js = Wechat::js();
 
-        return view('question.index', compact('hot_search', 'teachers', 'teachers_top', 'teachers_top_uid_json', 'questions', 'talks', 'question_tags', 'talk_tags','wx_js'));
+        return view('question.index', compact('carouselList', 'talks', 'talk_tags','wx_js'));
     }
 
     //指导师详情
