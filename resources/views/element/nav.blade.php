@@ -113,7 +113,7 @@
 
 <div class="nav-show">
 	<table width='100%'>
-		<tr onclick="location.href='/question?selected_tab=2'">
+		<tr onclick="location.href='/question/ask_talk'">
 			<td valign="middle">
 				<img src="/images/public/huati.png"/>
 			<td>
@@ -122,7 +122,7 @@
 				<div class="tip">有什么想聊的，和全国家长们一起讨论!</div>
 			<td>
 		</tr>
-		<tr onclick="location.href='/question?selected_tab=3'"> 
+		<tr onclick="location.href='/question/ask_talk'"> 
 			<td valign="middle">
 				<img src="/images/public/wenda.png"/>
 			<td>
