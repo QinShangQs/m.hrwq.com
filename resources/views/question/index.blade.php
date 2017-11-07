@@ -39,7 +39,7 @@
             </div>
             @endif
 
-                    <div class="ga_div_3"  >
+                    <div class="ga_div_3"  style="margin-top: -0.5rem">
                         <div class="clearboth"></div>
                         @if(count($talks))
                             <ul class="ga_div_3_list">
@@ -84,12 +84,65 @@
 @endsection
 
 @section('script')
+	<script type="text/javascript" src="/js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
+	<script type="text/javascript" src="/js/jquery.touchSlider.js"></script><!--幻灯效果-->
     <script type="text/javascript" src="/js/audio_play.js"></script>
     <script type="text/javascript" src="/js/history_search.js"></script>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 	<style type="text/css">
 	.two_line { height: 29px; overflow: hidden; }
 	</style>
+	<script>
+	$(document).ready(function(){
+		$dragBln = false;
+
+        $(".main_image").touchSlider({
+            flexible : true,
+            speed : 200,
+            btn_prev : $("#btn_prev"),
+            btn_next : $("#btn_next"),
+            paging : $(".flicking_con a"),
+            counter : function (e){
+                $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+            }
+        });
+
+        $(".main_image").bind("mousedown", function() {
+            $dragBln = false;
+        });
+
+        $(".main_image").bind("dragstart", function() {
+            $dragBln = true;
+        });
+
+        $(".main_image a").click(function(){
+            if($dragBln) {
+                return false;
+            }
+        });
+
+        timer = setInterval(function(){
+            $("#btn_next").click();
+        }, 5000);
+
+        $(".main_visual").hover(function(){
+            clearInterval(timer);
+        },function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            },5000);
+        });
+
+        $(".main_image").bind("touchstart",function(){
+            clearInterval(timer);
+        }).bind("touchend", function(){
+            timer = setInterval(function(){
+                $("#btn_next").click();
+            }, 5000);
+        });
+        //$(".main_visual").height($(".main_visual").width()/750*300);
+	});
+</script>
     <script>
      $(document).ready(function(){
          

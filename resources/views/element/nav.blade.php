@@ -136,7 +136,7 @@
 
 <ul id="nav"><!--导航，所在li需添加类selected-->
     <li @if($selected_item == 'nav2')class="selected" @endif><a class="nav_2" href="{{route('vcourse')}}" title="首页"></a></li>
-    <li @if($selected_item == 'nav4')class="selected" @endif><a class="nav_4" href="{{route('question')}}?selected_tab=2" title="家长圈"></a></li>
+    <li @if($selected_item == 'nav4')class="selected" @endif><a class="nav_4" href="{{route('question')}}" title="家长圈"></a></li>
     <li style="margin-top: -1rem;"><a class="nav-3" style="width:3rem" href="javascript:;"></a></li>
     <li @if($selected_item == 'nav1')class="selected" @endif><a class="nav_1" href="{{ _get_telecast_link()}}" title="直播"></a></li>
     @if(!session('wechat_user'))
