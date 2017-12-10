@@ -150,8 +150,8 @@ class VcourseController extends Controller
         //收藏情况
         $userFavor = UserFavor::whereUserId(@$user_info['id'])->whereFavorId($id)->whereFavorType('2')->first();
         //作业&笔记
-        $vcourseMarkListA = $this->get_mark_lists($user_info,$id);
-        $vcourseMarkListB = $this->get_mark_lists($user_info,$id, 1);
+        $vcourseMarkListA = $this->get_mark_lists($user_info,$id, 1,'!=');
+        $vcourseMarkListB = $this->get_mark_lists($user_info,$id);
 
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
@@ -166,7 +166,7 @@ class VcourseController extends Controller
         return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js','vip_left_day'));
     }
     
-    private function get_mark_lists($user_info,$vcourseId,$visible = -1){
+    private function get_mark_lists($user_info,$vcourseId, $visible = -1, $user_id_equal = '='){
     	$builder = VcourseMark::whereVcourseId($vcourseId)->with('user')->with(['like_record' => function ($query) use ($user_info) {
 	    		$query->where('like_type', '2');
 	    		$query->where('user_id', @$user_info['id']);
@@ -176,7 +176,7 @@ class VcourseController extends Controller
     		$builder->whereVisible('1');
     	}
 	    
-	    $parentMarkList = $builder->where('user_id', '!=', @$user_info['id'])
+	    $parentMarkList = $builder->where('user_id', $user_id_equal, @$user_info['id'])
 	    	->where('parent_id', '=', 0)
 	    	->orderBy('vcourse_mark.likes', 'desc')
 	    	->orderBy('vcourse_mark.created_at', 'desc')
