@@ -219,6 +219,10 @@
     </div>
 </div>
 
+<a class="lcd_evaluate lcd_evaluate_fa" style="background-color:#fff;background-image: url(/images/new/return.png);background-size: cover;" href="/">
+	&nbsp;
+</a>
+
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
 </div>
 
