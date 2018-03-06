@@ -563,6 +563,7 @@ $(document).ready(function(){
 		            type: vType(),
 		            src: vLink
 		        });
+		        player.load();
 				player.play();
 			}else{
 				document.addEventListener("WeixinJSBridgeReady", function () { 
@@ -574,6 +575,7 @@ $(document).ready(function(){
 			        
 			        console.log('browserOS is ' + browserOS());
 					if(browserOS() != 'android'){
+						player.load();
 						player.play();
 						
 						waitingPub = Popup.init({
@@ -592,6 +594,7 @@ $(document).ready(function(){
 	}
 	    $('.lcd_banner_div').click(function(event) {
 	        var player = videojs('video-embed');
+	        player.load();
 	        player.play();
 	    });
     @else
