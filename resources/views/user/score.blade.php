@@ -30,4 +30,8 @@
             </div>
         </div>
     </div>
+
+<a class="lcd_evaluate lcd_evaluate_fa" style="background-color:#fff;background-image: url(/images/new/return.png);background-size: cover;" href="/">
+	&nbsp;
+</a>
 @endsection
