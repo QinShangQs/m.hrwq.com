@@ -53,13 +53,14 @@ class VcourseController extends Controller
         	}
         }
        
-        $wx_js = Wechat::js();        
-        if(preg_match('/^win/i', PHP_OS)){
-        	$data = file_get_contents('E:/sug_link.log');
-        }else{
-        	$data = file_get_contents('/mnt/sug_link.log');
+        $wx_js = Wechat::js();    
+        if(config('app.debug') === false){
+            if(preg_match('/^win/i', PHP_OS)){
+                    $data = file_get_contents('E:/sug_link.log');
+            }else{
+                    $data = file_get_contents('/mnt/sug_link.log');
+            }
         }
-        
         if(!empty($data)){
         	list($telecast, $foreshow) = explode("\n", $data);
         }else{
