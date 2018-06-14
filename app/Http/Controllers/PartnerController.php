@@ -97,24 +97,6 @@ class PartnerController extends Controller
      */
     public function city_check()
     {
-        $this->validate(request(), [
-            'realname' => 'required',
-            'sex' => 'required',
-            'email' => 'required',
-            'address' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-        ], [], [
-            'realname' => '真实姓名',
-            'sex' => '性别',
-            'email' => '邮箱',
-            'address' => '通讯地址',
-            'province' => '期望城市',
-            'city' => '期望城市',
-        ]);
-        $user_has_partner = User::where('partner_city', request('city'))->where('role', 3)->where('id', '!=', session('user_info')['id'])->first();
-        if ($user_has_partner)
-            return response()->json(['code' => 0]);
         return response()->json(['code' => 1]);
     }
 
