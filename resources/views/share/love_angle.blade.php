@@ -63,7 +63,7 @@
 		(function(){
 			var canvas = document.getElementById("namevas");
 			var ctx = canvas.getContext("2d");
-			ctx.fillStyle = "#f00";//海报名称文字颜色
+			ctx.fillStyle = "#ffffff";//海报名称文字颜色
 			ctx.stroke();
 			ctx.font="12px Heiti SC";
 			ctx.textAlign = 'center';
