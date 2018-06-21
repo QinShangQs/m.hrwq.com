@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Events\OrderPaid;
@@ -18,66 +19,66 @@ use App\Models\UserBalance;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Wechat, Event, DB;
+use Wechat,
+    Event,
+    DB;
 use App\Events\MarkReplay;
 
-class VcourseController extends Controller
-{
+class VcourseController extends Controller {
+
     /** 好看课程首页 */
-    public function index(Request $request)
-    {
-    	//轮播图
-    	$carouselList = Carousel::whereUseType('2')->orderBy('sort', 'desc')->get();
-    	
+    public function index(Request $request) {
+        //轮播图
+        $carouselList = Carousel::whereUseType('2')->orderBy('sort', 'desc')->get();
+
         $builder = Vcourse::whereStatus('2')
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket');
-        
-        $sortField = $request->input('ob','created_at');
+                ->whereNotNull('vcourse.video_tran')
+                ->whereNotNull('vcourse.video_free')
+                ->whereNotNull('vcourse.bucket');
+
+        $sortField = $request->input('ob', 'created_at');
         $request['ob'] = $sortField;
-        
-        if($sortField == 'biting'){
-        	//推荐课程
-        	$vcourseList = $builder->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
-        }else{
-        	if (($search_key = $request->input('search_key'))) {
-        		$builder->where('title', 'like', '%' . $search_key . '%');
-        	}
-        	$vcourseList = $builder->take(100)->orderBy('vcourse.'.$sortField, 'desc')->get();
+
+        if ($sortField == 'biting') {
+            //推荐课程
+            $vcourseList = $builder->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
+        } else {
+            if (($search_key = $request->input('search_key'))) {
+                $builder->where('title', 'like', '%' . $search_key . '%');
+            }
+            $vcourseList = $builder->take(100)->orderBy('vcourse.' . $sortField, 'desc')->get();
         }
 
-        if($userid = session('user_info')['id']){
-        	foreach ($vcourseList as $k => $v){
-        		$v->userFavor = UserFavor::whereUserId($userid)->whereFavorId($v->id)->whereFavorType('2')->first();
-        	}
-        }
-       
-        $wx_js = Wechat::js();    
-        if(config('app.debug') === false){
-            if(preg_match('/^win/i', PHP_OS)){
-                    $data = file_get_contents('E:/sug_link.log');
-            }else{
-                    $data = file_get_contents('/mnt/sug_link.log');
+        if ($userid = session('user_info')['id']) {
+            foreach ($vcourseList as $k => $v) {
+                $v->userFavor = UserFavor::whereUserId($userid)->whereFavorId($v->id)->whereFavorType('2')->first();
             }
         }
-        if(!empty($data)){
-        	list($telecast, $foreshow) = explode("\n", $data);
-        }else{
-        	$telecast = '';
-        	$foreshow = '';
+
+        $wx_js = Wechat::js();
+        if (config('app.debug') === false) {
+            if (preg_match('/^win/i', PHP_OS)) {
+                $data = file_get_contents('E:/sug_link.log');
+            } else {
+                $data = file_get_contents('/mnt/sug_link.log');
+            }
+        }
+        if (!empty($data)) {
+            list($telecast, $foreshow) = explode("\n", $data);
+        } else {
+            $telecast = '';
+            $foreshow = '';
         }
 
-        return view('vcourse.index', compact('carouselList','vcourseList', 'wx_js','telecast','foreshow'));
+        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'telecast', 'foreshow'));
     }
 
     /** 好看课程搜索 */
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         $builder = Vcourse::whereStatus('2')
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket');
+                ->whereNotNull('vcourse.video_tran')
+                ->whereNotNull('vcourse.video_free')
+                ->whereNotNull('vcourse.bucket');
 
         if (($search_key = $request->input('search_key'))) {
             $builder->where('title', 'like', '%' . $search_key . '%');
@@ -99,14 +100,13 @@ class VcourseController extends Controller
     }
 
     /** 好看课程一览页 */
-    public function more(Request $request, $type)
-    {
+    public function more(Request $request, $type) {
         //轮播图
         $carouselList = Carousel::whereUseType('2')->orderBy('sort', 'desc')->get();
         $builder = Vcourse::whereStatus('2')->with('agency')
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket');
+                ->whereNotNull('vcourse.video_tran')
+                ->whereNotNull('vcourse.video_free')
+                ->whereNotNull('vcourse.bucket');
 
         $builder_b = clone $builder;
         $builder_c = clone $builder;
@@ -127,8 +127,7 @@ class VcourseController extends Controller
     }
 
     /** 好看课程详情页 */
-    public function detail($id)
-    {
+    public function detail($id) {
         $user_info = '';
         if (session('user_info')['id']) {
             $user_info = User::where('id', session('user_info')['id'])->first()->toArray();
@@ -136,65 +135,63 @@ class VcourseController extends Controller
 
         //课程详情  
         $vcourseDetail = Vcourse::whereStatus('2')
-            ->with(['order' => function ($query) use ($user_info) {
-                $query->where('pay_type', '2');
-                $query->where('user_id', @$user_info['id']);
-                $query->whereIn('order_type', ['1', '2', '4']);
-            }])
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket')
-            ->whereId($id)
-            ->first();
+                ->with(['order' => function ($query) use ($user_info) {
+                        $query->where('pay_type', '2');
+                        $query->where('user_id', @$user_info['id']);
+                        $query->whereIn('order_type', ['1', '2', '4']);
+                    }])
+                ->whereNotNull('vcourse.video_tran')
+                ->whereNotNull('vcourse.video_free')
+                ->whereNotNull('vcourse.bucket')
+                ->whereId($id)
+                ->first();
         if (!$vcourseDetail)
             abort(404, '课程查找失败！');
         //收藏情况
         $userFavor = UserFavor::whereUserId(@$user_info['id'])->whereFavorId($id)->whereFavorType('2')->first();
         //作业&笔记
-        $vcourseMarkListA = $this->get_mark_lists($user_info,$id, 1,'!=');
-        $vcourseMarkListB = $this->get_mark_lists($user_info,$id);
+        $vcourseMarkListA = $this->get_mark_lists($user_info, $id, 1, '!=');
+        $vcourseMarkListB = $this->get_mark_lists($user_info, $id);
 
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket')
-            ->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
+                        ->whereNotNull('vcourse.video_tran')
+                        ->whereNotNull('vcourse.video_free')
+                        ->whereNotNull('vcourse.bucket')
+                        ->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
         $wx_js = Wechat::js();
 
         $vip_left_day = computer_vip_left_day(@$user_info['vip_left_day']);
-        
-        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js','vip_left_day'));
+
+        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js', 'vip_left_day'));
     }
-    
-    private function get_mark_lists($user_info,$vcourseId, $visible = -1, $user_id_equal = '='){
-    	$builder = VcourseMark::whereVcourseId($vcourseId)->with('user')->with(['like_record' => function ($query) use ($user_info) {
-	    		$query->where('like_type', '2');
-	    		$query->where('user_id', @$user_info['id']);
-	    	}]);
-    	
-    	if($visible != -1){
-    		$builder->whereVisible('1');
-    	}
-	    
-	    $parentMarkList = $builder->where('user_id', $user_id_equal, @$user_info['id'])
-	    	->where('parent_id', '=', 0)
-	    	->orderBy('vcourse_mark.likes', 'desc')
-	    	->orderBy('vcourse_mark.created_at', 'desc')
-	    	->get();
-    	
-	    foreach ($parentMarkList as $k => $v){
-	    	$parentMarkList[$k]['subs'] = VcourseMark::whereParentId($v['id'])
-	    			->orderBy('vcourse_mark.created_at', 'asc')->get();
-	    }
-    	
-	    return $parentMarkList;
+
+    private function get_mark_lists($user_info, $vcourseId, $visible = -1, $user_id_equal = '=') {
+        $builder = VcourseMark::whereVcourseId($vcourseId)->with('user')->with(['like_record' => function ($query) use ($user_info) {
+                $query->where('like_type', '2');
+                $query->where('user_id', @$user_info['id']);
+            }]);
+
+        if ($visible != -1) {
+            $builder->whereVisible('1');
+        }
+
+        $parentMarkList = $builder->where('user_id', $user_id_equal, @$user_info['id'])
+                ->where('parent_id', '=', 0)
+                //->orderBy('vcourse_mark.likes', 'desc')
+                ->orderBy('vcourse_mark.created_at', 'desc')
+                ->get();
+
+        foreach ($parentMarkList as $k => $v) {
+            $parentMarkList[$k]['subs'] = VcourseMark::whereParentId($v['id'])
+                            ->orderBy('vcourse_mark.created_at', 'asc')->get();
+        }
+
+        return $parentMarkList;
     }
-    
 
     /** 好看课程添加收藏 */
-    public function add_favor(Request $request)
-    {
+    public function add_favor(Request $request) {
         $id = $request->input('vcourse_id');
         $user_id = session('user_info')['id'];
         $vcourse = Vcourse::where('status', 2)->find($id);
@@ -224,8 +221,7 @@ class VcourseController extends Controller
     }
 
     /** 好看评论点赞 */
-    public function add_like(Request $request)
-    {
+    public function add_like(Request $request) {
         $id = $request->input('id');
         $user_id = session('user_info')['id'];
         $vcourseMark = VcourseMark::find($id);
@@ -252,15 +248,14 @@ class VcourseController extends Controller
     }
 
     /** 好看提交笔记&作业 */
-    public function add_mark(Request $request)
-    {
+    public function add_mark(Request $request) {
         if ($request->isMethod('post')) {
             $customAttr = [
                 'mark_content' => '作业&笔记',
             ];
             $this->validate($request, [
                 'mark_content' => 'required|max:10000',
-            ], [], $customAttr);
+                    ], [], $customAttr);
 
 
             $vcourseMark = new VcourseMark();
@@ -277,33 +272,29 @@ class VcourseController extends Controller
             }
             $vcourseMark->mark_content = $request->input('mark_content');
             $vcourseMark->parent_id = $request->input('parent_id', 0);
-            $user_id = session('user_info')['id'];// 当前登录者
+            $user_id = session('user_info')['id']; // 当前登录者
             $vcourseMark->user_id = $user_id;
 
             if ($vcourseMark->save()) {
                 get_score($scoretype);
                 $vcourseMarkInfo = VcourseMark::whereId($vcourseMark->id)->with('user')->first();
                 $vcourseMarkInfo->user->profileIcon = @url($vcourseMarkInfo->user->profileIcon);
-                
-                if($vcourseMark->parent_id > 0){
-                	Event::fire(new MarkReplay($request->input('vcourse_title', ''),
-                	 	$request->input('parent_openid', ''), 
-                	 	$vcourseMarkInfo->user->nickname, 
-                	 	$request->input('mark_content')));
+
+                if ($vcourseMark->parent_id > 0) {
+                    Event::fire(new MarkReplay($request->input('vcourse_title', ''), $request->input('parent_openid', ''), $vcourseMarkInfo->user->nickname, $request->input('mark_content')));
                 }
-                
-                return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(), 
-                		'msg' =>  $vcourseMark->parent_id > 0 ? '回复成功': '作业&笔记提交成功'
+
+                return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(),
+                            'msg' => $vcourseMark->parent_id > 0 ? '回复成功' : '作业&笔记提交成功'
                 ]);
             } else {
-                return response()->json(['status' => false, 'msg' =>   $vcourseMark->parent_id > 0 ? '回复失败': '作业&笔记提交失败']);
+                return response()->json(['status' => false, 'msg' => $vcourseMark->parent_id > 0 ? '回复失败' : '作业&笔记提交失败']);
             }
         }
     }
 
     /** 好看增加观看次数 */
-    public function add_view_cnt(Request $request)
-    {
+    public function add_view_cnt(Request $request) {
         if ($request->isMethod('post')) {
             $vcourse_id = $request->input('id');
             $vcourse = Vcourse::find($vcourse_id);
@@ -318,13 +309,12 @@ class VcourseController extends Controller
     }
 
     //好看推荐
-    public function recommend_list(Request $request)
-    {
+    public function recommend_list(Request $request) {
         $builder = Vcourse::whereStatus('2')->with('agency')
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket')
-            ->whereRecommend('2')->orderBy('vcourse.sort', 'desc');
+                        ->whereNotNull('vcourse.video_tran')
+                        ->whereNotNull('vcourse.video_free')
+                        ->whereNotNull('vcourse.bucket')
+                        ->whereRecommend('2')->orderBy('vcourse.sort', 'desc');
         $data = $builder->paginate(10);
 
         //ajax请求，返回json
@@ -336,24 +326,23 @@ class VcourseController extends Controller
     }
 
     /** 好看付费订单 */
-    public function order_free(Request $request)
-    {
+    public function order_free(Request $request) {
         if ($request->isMethod('post')) {
 
             $user_info = session('user_info');
             $vcourse_id = $request->input('vcourse_id');
             //课程详情  
             $vcourseDetail = Vcourse::whereStatus('2')
-                ->with(['order' => function ($query) use ($user_info) {
-                    $query->where('pay_type', '2');
-                    $query->where('user_id', $user_info['id']);
-                    $query->whereIn('order_type', ['2', '4']);
-                }])
-                ->whereNotNull('vcourse.video_tran')
-                ->whereNotNull('vcourse.video_free')
-                ->whereNotNull('vcourse.bucket')
-                ->whereId($vcourse_id)
-                ->first();
+                    ->with(['order' => function ($query) use ($user_info) {
+                            $query->where('pay_type', '2');
+                            $query->where('user_id', $user_info['id']);
+                            $query->whereIn('order_type', ['2', '4']);
+                        }])
+                    ->whereNotNull('vcourse.video_tran')
+                    ->whereNotNull('vcourse.video_free')
+                    ->whereNotNull('vcourse.bucket')
+                    ->whereId($vcourse_id)
+                    ->first();
 
             if (!empty($user_info['id']) && !empty($vcourseDetail['id']) && count($vcourseDetail->order) == '0') {
                 $order = new Order;
@@ -377,38 +366,36 @@ class VcourseController extends Controller
     }
 
     /** 好看免费订单 */
-    public function order($id, Request $request)
-    {
-        $temp = $request->input('temp');// 收货地址
-        $coupon_user_id = $request->input('coupon_user_id');// 用户优惠券id
-        $coupon_id = $request->input('coupon_id');// 优惠券id
-        $coupon_type = $request->input('coupon_type');// 优惠券类型
-        $coupon_cutmoney = $request->input('coupon_cutmoney');// 优惠券减免
-        $coupon_discount = $request->input('coupon_discount');// 优惠券折扣
+    public function order($id, Request $request) {
+        $temp = $request->input('temp'); // 收货地址
+        $coupon_user_id = $request->input('coupon_user_id'); // 用户优惠券id
+        $coupon_id = $request->input('coupon_id'); // 优惠券id
+        $coupon_type = $request->input('coupon_type'); // 优惠券类型
+        $coupon_cutmoney = $request->input('coupon_cutmoney'); // 优惠券减免
+        $coupon_discount = $request->input('coupon_discount'); // 优惠券折扣
 
-        $is_point = $request->input('is_point');// 积分开关
-        $usable_point = $request->input('usable_point');// 可用积分
-        $usable_money = $request->input('usable_money');// 积分可抵用现金
-        $is_balance = $request->input('is_balance');// 可用余额开关
-        $usable_balance = $request->input('usable_balance');// 可用余额
-        $total_price = $request->input('total_price');// 总计
-
+        $is_point = $request->input('is_point'); // 积分开关
+        $usable_point = $request->input('usable_point'); // 可用积分
+        $usable_money = $request->input('usable_money'); // 积分可抵用现金
+        $is_balance = $request->input('is_balance'); // 可用余额开关
+        $usable_balance = $request->input('usable_balance'); // 可用余额
+        $total_price = $request->input('total_price'); // 总计
         // 当前用户
         $user_id = session('user_info')['id'];
         $user = User::find($user_id);
 
         //课程详情  
         $vcourseDetail = Vcourse::whereStatus('2')
-            ->with(['order' => function ($query) use ($user_id) {
-                $query->where('pay_type', '2');
-                $query->where('user_id', $user_id);
-                $query->whereIn('order_type', ['1', '2', '4']);
-            }])
-            ->whereNotNull('vcourse.video_tran')
-            ->whereNotNull('vcourse.video_free')
-            ->whereNotNull('vcourse.bucket')
-            ->whereId($id)
-            ->first();
+                ->with(['order' => function ($query) use ($user_id) {
+                        $query->where('pay_type', '2');
+                        $query->where('user_id', $user_id);
+                        $query->whereIn('order_type', ['1', '2', '4']);
+                    }])
+                ->whereNotNull('vcourse.video_tran')
+                ->whereNotNull('vcourse.video_free')
+                ->whereNotNull('vcourse.bucket')
+                ->whereId($id)
+                ->first();
         if (!$vcourseDetail)
             abort(404, '课程查找失败！');
         if (count($vcourseDetail->order) > 0)
@@ -422,7 +409,7 @@ class VcourseController extends Controller
                 echo "<script>alert('不存在该优惠券！');history.go(-1);</script>";
                 exit;
             }
-            $coupon_name = $coupon->name;// 优惠券的名称
+            $coupon_name = $coupon->name; // 优惠券的名称
             // 选完优惠券，可用余额与总价相应变化
             if ($coupon_type == 1) {
                 $total_price = $total_price - $coupon_cutmoney;
@@ -430,8 +417,7 @@ class VcourseController extends Controller
                     $total_price = 0;
                     $usable_point = 0;
                     $usable_money = 0;
-                }
-                else if ($total_price > 0 && $total_price < $user->current_balance) {
+                } else if ($total_price > 0 && $total_price < $user->current_balance) {
                     $usable_balance = $total_price;
                 } else {
                     $usable_balance = $user->current_balance;
@@ -458,8 +444,7 @@ class VcourseController extends Controller
     }
 
     // 优惠券
-    public function coupon(Request $request, $id)
-    {
+    public function coupon(Request $request, $id) {
         $id = intval($id);
 
         $coupon = $request->input('coupon');
@@ -482,28 +467,26 @@ class VcourseController extends Controller
 
         // 可用优惠券
         $coupons_usable = $this->getCouponsUsable($user_id, $vcourse);
-        $couponusers_usable = [ ];
+        $couponusers_usable = [];
         // 不可用优惠券
-        $couponusers_unusable = [ ];
-        if ($coupons_usable) foreach ($coupons_usable as $coupon) {
-            if ($coupon->full_money > $total_price) {
-                $couponusers_unusable[] = $coupon;
+        $couponusers_unusable = [];
+        if ($coupons_usable)
+            foreach ($coupons_usable as $coupon) {
+                if ($coupon->full_money > $total_price) {
+                    $couponusers_unusable[] = $coupon;
+                } else {
+                    $couponusers_usable[] = $coupon;
+                }
             }
-            else {
-                $couponusers_usable[] = $coupon;
-            }
-        }
 
         $coupon_use_scope = config('constants.coupon_use_scope');
         // dd($couponusers_usable);
 
         return view('vcourse.coupon', compact('couponusers_usable', 'couponusers_unusable', 'vcourse', 'user_id', 'is_point', 'usable_point', 'usable_money', 'is_balance', 'usable_balance', 'coupon_use_scope', 'total_price'));
-
     }
 
     /** 好看免费订单保存 */
-    public function order_save(Request $request)
-    {
+    public function order_save(Request $request) {
         $user_info = User::where('id', session('user_info')['id'])->first()->toArray();
         //首次支付
         if ($request->isMethod('post')) {
@@ -511,16 +494,16 @@ class VcourseController extends Controller
 
             //课程详情
             $vcourseDetail = Vcourse::whereStatus('2')
-                ->with(['order' => function ($query) use ($user_info) {
-                    $query->where('pay_type', '2');
-                    $query->where('user_id', $user_info['id']);
-                    $query->whereIn('order_type', ['1', '2', '4']);
-                }])
-                ->whereNotNull('vcourse.video_tran')
-                ->whereNotNull('vcourse.video_free')
-                ->whereNotNull('vcourse.bucket')
-                ->whereId($id)
-                ->first();
+                    ->with(['order' => function ($query) use ($user_info) {
+                            $query->where('pay_type', '2');
+                            $query->where('user_id', $user_info['id']);
+                            $query->whereIn('order_type', ['1', '2', '4']);
+                        }])
+                    ->whereNotNull('vcourse.video_tran')
+                    ->whereNotNull('vcourse.video_free')
+                    ->whereNotNull('vcourse.bucket')
+                    ->whereId($id)
+                    ->first();
             if (!$vcourseDetail)
                 return response()->json(['status' => false, 'msg' => '课程不存在！']);
             if (count($vcourseDetail->order) > 0)
@@ -539,17 +522,16 @@ class VcourseController extends Controller
                     $order->free_flg = 2;
 
                     $last_price = $vcourseDetail->price;
-                    $order->total_price = $last_price;// 任何减免之前的价格
-
+                    $order->total_price = $last_price; // 任何减免之前的价格
                     // 优惠券
                     $coupon_id = $request->input('coupon_id');
                     if ($coupon_id) {
                         $couponuser = CouponUser::where('coupon_id', $coupon_id)
-                            ->where('user_id', $user_info['id'])
-                            ->where('is_used', 2)
-                            ->whereNull('used_at')
-                            ->where('expire_at', '>', date('Y-m-d'))
-                            ->first();
+                                ->where('user_id', $user_info['id'])
+                                ->where('is_used', 2)
+                                ->whereNull('used_at')
+                                ->where('expire_at', '>', date('Y-m-d'))
+                                ->first();
                         if ($couponuser) {
                             $coupon_info = Coupon::find($coupon_id);
                             // 代金券
@@ -562,9 +544,8 @@ class VcourseController extends Controller
                                 $coupon_score = $last_price * (1 - $coupon_info->discount / 100);
                                 $last_price -= $coupon_score;
                             }
-                            $order->coupon_user_id = $couponuser->id;// 优惠券id
-                            $order->coupon_price = $coupon_score;// 优惠券减免的金额
-
+                            $order->coupon_user_id = $couponuser->id; // 优惠券id
+                            $order->coupon_price = $coupon_score; // 优惠券减免的金额
                             // 相应的减少优惠券(coupon_user表更改优惠券的使用状态)
                             $couponuser->is_used = 1;
                             $couponuser->used_at = date('Y-m-d H:i:s');
@@ -578,9 +559,10 @@ class VcourseController extends Controller
                     }
 
                     // 积分抵用
-                    $is_point = $request->input('is_point');// 积分抵用开关
-                    $usable_point = $request->input('usable_point');// 积分减免的积分
-                    $usable_money = $request->input('usable_money');;// 积分减免的金额
+                    $is_point = $request->input('is_point'); // 积分抵用开关
+                    $usable_point = $request->input('usable_point'); // 积分减免的积分
+                    $usable_money = $request->input('usable_money');
+                    ; // 积分减免的金额
                     $user = User::find($user_info['id']);
 
                     if ($is_point && $usable_point > 0 && ($order->total_price / 2) >= $usable_money && ($usable_money * 100) == $usable_point && $usable_point <= $user->score) {
@@ -608,9 +590,9 @@ class VcourseController extends Controller
 
 
                     // 可用余额
-                    $is_balance = $request->input('is_balance');// 可用余额开关
+                    $is_balance = $request->input('is_balance'); // 可用余额开关
                     $user = User::find($user_info['id']);
-                    $usable_balance = $request->input('usable_balance');// 可用余额
+                    $usable_balance = $request->input('usable_balance'); // 可用余额
                     if ($is_balance && $usable_balance <= $user->current_balance && $usable_balance > 0) {
                         $last_price -= $usable_balance;
                         $order->balance_price = $usable_balance;
@@ -630,7 +612,7 @@ class VcourseController extends Controller
                         DB::rollBack();
                         return response()->json(['status' => false, 'msg' => '订单金额异常']);
                     }
-zero_pay:
+                    zero_pay:
                     //实际支付金额为零
                     if ($last_price == 0) {
                         $order->order_type = '2';
@@ -661,16 +643,15 @@ zero_pay:
         }
     }
 
-	private function getCouponsUsable($user_id, $vcourse)
-    {
-        $coupons_usable = [ ];
+    private function getCouponsUsable($user_id, $vcourse) {
+        $coupons_usable = [];
 
         //初步符合要求的优惠券数量
         $couponusers_usable = CouponUser::leftJoin('coupon', 'coupon.id', '=', 'coupon_user.coupon_id')
-            ->where('coupon_user.user_id', $user_id)
-            ->where('coupon_user.is_used', 2)
-            ->where('coupon_user.expire_at', '>=', date('Y-m-d'))
-            ->get();
+                ->where('coupon_user.user_id', $user_id)
+                ->where('coupon_user.is_used', 2)
+                ->where('coupon_user.expire_at', '>=', date('Y-m-d'))
+                ->get();
         foreach ($couponusers_usable as $key => $value) {
             // 将不满足适用范围的优惠券和没到使用时间的优惠券注销
             if ($value->available_period_type == 2 && $value->available_start_time > date('Y-m-d')) {
@@ -683,7 +664,6 @@ zero_pay:
             // 该课程的类型id
             $agency_id = $vcourse->agency_id;
             // 该课程的id
-
             // 好课课程类别数组或者课程ID数组
             $arr_scope_val = explode(',', $value->use_scope_val);
 
@@ -698,4 +678,5 @@ zero_pay:
         }
         return $coupons_usable;
     }
+
 }
