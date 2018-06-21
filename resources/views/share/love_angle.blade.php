@@ -63,9 +63,9 @@
 		(function(){
 			var canvas = document.getElementById("namevas");
 			var ctx = canvas.getContext("2d");
-			ctx.fillStyle = "#ed6d11";
+			ctx.fillStyle = "#ffffff";//海报名称文字颜色
 			ctx.stroke();
-			ctx.font="13px Heiti SC";
+			ctx.font="12px Heiti SC";
 			ctx.textAlign = 'center';
 			ctx.fillText("我是{{$data['nickname']}}", 100, 12);
 			$("#vasimg").attr('src', canvas.toDataURL("image/png")); 

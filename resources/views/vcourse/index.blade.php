@@ -90,9 +90,9 @@
             	<div class="cover">
             		<a href="{{route('vcourse.detail',['id'=>$item->id])}}">
             		@if($item->cover)
-                       <img src="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                       <img class="lazy" src="/images/vcourse/default-v-cover.jpg" data-echo="{{ config('constants.admin_url').$item->cover}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
                     @else
-                       <img src="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
+                       <img class="lazy" src="/images/vcourse/default-v-cover.jpg" data-echo="{{ config('qiniu.DOMAIN').$item->video_tran}}?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}" alt="" onerror="javascript:this.src='/images/error.jpg'"/>
                     @endif
                     </a>
             	</div>
@@ -124,8 +124,16 @@
 @section('script')
 <script type="text/javascript" src="/js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
 <script type="text/javascript" src="/js/jquery.touchSlider.js"></script><!--幻灯效果-->
+<script type="text/javascript" src="/js/echo.min.js"></script>
 <script type="text/javascript" src="/js/history_search.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script>
+//懒加载图片
+Echo.init({
+    offset: 0,
+    throttle: 0
+});
+</script>
 <script>
 	$(document).ready(function(){
 		$dragBln = false;

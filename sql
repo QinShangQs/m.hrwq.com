@@ -1,3 +1,5 @@
+####
+test deploy
 ###############2017-07-10#################
 /*将会员卡激活但是没有会员天数的用户增加天数*/
 update `user` set vip_left_day = '2018-07-12' where vip_flg = 2 and vip_left_day is null

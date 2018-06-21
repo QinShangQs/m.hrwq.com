@@ -4,7 +4,7 @@
     <div id="main">
         <div class="my">
             <div class="my_order">
-                <div class="mo_top">我区域的订单</div>
+                <div class="mo_top">关联爱心大使的客户</div>
                 <ul class="mo_list">
                     @foreach($orders as $value)
                         <li>
