@@ -67,7 +67,7 @@ class VcourseController extends Controller {
             $telecast = '';
             $foreshow = '';
         }
-
+        
         return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'telecast', 'foreshow'));
     }
 
