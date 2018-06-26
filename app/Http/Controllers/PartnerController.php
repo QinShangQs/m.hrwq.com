@@ -145,9 +145,12 @@ class PartnerController extends Controller
                     $query->where('head_flg', 1)
                         ->where('distribution_flg', 1);
                 })
-                    ->whereHas('order_course', function ($query) use ($userInfo) {
-                        $query->where('user_city', $userInfo->partner_city);
-                    });
+                ->whereHas('order_course', function ($query) use ($userInfo) {
+                    $query->where('user_city', $userInfo->partner_city);
+                 });
+            })
+            ->whereHas('user', function($query) use ($userInfo){
+                $query->where('lover_id', $userInfo->id);
             })
             ->whereIn('pay_type', ['1'])
             ->whereIn('order_type', ['1', '2', '4'])
