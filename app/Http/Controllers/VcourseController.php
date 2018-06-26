@@ -22,6 +22,7 @@ use App\Http\Controllers\Controller;
 use Wechat,
     Event,
     DB;
+use Cache;
 use App\Events\MarkReplay;
 
 class VcourseController extends Controller {
@@ -181,8 +182,13 @@ class VcourseController extends Controller {
                 ->get();
 
         foreach ($parentMarkList as $k => $v) {
-            $parentMarkList[$k]['subs'] = VcourseMark::whereParentId($v['id'])
-                            ->orderBy('vcourse_mark.created_at', 'asc')->get();
+            $vmarkKey = "vcourse_mark_list_". $v['id'];
+            $sub = Cache::get($vmarkKey);
+            if(empty($sub)){
+                $sub =  VcourseMark::whereParentId($v['id'])->orderBy('vcourse_mark.created_at', 'asc')->get();
+                Cache::put($vmarkKey, $sub, 60);
+            }
+            $parentMarkList[$k]['subs'] = $sub;
         }
 
         return $parentMarkList;

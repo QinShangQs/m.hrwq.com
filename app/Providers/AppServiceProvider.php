@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use DB;
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        if(config('app.debug') === true){
+            DB::listen(function ($sql, $bindings, $time) {
+                Log::info('db listen', [
+                    'sql' => $sql,
+                    'bindings' => $bindings,
+                    'time' => $time
+                ]);
+            });
+        }
     }
 
     /**
