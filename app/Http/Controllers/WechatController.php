@@ -267,7 +267,11 @@ class WechatController extends Controller
                         return false;
                     }
                     //通知
-                    Event::fire(new OrderPaid($order));
+                    try{
+                        Event::fire(new OrderPaid($order));
+                    }catch(\Exception $ex){
+                    }
+                    
                     return true;
                 }
             }
@@ -640,7 +644,11 @@ class WechatController extends Controller
     				
     				if($sendNotice){
     					$lover->nickname = $cUser->nickname;
-    					Event::fire(new RegisterPeople($lover, true));
+                                        try{
+                                            Event::fire(new RegisterPeople($lover, true));
+                                        }catch(\Exception $ex){
+                                            
+                                        }
     				}
     			} 
     		}
