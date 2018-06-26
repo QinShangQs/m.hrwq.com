@@ -54,7 +54,7 @@ class OrderEventListener
                     try {
                         send_sms([$order->user->mobile], '让教育孩子变得简单。恭喜你成功报名'.$order->course->title.'，请提前安排好行程。客服电话400-6363-555');
                         //发送微信通知
-                        $notice = Wechat::notice();
+                        $notice = Wechat::notice();                        
                         $notice->send([
                             'touser' => $order->user->openid,
                             'template_id' => '7hXsOVA4WE3nGyta1UQRqUOtDP6C1D5ymR-E46_X1Ts',
@@ -191,14 +191,14 @@ class OrderEventListener
                     $notice->send([
                         'touser' => $order->user->openid,
                         'template_id' => '7hXsOVA4WE3nGyta1UQRqUOtDP6C1D5ymR-E46_X1Ts',
-                        'url' => route('user'),
+                        'url' => "http://m.hrwq.com/user/profile/edit",
                         'topcolor' => '#f7f7f7',
                         'data' => [
                             'first' => '和会员开通提示',
                             'keyword1'=>'和会员',
                             'keyword2'=> (string)$order->pay_time,
                             'keyword3'=> '恭喜你成功加入和润万青父母学院',
-                            'remark'=> '点击此处查看详情'
+                            'remark'=> '点击此处立即完善个人信息，客服老师会在1-2个工作日内，联系您开通直播权限'
                         ],
                     ]);
                     break;

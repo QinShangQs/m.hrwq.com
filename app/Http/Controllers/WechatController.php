@@ -735,4 +735,12 @@ class WechatController extends Controller
         $url = $qrcode->url($ticket);
         return view('wechat.qrcode', compact('url'));
     }
+    
+    public function access_token(){
+        $app = new Application(config('wechat'));
+        $accessToken = $app->access_token;
+        $token = $accessToken->getToken();
+        echo ($token);
+        exit;
+    }
 }

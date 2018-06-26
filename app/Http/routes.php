@@ -24,6 +24,7 @@ Route::group(['prefix' => 'wechat'], function () {
     Route::post('/question_ask_pay', 'WechatController@question_ask_pay')->name('wechat.question_ask_pay');
     Route::get('/menu', 'WechatController@menu')->name('wechat.menu');
     Route::get('/material', 'WechatController@material')->name('wechat.material');
+    Route::get('/access_token', 'WechatController@access_token')->name('wechat.access_token');
 });
 
 Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat', 'FrontAuth']], function () {

@@ -24,20 +24,24 @@ class FrontWechat
     		$lover_id = $out[1];
     		$lover_time = date('Y-m-d H:i:s');
     	}
-    	
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
-            if (strpos($user_agent, 'MicroMessenger') !== false ) {
+            if(config('app.debug') === true && config('app.env') === 'dev'
+                    && strpos($user_agent, 'MicroMessenger') === false){
+                $user_agent = "MicroMessenger";
                 //方便测试临时制造数据 TODO
-                //     $wechatUsertemp = [
-                //     'openid' => 'oveRcwX9qpQ-p_EH5IIzLq_wGUpc',
-                //     'nickname' => '阿虚',
-                //     'sex' => '1',
-                //     'city' => '泰州',
-                //     'province' => '江苏',
-                //     'headimgurl' => 'http://hrwq.test.looip.com/uploads/profileIcon/20160816/AA.jpg',
-                // ];
-                // $request->session()->put('wechat_user', $wechatUsertemp);
+                $wechatUsertemp = [
+                         'openid' => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY',
+                         'nickname' => '秦殇2607',
+                         'sex' => '1',
+                         'city' => '泰州',
+                         'province' => '江苏',
+                         'headimgurl' => 'http://m.hrwq.com//uploads/profileIcon/20180626/ot3XZt_Zq7p5PPFuihUQgY6Nn9fY.jpg',
+                ];
+                $request->session()->put('wechat_user', $wechatUsertemp);
+            }
+            
+            if (strpos($user_agent, 'MicroMessenger') !== false ) {             
                 if (empty($request->session()->get('wechat_user'))) {
                     return redirect('/wechat/auth?url='.$request->getRequestUri());
                 }
