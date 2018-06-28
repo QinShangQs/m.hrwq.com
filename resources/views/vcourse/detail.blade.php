@@ -137,7 +137,10 @@
                         @foreach($vcourseMarkListA as $item)
                         <li>
                             <div class="lcd_div_2_list_img"><img src="{{url($item->user->profileIcon)}}" alt=""/></div>
-                            <div class="lcd_div_2_list_title">{{@$item->user->nickname}}</div><!--需要链接直接加a标签就行-->
+                            <div class="lcd_div_2_list_title">
+                                {{@$item->user->nickname}}
+                                @if($item->user->role == 2)(指导师)@endif
+                            </div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_time">{{@date('Y-m-d',strtotime($item->created_at))}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_p">
                             	<span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>
@@ -170,7 +173,10 @@
                         @foreach($vcourseMarkListB as $k => $item)
                         <li>
                             <div class="lcd_div_2_list_img"><img src="{{url(@$item->user->profileIcon)}}" alt=""/></div>
-                            <div class="lcd_div_2_list_title">{{@$item->user->nickname}}</div><!--需要链接直接加a标签就行-->
+                            <div class="lcd_div_2_list_title">
+                                {{@$item->user->nickname}}
+                                 @if($item->user->role == 2)(指导师)@endif
+                            </div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_time">{{@date('Y-m-d',strtotime($item->created_at))}}</div><!--需要链接直接加a标签就行-->
                             <div class="lcd_div_2_list_p">
                             	<span style="color:#f39800">@if($item->mark_type=='1')#笔记#@elseif($item->mark_type=='2')#作业#@endif</span>

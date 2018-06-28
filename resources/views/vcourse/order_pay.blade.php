@@ -48,7 +48,8 @@ function checkStatus() {
         data: {"order_id": "{{$order->id}}", "_token": "{{csrf_token()}}"},
         success: function (res) {
             if (res.code == 0 && res.data == "2") {
-                location.href = '{{route('vcourse.detail',['id'=>$order->pay_id])}}';
+                //location.href = '{{route('vcourse.detail',['id'=>$order->pay_id])}}';
+                location.href = '{{route('my.orders',[])}}';
             }
         },
         error: function () {
