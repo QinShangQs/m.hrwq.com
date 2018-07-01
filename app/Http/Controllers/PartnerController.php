@@ -135,19 +135,23 @@ class PartnerController extends Controller
         $orders = Order::with([
             'course', 'user', 'order_course'
         ])
-            ->whereHas('course', function ($query) use ($userInfo) {
-                $query->where('promoter', $userInfo->id)
-                    ->where('head_flg', 2);
+//            ->whereHas('course', function ($query) use ($userInfo) {
+//                $query->where('promoter', $userInfo->id)
+//                    ->where('head_flg', 2);
+//
+//            })
+//            ->orWhere(function ($query) use ($userInfo) {
+//                $query->whereHas('course', function ($query) use ($userInfo) {
+//                    $query->where('head_flg', 1)
+//                        ->where('distribution_flg', 1);
+//                })
+//                ->whereHas('order_course', function ($query) use ($userInfo) {
+//                    $query->where('user_city', $userInfo->partner_city);
+//                 });
+//            })
 
-            })
-            ->orWhere(function ($query) use ($userInfo) {
-                $query->whereHas('course', function ($query) use ($userInfo) {
-                    $query->where('head_flg', 1)
-                        ->where('distribution_flg', 1);
-                })
-                    ->whereHas('order_course', function ($query) use ($userInfo) {
-                        $query->where('user_city', $userInfo->partner_city);
-                    });
+            ->whereHas('user', function($query) use ($userInfo){
+                $query->where('lover_id', $userInfo->id);
             })
             ->whereIn('pay_type', ['1','6'])
             ->whereIn('order_type', ['1', '2', '4'])

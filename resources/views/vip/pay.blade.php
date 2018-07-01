@@ -47,7 +47,8 @@ function checkStatus() {
         success: function (res) {
             if (res.code == 0 && res.data == "2") {
                 if(res.user.mobile){
-                	location.href = '{{route('user')}}';
+                	//location.href = '{{route('user')}}';
+                        location.href = '{{route('my.orders',[])}}';
                 }else{
                 	location.href = '{{route('user.login')}}';
                 }

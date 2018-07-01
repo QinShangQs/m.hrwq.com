@@ -151,7 +151,7 @@ class VcourseController extends Controller {
         //作业&笔记
         $vcourseMarkListA = $this->get_mark_lists($user_info, $id, 1, '!=');
         $vcourseMarkListB = $this->get_mark_lists($user_info, $id);
-
+        
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
                         ->whereNotNull('vcourse.video_tran')
@@ -285,7 +285,9 @@ class VcourseController extends Controller {
                 $vcourseMarkInfo->user->profileIcon = @url($vcourseMarkInfo->user->profileIcon);
 
                 if ($vcourseMark->parent_id > 0) {
-                    Event::fire(new MarkReplay($request->input('vcourse_title', ''), $request->input('parent_openid', ''), $vcourseMarkInfo->user->nickname, $request->input('mark_content')));
+                    if(config('app.debug') === false){
+                        Event::fire(new MarkReplay($request->input('vcourse_title', ''), $request->input('parent_openid', ''), $vcourseMarkInfo->user->nickname, $request->input('mark_content')));
+                    }   
                 }
 
                 return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(),
