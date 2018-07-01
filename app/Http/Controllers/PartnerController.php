@@ -149,7 +149,7 @@ class PartnerController extends Controller
                         $query->where('user_city', $userInfo->partner_city);
                     });
             })
-            ->whereIn('pay_type', ['1'])
+            ->whereIn('pay_type', ['1','6'])
             ->whereIn('order_type', ['1', '2', '4'])
             ->orderBy('id', 'desc')
             ->get();
