@@ -1,5 +1,16 @@
 ####
 test deploy
+
+###############2018-07-02#################
+CREATE TABLE `tooler` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '类型，类型唯一',
+  `content` text NOT NULL COMMENT '内容，可以json',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='工具表 ';
 ###############2017-07-10#################
 /*将会员卡激活但是没有会员天数的用户增加天数*/
 update `user` set vip_left_day = '2018-07-12' where vip_flg = 2 and vip_left_day is null
