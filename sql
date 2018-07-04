@@ -5,7 +5,7 @@ test deploy
 CREATE TABLE `tooler` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '类型，类型唯一',
-  `content` text NOT NULL COMMENT '内容，可以json',
+  `content` longtext NOT NULL COMMENT '内容，可以json',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL,
