@@ -16,9 +16,17 @@ class ShareController extends Controller
     }
     
     public function loveAngle(){
-    	$lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg')) ;
+        $lovebg64 = '';
+        $name_color = '';
+        $instance = \App\Models\Tooler::getByType(\App\Models\Tooler::TYPE_LOVE_BG);
 
-    	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64]);
+        if(!empty($instance['content']['base64'])){
+            $lovebg64 = $instance['content']['base64'];
+            $name_color = $instance['content']['name_color'];
+        }else{
+            $lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg')) ;
+        }
+    	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64,'name_color'=>$name_color]);
     }
     
     public function hot($id){    	
