@@ -157,6 +157,7 @@ class PartnerController extends Controller
             ->whereIn('order_type', ['1', '2', '4'])
             ->orderBy('id', 'desc')
             ->get();
+            //dd($orders);
         $order_type = config('constants.order_type');
         return view('partner.orders', ['orders' => $orders, 'order_type' => $order_type]);
     }

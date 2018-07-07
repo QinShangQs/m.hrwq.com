@@ -29,9 +29,9 @@ class FrontWechat
             if(config('app.debug') === true && config('app.env') === 'dev'
                     && strpos($user_agent, 'MicroMessenger') === false){
                 $user_agent = "MicroMessenger";
-                //方便测试临时制造数据 TODO
+                //方便测试临时制造数据 TODO 
                 $wechatUsertemp = [
-                         'openid' => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY',
+                         'openid' => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY',// ot3XZt41_M-OX9ihvC0_w05DU68Q
                          'nickname' => '秦殇2607',
                          'sex' => '1',
                          'city' => '泰州',
