@@ -8,6 +8,7 @@
                     <li id="ga_tab_1"  ga_div="ga_div_1" class="selected" >已提问</li>
                     <li id="ga_tab_2"  ga_div="ga_div_2" >已旁听</li>
                     <li id="ga_tab_3"  ga_div="ga_div_3"  >已关注</li>
+                    <li id="ga_tab_4"  ga_div="ga_div_4"  >已发帖</li>
                 </ul>
                 <div class="ga_div">
 
@@ -89,7 +90,24 @@
                                 @endif
                         </ul>
                     </div>
-
+                    
+                    <div class="ga_div_4 children_div" style="display:none;" >
+                            <ul class="mr_div_list">
+                                @foreach($talk as $item)
+                                <li>
+                                    <div class="mr_div_list_div">
+                                        <div class="mr_div_list_img"><img src="{{url($item->ask_user->profileIcon)}}" alt=""/></div>
+                                        <div class="mr_div_list_name">{{$item->ask_user->realname or $item->ask_user->nickname}}</div>
+                                        <div class="mr_div_list_source">来自  {{@$item->ask_user->c_city->area_name}}  {{config('constants.user_label')[$item->ask_user->label]}}</div>
+                                    </div>
+                                    <div class="mr_div_list_people">{{$item->view or 0}}人已看</div>
+                                    <div class="mr_div_list_problem"><a href="{{route('question.talk',['id'=>$item->id])}}">{{$item->title}}</a></div>
+                                    <div class="mr_div_list_p"><a href="{{route('question.talk',['id'=>$item->id])}}">{!! replace_em($item->content) !!}</a></div>
+                                </li>
+                                @endforeach
+                            </ul>
+                    </div>
+                    
                 </div>
             </div>
         </div>
