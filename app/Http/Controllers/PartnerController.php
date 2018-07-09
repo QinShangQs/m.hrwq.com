@@ -331,4 +331,12 @@ class PartnerController extends Controller
 
         return $day_num_arr;
     }
+    
+    public function card(Request $request){
+        return view('partner.card', ['test' => 123]);
+    }
+    
+    public function cardShow(Request $request){
+        return view('partner.card-show', ['test' => 123]);
+    }
 }

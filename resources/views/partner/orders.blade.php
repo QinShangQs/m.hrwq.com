@@ -18,7 +18,7 @@
                                 <div class="mo_list_price">@if($value->free_flg=='2')￥{{$value->each_price}}@else免费@endif</div>
                                 <div class="mo_list_people">{{ $value->course->participate_num or 0}}人已报名</div>
                             </div>
-                            <div class="mo_list_text" @if($value->pay_type == 6) style="display:block;height:auto;padding-left:20px" @endif>
+                            <div class="mo_list_text" @if($value->pay_type == 6) style="display:block;height:auto;padding-left:20px" @else style="display:none" @endif>
                                 <div class="mo_list_title" style="text-align: right">
                                     {{ @str_limit(@$value->order_name,20) }}
                                     <span class="mo_list_price">@if($value->free_flg=='2')￥{{$value->price}}@else免费@endif</span>
