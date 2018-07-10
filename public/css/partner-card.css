@@ -218,9 +218,12 @@ body {
 }
 
 .card-body .last-content .item .tcont .pics {
-    
+    font-size: 0;
+    background-color: #ececec;
 }
 
 .card-body .last-content .item .tcont .pics img{
-    width:30%
+    width:32%;
+    margin-left: 1%;
+    margin-bottom: .53%;
 }
