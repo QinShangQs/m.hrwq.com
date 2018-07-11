@@ -345,13 +345,17 @@ class CourseController extends Controller
             echo "<script>alert('不存在该课程！');history.go(-1);</script>";
             exit;
         }
-
+        
+        //指导师课程并且当前用户是指导师身份
+        if($course->is_tutor_course == 1 && user_info()['role']  == 2){
+             return view('course.comment', ['course' => $course]);
+        }
+        
         $order = Order::where('user_id', session('user_info')['id'])->where('pay_type', 1)->where('pay_id', $id)->whereIn('order_type', ['2', '4'])->first();
         if ($order == null) {
             echo "<script>alert('参加过该课程，方可进行评论！');history.go(-1);</script>";
             exit;
         }
-
         return view('course.comment', ['course' => $course]);
     }
 

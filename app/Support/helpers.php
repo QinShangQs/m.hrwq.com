@@ -123,21 +123,23 @@ if (!function_exists('get_score')) {
                 //发送微信提醒
                 $scoreSources = config('constants.income_point_source');
                 if(isset($scoreSources[$type])) {
-                    $notice = \Wechat::notice();
-                    $notice->send([
-                        'touser' => $user->openid,
-                        'template_id' => 'oxk8-ixLvD_XqQ8enFSy1wJ6qrwziLdeHv7KJqybfwE',
-                        'url' => route('user.score'),
-                        'topcolor' => '#f7f7f7',
-                        'data' => [
-                            'first' => '恭喜你获得和贝奖励',
-                            'keyword1' => '+' . $score,
-                            'keyword2' => $scoreSources[$type],
-                            'keyword3' => (string)\Carbon\Carbon::now(),
-                            'keyword4' => $user->score,
-                            'remark' => '和贝可抵扣听课费，点击查看积分详情'
-                        ],
-                    ]);
+                    if(config('app.debug') === false){
+                        $notice = \Wechat::notice();
+                        $notice->send([
+                            'touser' => $user->openid,
+                            'template_id' => 'oxk8-ixLvD_XqQ8enFSy1wJ6qrwziLdeHv7KJqybfwE',
+                            'url' => route('user.score'),
+                            'topcolor' => '#f7f7f7',
+                            'data' => [
+                                'first' => '恭喜你获得和贝奖励',
+                                'keyword1' => '+' . $score,
+                                'keyword2' => $scoreSources[$type],
+                                'keyword3' => (string)\Carbon\Carbon::now(),
+                                'keyword4' => $user->score,
+                                'remark' => '和贝可抵扣听课费，点击查看积分详情'
+                            ],
+                        ]);
+                    }
                 }
                 return $score;
             } else {

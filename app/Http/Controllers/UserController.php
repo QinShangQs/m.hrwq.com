@@ -40,7 +40,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        $tutorCourse = Course::where('is_tutor_course', 1)->where('status', 2)->first();
         //指导师待回答问题数
         $questionsToAnswerCount = $this->_get_questions_to_answer_count();
         //提问者有未读回答问题数
@@ -59,8 +58,7 @@ class UserController extends Controller
             'order_read_num' => $this->_get_order_read_num()->count(),
             'questions_to_answer_count' => $questionsToAnswerCount,
             'new_answer_questions_count' => $newAnswerQuestionsCount,
-            'tutorCourse' => $tutorCourse,
-        	'balanceCount' => $balanceCount,
+            'balanceCount' => $balanceCount,
             'myWalletCount' => $myWalletCount,
             'partnerNewOrderCount'=>$partnerNewOrderCount,
             'unreadTalkCommentCount' => $unreadTalkCommentCount
@@ -166,6 +164,7 @@ class UserController extends Controller
      */
     public function setting(){
     	$tutorCourse = Course::where('is_tutor_course', 1)->where('status', 2)->first();
+            dd($tutorCourse);
     	return view('user.setting', [
             'data' => user_info(),
     		'tutorCourse' => $tutorCourse
