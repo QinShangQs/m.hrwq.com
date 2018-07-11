@@ -301,7 +301,15 @@ class UserController extends Controller
             ->orderBy('id', 'desc')
             ->get();
             
-        return view('user.question', ['answer_data' => $answer_data, 'no_answer_data' => $no_answer_data,'questions' => $data, 'teachers' => $teachers]);
+
+//        //我发布的
+        $talk = Talk::with('ask_user', 'ask_user.c_city')
+            ->where('user_id', user_info('id'))
+            ->orderBy('id', 'desc')
+            ->get();
+            
+        return view('user.question', ['answer_data' => $answer_data, 'no_answer_data' => $no_answer_data
+                ,'questions' => $data, 'teachers' => $teachers,'talk'=>$talk]);
     }
 
     /**

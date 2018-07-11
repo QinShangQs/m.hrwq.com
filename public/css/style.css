@@ -272,10 +272,11 @@ transform: rotate(-45deg);
 /*----------好问----------*/
 .good_asking { width:100%;}
 .ga_tab { padding:7px 32px; height:34px; background:#fff;}
-.ga_tab li { width:33.33%; box-sizing:border-box; border:2px solid #ff9900; line-height:30px; text-align:center; color:#ff9900; font-size:16px; float:left;}
+.ga_tab li { width:24.9%; box-sizing:border-box; border:2px solid #ff9900; line-height:30px; text-align:center; color:#ff9900; font-size:16px; float:left;}
 #ga_tab_1 { border-radius:15px 0 0 15px;}
 #ga_tab_2 { border-left:none; border-right:none;}
-#ga_tab_3 { border-radius:0 15px 15px 0;}
+#ga_tab_3 { border-right:none;}
+#ga_tab_4 { border-radius:0 15px 15px 0;}
 .ga_tab .selected { color:#fff; background:#ff9900;}
 .ga_div { width:100%; padding-bottom:50px;}
 .ga_div_1 { width:100%;}

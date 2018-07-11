@@ -84,6 +84,10 @@ if (!function_exists('get_score')) {
      */
     function get_score($type, $money = 0, $user_id = '')
     {
+        if(config('app.debug') === true){
+             return true;
+        }
+        
         $type = intval($type);
         $money = intval($money);
         if (empty($user_id)) {

@@ -891,6 +891,10 @@ if (!function_exists('get_score')) {
      *
      */
     function get_score($type,$money=0) {
+        if(config('app.debug') === true){
+             return true;
+        }
+        
         $type = intval($type);
         $money = intval($money);
         //来源:1注册 2分享 4发帖 5评论 6作业 7笔记 8推荐好友注册  12观看视频 13消费 
