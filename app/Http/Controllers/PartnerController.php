@@ -343,12 +343,14 @@ class PartnerController extends Controller
     }
     
     private function _cardFixUser($userInfo){
+        $city = array('city' => array('area_name' => '中国'));
         if ($userInfo['partner_city']) {
             $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
-            $userInfo['city'] = $areaInfo->toArray();
-        }else{
-            $userInfo['city']['area_name'] = '中国';
+            if(!empty($areaInfo)){
+                $city['city'] = $areaInfo->toArray();
+            }
         }
+        $userInfo = array_merge($userInfo, $city);
         
         $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
         $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
