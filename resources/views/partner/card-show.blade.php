@@ -4,17 +4,17 @@
 
 <div class="card-body">
     <div class="banner">
-        <img src="/images/partner/banner.png" />
+        <img src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
         <div class="change"></div>
     </div>
     
     <div class="info-content">
         <div class="name-info">
             <div class="author">
-                <img src="http://dev.m.hrwq.com/uploads/profileIcon/20161029/ot3XZtzWe3i6nZVo4XrDmvLB4zAA.jpg"/>
+                <img src="{{$user_info['profileIcon']}}"/>
                 <div class="desc">
-                    <div class="name">包老师</div>
-                    <div class="cityname">北京市朝阳区合伙人</div>
+                    <div class="name">{{$user_info['realname']}}</div>
+                    <div class="cityname">{{$user_info['city']['area_name']}}合伙人</div>
                 </div>
             </div>
             
@@ -29,48 +29,48 @@
                 <img src='/images/partner/phone.png' />
                 <div class='remark' >
                     <div class='title'>电话</div>
-                    <div class='name'>188888888888888</div>
+                    <div class='name'><a href="tel:{{$card_info->tel}}">{{$card_info->tel}}</a></div>
                 </div>
             </div>
             <div class='item'>
                 <img src='/images/partner/wechat.png' />
                 <div class='remark' >
                     <div class='title'>微信</div>
-                    <div class='name'>188888888888888</div>
+                    <div class='name'>{{$card_info->wechat}}</div>
                 </div>
             </div>
             <div class='item'>
                 <img src='/images/partner/msg.png' />
                 <div class='remark' >
                     <div class='title'>邮箱</div>
-                    <div class='name'>abccsds@qq.com</div>
+                    <div class='name'><a href="mailto:{{$card_info->email}}">{{$card_info->email}}</a></div>
                 </div>
             </div>
             <div class='item'>
                 <img src='/images/partner/pointer.png' />
                 <div class='remark' >
                     <div class='title'>地址</div>
-                    <div class='name'>北京市朝阳区旱河路93号路南</div>
+                    <div class='name'>{{$card_info->address}}</div>
                 </div>
             </div>
             <div class='item'>
                 <img src='/images/partner/ie.png' />
                 <div class='remark' >
                     <div class='title'>网址</div>
-                    <div class='name'>www.hreq.com</div>
+                    <div class='name'>{{$card_info->website}}</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class='mid-content'>
+    <div class='mid-content' >
         <div class='show'>
             <div>点击查看更多信息</div>
             <img src='/images/partner/more.png' />
         </div>
     </div>
     
-    <div class='last-content'>
+    <div class='last-content' style="display:none">
         <div class='item'>
             <div class='title'>
                 <img src='/images/partner/left-line.png'/>
@@ -83,7 +83,11 @@
                 </p>
             </div>
         </div>
-        <div class='item'>
+        <div class='item fixed'
+              @if(empty($card_info->video_url))
+                style="display:none"
+              @endif
+             >
             <div class='title'>
                 <img src='/images/partner/left-line.png'/>
                 <span>照片</span>
@@ -97,28 +101,75 @@
                     <img src='/images/partner/pic-it.png'/>
                 </div>
             </div>
-        </div>
-        <div class='item'>
-            <div class='title'>
-                <img src='/images/partner/left-line.png'/>
-                <span>视频</span>
-            </div>
-            <div class='tcont'>
+            <div style="height:0.8rem"></div>
+            <div class='tcont'
+                 @if(empty($card_info->video_url))
+                    style="display:none"
+                  @endif
+                 >
                 <div class='video' >
                     <img src='/images/partner/play.png'/>
                 </div>
             </div>
         </div>
         
-        <img class='save' src='/images/partner/to-learn.png'/>
+        <img id="tolearn" class='save' src='/images/partner/to-learn.png'/>
     </div>
     
 </div>
 
+<div class="qrcode-bg" style="display:none">
+    <div class="qrcode-body">
+        <div class="title">
+            <img src="{{$user_info['profileIcon']}}"/>
+            <div class="name">{{$user_info['realname']}}</div>
+            <img class="close" src="/images/look/glr_close.png" />
+        </div>
+        <div class="cav">
+            <div id="qrcode"></div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('script')
-    <!-- 提交信息 -->
     <script>
+        (function(){
+            $('.mid-content .show').click(function(){
+                $('.mid-content').hide();
+                $('.last-content').show();
+            });
+        })();
+    </script>
+    
+    <script>
+        (function(){
+            $('#tolearn').click(function(){
+                location.href = '/';
+            });
+        })();
+    </script>
 
+    <script type="text/javascript" src="/js/qrcode.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var qrcodeWidth = window.screen.width*.8*.8;
+            qrcodeWidth > 500 ? qrcodeWidth = 250 : null;
+            
+            var qrcode = new QRCode(document.getElementById("qrcode"), {
+		text: "{{ route('partner.card.show',[ 'uid'=> $base64_id ] ) }}",
+		width : qrcodeWidth,
+		height : qrcodeWidth
+            });
+            $('#qrcode').width(qrcodeWidth).css('margin','auto');
+            
+            $('.qrcode-body .title .close').click(function(){
+                $('.qrcode-bg').hide();
+            });
+            
+            $('.name-info .qrcode').click(function(){
+                $('.qrcode-bg').show();
+            });
+        });
     </script>
 @endsection

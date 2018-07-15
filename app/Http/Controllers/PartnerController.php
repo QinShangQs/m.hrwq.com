@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Area;
 use App\Models\Article;
 use App\Models\UserPartnerApply;
+use App\Models\UserPartnerCard;
+use App\Models\UserPartnerCardImages;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -332,11 +334,111 @@ class PartnerController extends Controller
         return $day_num_arr;
     }
     
-    public function card(Request $request){
-        return view('partner.card', ['test' => 123]);
+    private function _createPartnerBase64Id($uid){
+        return base64_encode($uid);
     }
     
-    public function cardShow(Request $request){
-        return view('partner.card-show', ['test' => 123]);
+    private function _decodePartnerBase64Id($base64id){
+        return base64_decode($base64id);
+    }
+    
+    public function card(Request $request){
+        $userInfo = user_info();
+        if ($userInfo['role'] != 3){
+            abort(403, '不是合伙人，无法查看卡片');
+        }
+        $remark = "和润万青（北京）教育科技有限公司，专注华人家庭教育和青少年成长教育15年，是由华人家庭教育领域唯一的父子专家——全国十佳教育公益人物贾容韬老师、北京师范大学心理学硕士贾语凡老师共同创立。
+全国免费咨询电话：400-6363-555";
+        $cover_url = "http://pbweca8a0.bkt.clouddn.com/banner.png";
+        $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
+        
+        if(empty($cardInfo)){
+            $apply = UserPartnerApply::where(['user_id' => $userInfo['id']])->first();
+            if(!empty($apply)){
+                $card = new UserPartnerCard();
+                $card->user_id = $userInfo['id'];
+                $card->tel = $userInfo['mobile'];
+                $card->email = $apply->email;
+                $card->address = $apply->address;
+                $card->cover_url = $cover_url;
+                $card->remark = empty($apply->introduction) ? $remark : $apply->introduction;
+                $card->save();
+            }else{
+                $card = new UserPartnerCard();
+                $card->user_id = $userInfo['id'];
+                $card->cover_url = $cover_url;
+                $card->remark = $remark;
+                $card->save();
+            }
+            
+            $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
+        }
+        
+        $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
+        if ($userInfo['partner_city']) {
+            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
+            $userInfo['city'] = $areaInfo->toArray();
+        }
+        
+        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
+        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        return view('partner.card', ['user_info' => $userInfo,'card_info' => $cardInfo, 'base64_id' => $base64Id]);
+    }
+    
+    public function cardShow($uid){
+        $uid = $this->_decodePartnerBase64Id($uid);
+        $userInfo = User::find($uid);
+        if(empty($userInfo)){
+            abort(403, '用户不存在');
+        }
+        if($userInfo->role != 3){
+            abort(403, '不是合伙人，无法查看卡片');
+        }
+        
+        $userInfo = $userInfo->toArray();
+        $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
+        $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
+        if ($userInfo['partner_city']) {
+            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
+            $userInfo['city'] = $areaInfo->toArray();
+        }
+        
+        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').$userInfo['profileIcon'];
+        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        return view('partner.card-show', ['user_info' => $userInfo,'card_info' => $cardInfo, 'base64_id' => $base64Id]);
+    }
+    
+    public function cardEdit(Request $request){
+        $userInfo = user_info();
+
+        if ($userInfo['role'] != 3){
+            abort(403, '不是合伙人，无法查看卡片');
+        }
+        
+        $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
+         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
+        if ($userInfo['partner_city']) {
+            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
+            $userInfo['city'] = $areaInfo->toArray();
+        }
+        
+        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
+        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        return view('partner.card-edit', ['user_info' => $userInfo, 'card_info' => $cardInfo, 'base64_id' => $base64Id]);
+    }
+    
+    public function cardUpdate(Request $request){
+        $user_id = user_info()['id'];
+        $attrs = array();
+        $attrs['tel'] = $request->input('tel');
+        $attrs['wechat'] = $request->input('wechat');
+        $attrs['email'] = $request->input('email');
+        $attrs['address'] = $request->input('address');
+        $attrs['website'] = $request->input('website');
+        $attrs['remark'] = $request->input('remark');
+        
+        UserPartnerCard::find($user_id)->update($attrs);
+        
+        return response()->json(['code'=>0, 'message'=>'修改成功！']);
     }
 }

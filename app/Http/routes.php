@@ -240,7 +240,9 @@ Route::group(['prefix'=>'partner', 'middleware'=>['FrontWechat']], function(){
     Route::post('/day7', 'PartnerController@day7')->name('partner.day7');
     Route::post('/city_check', 'PartnerController@city_check')->name('partner.city_check');
     Route::get('/card', 'PartnerController@card')->name('partner.card');
-    Route::get('/card/show', 'PartnerController@cardShow')->name('partner.cardShow');
+    Route::get('/card/show/{uid}', 'PartnerController@cardShow')->name('partner.card.show');
+    Route::get('/card/edit', 'PartnerController@cardEdit')->name('partner.cardEdit');
+    Route::post('/card/update', 'PartnerController@cardUpdate')->name('partner.card.update');
 });
 
 /** 和会员业务 */

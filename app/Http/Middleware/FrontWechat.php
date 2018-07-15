@@ -17,13 +17,31 @@ class FrontWechat
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    {   //已登录
+        if(session('user_info')){
+            return $next($request);
+        }
+        
+        //未登录
     	$lover_id = 0;
     	$lover_time = null;
+        //爱心大使
     	if(preg_match('/share\/hot\/(\d+)/i', $request->path(), $out)){
     		$lover_id = $out[1];
     		$lover_time = date('Y-m-d H:i:s');
     	}
+        //合伙人卡片
+        if(preg_match('/partner\/card\/show\/(\S+)/i', $request->path(), $out)){
+            $lover_id = base64_decode($out[1]) ;
+            \Log::info("合伙人卡片 lover_id={$lover_id} " . $request->path() );
+            if(is_numeric($lover_id)){//避免非法字符吃
+                $lover_id = (int)$lover_id;
+                $lover_time = date("Y-m-d H:i:s");
+            }else{
+                $lover_id = 0;
+            }   
+        }
+        
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
             if(config('app.debug') === true && config('app.env') === 'dev'
@@ -66,7 +84,7 @@ class FrontWechat
                     
                     User::whereOpenid($wechat_user['openid'])->update(['last_login' => date('Y-m-d H:i:s', time())]);
                     $request->session()->set('user_info', $user_info->toArray());
-                } elseif ($user_info && $user_info['id'] > 0&&$user_info['block']=='2') {
+                } elseif ($user_info && $user_info['id'] > 0 && $user_info['block']=='2') {
                     return redirect(route('course.block_index'));
                 } else {
                     $request->session()->forget('user_info');

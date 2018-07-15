@@ -1,6 +1,33 @@
 ####
 test deploy
 
+###############2018-07-15#################
+CREATE TABLE `user_partner_card` (
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `tel` varchar(25) NOT NULL DEFAULT '' COMMENT '手机号',
+  `wechat` varchar(25) NOT NULL COMMENT '微信',
+  `email` varchar(50) NOT NULL COMMENT 'email',
+  `address` varchar(100) NOT NULL COMMENT '地址',
+  `website` varchar(100) NOT NULL COMMENT '网址',
+  `remark` varchar(600) NOT NULL COMMENT '简介',
+  `cover_url` varchar(250) NOT NULL COMMENT '封面地址',
+  `video_url` varchar(600) NOT NULL COMMENT '视频地址',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='合伙人卡片表';
+
+CREATE TABLE `user_partner_card_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `url` varchar(250) NOT NULL COMMENT '图片地址',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='合伙人卡片图片表';
+
 ###############2018-07-02#################
 CREATE TABLE `tooler` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
