@@ -132,6 +132,10 @@
 
 <form enctype="multipart/form-data" id="photo-from" style="display:none"></form>
 
+<div class='card-loading' style="display:none">
+    <div class='body'>上传中...</div>
+</div>
+
 @endsection
 @section('script')
 <!-- 提交修改 -->
@@ -196,6 +200,14 @@
         }
     }
     
+    function showLoading(){
+        $('.card-loading').show();
+    }
+    
+    function hideLoading(){
+        $('.card-loading').hide();
+    }
+    
     (function(){
         hidePhotoDiv();
     })();
@@ -206,14 +218,7 @@
         if (bannerLock)
             return;
         bannerLock = true;
-        Popup.init({
-	    popTitle:"",
-	    popHtml:"正在上传，请稍后...",
-	    popFlash:{
-	        flashSwitch:true,
-	        flashTime:3000,
-	    }
-	});
+        showLoading();
  
         $.ajax({
             url: upload_url,
@@ -226,6 +231,7 @@
                     console.log(data);
                     callback(data);
                     bannerLock = false;
+                    hideLoading();
             },error: function (res) {
                     Popup.init({
                         popHtml: '<p>编辑失败！</p>',
@@ -235,6 +241,7 @@
                         }
                     });
                     bannerLock = false;
+                    hideLoading();
             }
         });
     }
