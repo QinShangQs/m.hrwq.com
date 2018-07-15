@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserPartnerCardImages extends Model {
 
-    protected $table = 'user_partner_card';
+    protected $table = 'user_partner_card_images';
 
+    protected $fillable = ['user_id', 'url'];
+    
     use SoftDeletes;
 }

@@ -84,28 +84,31 @@
             </div>
         </div>
         <div class='item fixed'
-              @if(empty($card_info->video_url))
+             @if(empty($card_info->video_url) && empty($card_info->images))
                 style="display:none"
               @endif
              >
-            <div class='title'>
-                <img src='/images/partner/left-line.png'/>
-                <span>照片</span>
-            </div>
-            <div class='tcont'>
-                <div class='pics'>
-                    <img src='/images/partner/pic-it.png'/>
-                    <img src='/images/partner/pic-it.png'/>
-                    <img src='/images/partner/pic-it.png'/>
-                    <img src='/images/partner/pic-it.png'/>
-                    <img src='/images/partner/pic-it.png'/>
+            @if ($card_info->images)
+                <div class='title'>
+                    <img src='/images/partner/left-line.png'/>
+                    <span>照片</span>
                 </div>
-            </div>
+                <div class='tcont'>
+                    <div class='pics'>
+                        @foreach($card_info->images as $image)
+                        <div class='lmg' >
+                            <img src='{{$image->url}}'/>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+            
             <div style="height:0.8rem"></div>
             <div class='tcont'
                  @if(empty($card_info->video_url))
                     style="display:none"
-                  @endif
+                 @endif
                  >
                 <div class='video' >
                     <img src='/images/partner/play.png'/>

@@ -3,10 +3,14 @@
 <link rel="stylesheet" href="/css/partner-card.css"/>
 
 <div class="card-body">
-    <div class="banner">
-        <img src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
-        <div class="change"></div>
-    </div>
+     <form enctype="multipart/form-data" id="banner-from">
+        <div class="banner">
+            <img id="banner-img" src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
+            <div class="change" onclick="$('#banner-file').click()"></div>
+            <input type="file" name="file" id="banner-file" style="display: none" onchange="uploadBanner()" >
+        </div>
+    </form>
+
     <form id="profile-form">
         <div class="info-content">
             <div class="name-info">
@@ -89,10 +93,23 @@
                     <span>照片</span>
                 </div>
                 <div class='tcont'>
-                    <img src='/images/partner/pic.png' />
+                    <div class='pics'>
+                        @if ($card_info->images)
+                            @foreach($card_info->images as $image)
+                            <div class='lmg' onclick='removePhoto({{$image->id}}, this)'>
+                                <img src='{{$image->url}}' />
+                                <img class='remove' src='/images/partner/remove.png'/>
+                            </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <div class='tcont' id='photo-div'>
+                    <img src='/images/partner/pic.png' onclick="$('#photo-file').click()" />
                     <div class='desc'>
                         点击上传图片
                     </div>
+                    <input type="file" name="file" id="photo-file" style="display: none" onchange="uploadPhoto()" >
                 </div>
             </div>
             <div class='item'>
@@ -112,6 +129,8 @@
         </div>
     </form>
 </div>
+
+<form enctype="multipart/form-data" id="photo-from" style="display:none"></form>
 
 @endsection
 @section('script')
@@ -166,5 +185,120 @@
             });
         });
     });
+</script>
+
+<script>
+    function hidePhotoDiv(){
+        if($('.pics .lmg').length == 6){
+            $('#photo-div').hide();
+        }else{
+            $('#photo-div').show();
+        }
+    }
+    
+    (function(){
+        hidePhotoDiv();
+    })();
+    
+    var bannerLock = false;
+    
+    function uploadImg(upload_url, formData, callback){
+        if (bannerLock)
+            return;
+        bannerLock = true;
+        Popup.init({
+	    popTitle:"",
+	    popHtml:"正在上传，请稍后...",
+	    popFlash:{
+	        flashSwitch:true,
+	        flashTime:3000,
+	    }
+	});
+ 
+        $.ajax({
+            url: upload_url,
+            type: 'POST',
+            data: formData,
+            //这两个设置项必填
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                    console.log(data);
+                    callback(data);
+                    bannerLock = false;
+            },error: function (res) {
+                    Popup.init({
+                        popHtml: '<p>编辑失败！</p>',
+                        popFlash: {
+                            flashSwitch: true,
+                            flashTime: 2000,
+                        }
+                    });
+                    bannerLock = false;
+            }
+        });
+    }
+    
+    function uploadBanner(){
+        var formData = new FormData($('#banner-from')[0]);
+        uploadImg('{{route('partner.card.change_banner')}}',formData,function(data){
+            if (data.code == 0) {
+                $('#banner-img').attr('src', data.url);
+            } else {
+                Popup.init({
+                    popHtml: '<p>' + data.message + '</p>',
+                    popFlash: {
+                        flashSwitch: true,
+                        flashTime: 2000,
+                    }
+                });
+            }
+        })
+    }
+    
+    function uploadPhoto(){
+        var formData = new FormData($('#photo-from')[0]);
+        formData.append('file',$('#photo-file')[0].files[0]);
+        uploadImg('{{route('partner.card.create_img')}}',formData,function(data){
+            if (data.code == 0) {
+                var div = "<div class='lmg' onclick='removePhoto("+data.id+", this)'>"
+                          +"<img src='"+data.url+"' />"
+                          +"<img class='remove' src='/images/partner/remove.png'/>"
+                          +"</div>";
+                $('.pics').append($(div));
+                
+                hidePhotoDiv();
+            } else {
+                Popup.init({
+                    popHtml: '<p>' + data.message + '</p>',
+                    popFlash: {
+                        flashSwitch: true,
+                        flashTime: 2000,
+                    }
+                });
+            }
+        })
+    }
+    
+    function removePhoto(id, img){
+         Popup.init({
+            popHtml: '确定要删除该图片吗？',
+            popOkButton: {
+                buttonDisplay: true,
+                buttonName: "确认",
+                buttonfunction: function () {
+                    $.post('{{route('partner.card.remove_img')}}',{id:id}, function(data){
+                        $(img).remove();
+                        hidePhotoDiv();
+                    },'json');
+                }
+            },
+            popCancelButton:{
+                buttonDisplay:true,
+                buttonName:"取消",
+                buttonfunction:function(){}
+            }
+        });
+    }
 </script>
 @endsection

@@ -10,6 +10,7 @@ use App\Models\UserPartnerApply;
 use App\Models\UserPartnerCard;
 use App\Models\UserPartnerCardImages;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -438,5 +439,44 @@ class PartnerController extends Controller
         UserPartnerCard::find($user_id)->update($attrs);
         
         return response()->json(['code'=>0, 'message'=>'修改成功！']);
+    }
+    
+    public function cardChangeBanner(Request $request){
+        $filepath = $_FILES['file']['tmp_name'];
+        $uploadResult = _qiniu_upload_img($filepath, 'banner');
+        $cover_url = '';
+        if(empty($uploadResult['err'])){
+            $cover_url = $uploadResult['url'];
+            UserPartnerCard::find(user_info()['id'])->update(['cover_url' => $cover_url]);
+            return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $cover_url]);
+        }
+       
+        return response()->json(['code' => 1, 'message' => '上传失败:'.$uploadResult['err']]);
+    }
+    
+    public function cardCreateImg(Request $request){
+        $filepath = $_FILES['file']['tmp_name'];
+        $uploadResult = _qiniu_upload_img($filepath, 'photo');
+        $cover_url = "";
+        if(empty($uploadResult['err'])){
+            $cover_url = $uploadResult['url'];
+            
+            $images = new UserPartnerCardImages();
+            $images->user_id = user_info()['id'];
+            $images->url = $cover_url;
+            $images->save();
+            $id = DB::getPdo()->lastInsertId();
+            return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $cover_url, 'id'=>$id]);
+        }
+        
+        return response()->json(['code' => 1, 'message' => '上传失败:'.$uploadResult['err']]);
+    }
+    
+    public function cardRemoveImg(Request $request){
+        $id = $request->input('id');
+        if(UserPartnerCardImages::destroy($id)){
+            return response()->json(['code' => 0, 'message' => '删除成功']);
+        }
+        return response()->json(['code' => 1, 'message' => '删除失败']);
     }
 }

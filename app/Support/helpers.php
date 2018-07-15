@@ -477,3 +477,31 @@ function _get_telecast_link (){
 	
 	return $telecast;
 }
+
+function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = false){
+    $uuid = $oldName;
+    if($useOldName === false){
+        $extistion = empty($oldName) ? 'jpg' : substr(strrchr($oldName, '.'), 1);
+        $uuid = str_replace('.', '', uniqid("", TRUE)) . "." . $extistion;
+    }
+    $newName = $qu_dir . '/' . $uuid;
+    
+    $ak = config('qiniu.AK');
+    $sk = config('qiniu.SK');
+    $buket = config('qiniu.BUCKET_NAME_USERCOVER');
+    $domain = config('qiniu.DOMAIN');
+    if(config('app.env') === 'dev'){
+        $buket = config('qiniu.BUCKET_NAME_DEVELOP');
+        $domain = config('qiniu.DOMAIN_DEVELOP');
+    }
+        
+    $auth = new \Qiniu\Auth($ak, $sk);
+    $token = $auth->uploadToken($buket);
+    // 初始化 UploadManager 对象并进行文件的上传。
+    $uploadMgr = new \Qiniu\Storage\UploadManager ();
+    // 调用 UploadManager 的 putFile 方法进行文件的上传。
+    list ( $ret, $err ) = $uploadMgr->putFile($token, $newName, $filepath);
+        
+    $url = rtrim($domain, '/') .'/'. $newName;
+    return array('url' => $url, 'ret'=> $ret, 'err' => $err);
+}

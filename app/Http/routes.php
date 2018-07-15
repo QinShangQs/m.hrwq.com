@@ -243,6 +243,10 @@ Route::group(['prefix'=>'partner', 'middleware'=>['FrontWechat']], function(){
     Route::get('/card/show/{uid}', 'PartnerController@cardShow')->name('partner.card.show');
     Route::get('/card/edit', 'PartnerController@cardEdit')->name('partner.cardEdit');
     Route::post('/card/update', 'PartnerController@cardUpdate')->name('partner.card.update');
+    Route::post('/card/change/banner', 'PartnerController@cardChangeBanner')->name('partner.card.change_banner');
+    Route::post('/card/create/img', 'PartnerController@cardCreateImg')->name('partner.card.create_img');
+    Route::post('/card/remove/img', 'PartnerController@cardRemoveImg')->name('partner.card.remove_img');
+    
 });
 
 /** 和会员业务 */

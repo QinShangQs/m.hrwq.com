@@ -49,7 +49,7 @@ class FrontWechat
                 $user_agent = "MicroMessenger";
                 //方便测试临时制造数据 TODO 
                 $wechatUsertemp = [
-                         'openid' => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY',// ot3XZt41_M-OX9ihvC0_w05DU68Q
+                         'openid' => 'ot3XZt41_M-OX9ihvC0_w05DU68Q',// 
                          'nickname' => '秦殇2607',
                          'sex' => '1',
                          'city' => '泰州',

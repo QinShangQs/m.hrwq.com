@@ -5,7 +5,7 @@
 <div class="card-body">
     <div class="banner">
         <img src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
-        <div class="change"></div>
+<!--        <div class="change"></div>-->
     </div>
     
     <div class="info-content">
@@ -86,9 +86,14 @@
                 <span>照片</span>
             </div>
             <div class='tcont'>
-                <img src='/images/partner/pic.png' />
-                <div class='desc'>
-                    点击上传图片
+                <div class='pics'>
+                    @if ($card_info->images)
+                        @foreach($card_info->images as $image)
+                        <div class='lmg' >
+                            <img src='{{$image->url}}'/>
+                        </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>
