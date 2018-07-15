@@ -451,7 +451,7 @@ class PartnerController extends Controller
             return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $cover_url]);
         }
        
-        return response()->json(['code' => 1, 'message' => '上传失败:'.$uploadResult['err']]);
+        return response()->json(['code' => 1, 'message' => '上传失败:'.json_encode($uploadResult['err'])]);
     }
     
     public function cardCreateImg(Request $request){
@@ -469,7 +469,7 @@ class PartnerController extends Controller
             return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $cover_url, 'id'=>$id]);
         }
         
-        return response()->json(['code' => 1, 'message' => '上传失败:'.$uploadResult['err']]);
+        return response()->json(['code' => 1, 'message' => '上传失败:'.json_encode($uploadResult['err'])]);
     }
     
     public function cardRemoveImg(Request $request){
