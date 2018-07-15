@@ -80,7 +80,7 @@
                     <span>简介</span>
                 </div>
                 <div class='tcont'>
-                    <textarea name='remark' rows='8'>{{$card_info->}}</textarea>
+                    <textarea name='remark' rows='8'>{{$card_info->remark}}</textarea>
                 </div>
             </div>
             <div class='item'>

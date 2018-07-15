@@ -342,6 +342,19 @@ class PartnerController extends Controller
         return base64_decode($base64id);
     }
     
+    private function _cardFixUser($userInfo){
+        if ($userInfo['partner_city']) {
+            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
+            $userInfo['city'] = $areaInfo->toArray();
+        }else{
+            $userInfo['city']['area_name'] = '中国';
+        }
+        
+        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
+        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        return $userInfo;
+    }
+    
     public function card(Request $request){
         $userInfo = user_info();
         if ($userInfo['role'] != 3){
@@ -375,13 +388,8 @@ class PartnerController extends Controller
         }
         
         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
-        if ($userInfo['partner_city']) {
-            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
-            $userInfo['city'] = $areaInfo->toArray();
-        }
+        $userInfo = $this->_cardFixUser($userInfo);
         
-        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
-        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
         return view('partner.card', ['user_info' => $userInfo,'card_info' => $cardInfo, 'base64_id' => $base64Id]);
     }
     
@@ -398,13 +406,7 @@ class PartnerController extends Controller
         $userInfo = $userInfo->toArray();
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
-        if ($userInfo['partner_city']) {
-            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
-            $userInfo['city'] = $areaInfo->toArray();
-        }
-        
-        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').$userInfo['profileIcon'];
-        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        $userInfo = $this->_cardFixUser($userInfo);
         return view('partner.card-show', ['user_info' => $userInfo,'card_info' => $cardInfo, 'base64_id' => $base64Id]);
     }
     
@@ -416,14 +418,8 @@ class PartnerController extends Controller
         }
         
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
-         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
-        if ($userInfo['partner_city']) {
-            $areaInfo = Area::where('area_id', $userInfo['partner_city'])->first();
-            $userInfo['city'] = $areaInfo->toArray();
-        }
-        
-        $userInfo['profileIcon'] = rtrim(config('constants.front_url'),'/').'/'.$userInfo['profileIcon'];
-        $userInfo['realname'] = !empty($userInfo['realname']) ? $userInfo['realname'] : $userInfo['nickname'];
+        $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
+        $userInfo = $this->_cardFixUser($userInfo);
         return view('partner.card-edit', ['user_info' => $userInfo, 'card_info' => $cardInfo, 'base64_id' => $base64Id]);
     }
     
