@@ -489,7 +489,7 @@ function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = fa
     $ak = config('qiniu.AK');
     $sk = config('qiniu.SK');
     $buket = config('qiniu.BUCKET_NAME_USERCOVER');
-    $domain = config('qiniu.DOMAIN');
+    $domain = config('qiniu.DOMAIN_USERCOVER');
     if(config('app.env') === 'dev'){
         $buket = config('qiniu.BUCKET_NAME_DEVELOP');
         $domain = config('qiniu.DOMAIN_DEVELOP');
