@@ -193,7 +193,7 @@
 
 <script>
     function hidePhotoDiv(){
-        if($('.pics .lmg').length == 6){
+        if($('.pics .lmg').length >= 6){
             $('#photo-div').hide();
         }else{
             $('#photo-div').show();

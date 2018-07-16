@@ -478,6 +478,14 @@ function _get_telecast_link (){
 	return $telecast;
 }
 
+/**
+ * 七牛原图上传不压缩
+ * @param type $filepath
+ * @param type $qu_dir
+ * @param type $oldName
+ * @param type $useOldName
+ * @return type
+ */
 function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = false){
     $uuid = $oldName;
     if($useOldName === false){
@@ -502,6 +510,57 @@ function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = fa
     // 调用 UploadManager 的 putFile 方法进行文件的上传。
     list ( $ret, $err ) = $uploadMgr->putFile($token, $newName, $filepath);
         
+    $url = rtrim($domain, '/') .'/'. $newName;
+    return array('url' => $url, 'ret'=> $ret, 'err' => $err);
+}
+
+/**
+ * 生成缩略图后上传
+ * @param type $filepath
+ * @param type $qu_dir
+ * @param type $oldName
+ * @param type $useOldName
+ * @return type
+ */
+function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldName = false){
+    $uuid = $oldName;
+    if($useOldName === false){
+        $extistion = empty($oldName) ? 'jpg' : substr(strrchr($oldName, '.'), 1);
+        $uuid = str_replace('.', '', uniqid("", TRUE)) . "-thumb." . $extistion;
+    }
+    $newName = $qu_dir . '/' . $uuid;
+    
+    $ak = config('qiniu.AK');
+    $sk = config('qiniu.SK');
+    $buket = config('qiniu.BUCKET_NAME_USERCOVER');
+    $domain = config('qiniu.DOMAIN_USERCOVER');
+    if(config('app.env') === 'dev'){
+        $buket = config('qiniu.BUCKET_NAME_DEVELOP');
+        $domain = config('qiniu.DOMAIN_DEVELOP');
+    }
+    
+    #$key = $newName;
+    # 设置图片缩略参数
+    //https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2
+    $fops = 'imageView2/1/w/200/h/200'; //宽最少200，等比剪裁
+    //生成EncodedEntryURI的值
+    $entry = "{$buket}:{$newName}";//<Key>为生成缩略图的文件名
+    //生成的值
+    $saveas_key = \Qiniu\base64_urlSafeEncode($entry);
+    
+    $fops = $fops.'|saveas/'.$saveas_key;
+    # 在上传策略中指定fobs和pipeline
+    $policy = array(
+      'persistentOps' => $fops,
+      //'persistentPipeline' => ""
+    );
+
+    $auth = new \Qiniu\Auth($ak, $sk);
+    $token = $auth->uploadToken($buket, $newName, 3600, $policy);
+    // 初始化 UploadManager 对象并进行文件的上传。
+    $uploadMgr = new \Qiniu\Storage\UploadManager ();
+    // 调用 UploadManager 的 putFile 方法进行文件的上传。
+    list ( $ret, $err ) = $uploadMgr->putFile($token, $newName, $filepath);
     $url = rtrim($domain, '/') .'/'. $newName;
     return array('url' => $url, 'ret'=> $ret, 'err' => $err);
 }
