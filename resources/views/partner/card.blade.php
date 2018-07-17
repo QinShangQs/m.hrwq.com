@@ -66,7 +66,7 @@
     
     <div class='mid-content'>
         <a href='{{route('partner.cardEdit')}}'><img src='/images/partner/edit.png' /></a>
-        <img src='/images/partner/send.png'  onclick="$('.win-share').show()"/>
+        <a href="javascript:;" onclick="$('.win-share').show()"><img src='/images/partner/send.png' /></a>
     </div>
     
     <div class='last-content'>
@@ -140,8 +140,11 @@
 </div>
 
 <div class="win-share" 
-     style="background: url(&quot;/images/vcourse/share-shadow.jpg&quot;) 0% 0% / contain; 
+     style="background: url(/images/partner/share-shadow.jpg) 0% 0% / contain; 
      top: 0px; opacity: 0.9; z-index: 100; width: 100%; 
+     background-repeat: no-repeat;
+     background-color: #000;
+     opacity: .8;
      height: 100%; position: fixed; display: none;" onclick="$(this).hide()">
 </div>
 
@@ -173,7 +176,7 @@
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
 	$(document).ready(function(){
-                var _title = "我是和润万清合伙人{{$user_info['realname']}}";
+                var _title = "我是和润万青合伙人{{$user_info['realname']}}";
                 var _link = "{{ route('partner.card.show',[ 'uid'=> $base64_id ] ) }}?from=singlemessage";
                 var _imgUrl = "{{$user_info['profileIcon']}}";
 
@@ -181,7 +184,7 @@
                 wx.ready(function () {
 	        wx.onMenuShareAppMessage({
 	            title: _title, // 分享标题
-	            desc: '我们穷尽一生的时间爱孩子，却很少关注自身的提升', // 分享描述
+	            desc: '和润万青，让教育孩子变得简单', // 分享描述
 	            link: _link, // 分享链接
 	            imgUrl: '{{$user_info['profileIcon']}}', // 分享图标
 	            type: '', // 分享类型,music、video或link，不填默认为link
