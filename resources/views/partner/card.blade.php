@@ -1,5 +1,6 @@
 @extends('layout.default')
 @section('content')
+<link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/partner-card.css"/>
 
 <div class="card-body">
@@ -85,7 +86,7 @@
                 <img src='/images/partner/left-line.png'/>
                 <span>照片</span>
             </div>
-            <div class='tcont'>
+            <div class='tcont' onclick="location.href='{{route('partner.cardEdit')}}'">
                 <div class='pics'>
                     @if ($card_info->images)
                         @foreach($card_info->images as $image)
@@ -102,12 +103,22 @@
                 <img src='/images/partner/left-line.png'/>
                 <span>视频</span>
             </div>
-            <div class='tcont'>
-                <img src='/images/partner/video.png' />
+            @if(empty($card_info->video_url))
+            <div class='tcont' onclick="location.href='{{route('partner.cardEdit')}}'">
+                <img src='/images/partner/video.png'  />
                 <div class='desc'>
                     点击上传视频
                 </div>
             </div>
+            @else
+            <div class="tcont"><!--height="550"-->
+                <video id="bus_video_vj" name="bus_video_vj" class="video-js vjs-default-skin" 
+			width="100%" 
+			poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" data-setup="{}">
+			<source src="{{ $card_info->video_url }}" type='video/mp4' />
+		</video> 
+            </div>
+            @endif
         </div>
         
 <!--        <img class='save' src='/images/partner/save.png'/>-->
@@ -195,5 +206,14 @@
 	        });
 	    });
 	});
+    </script>
+    
+    <script src="/qiniu/js/videojs/video.min.js"></script>
+    <script >
+        (function(){
+            var width = $('.banner').width();
+            $("#bus_video_vj").width(width).height((width/4)*3);
+            $(".video-js").removeClass("vjs-controls-disabled");
+        })();
     </script>
 @endsection

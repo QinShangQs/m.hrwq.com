@@ -443,7 +443,7 @@ class PartnerController extends Controller
     
     public function cardChangeBanner(Request $request){
         $filepath = $_FILES['file']['tmp_name'];
-        $uploadResult = _qiniu_upload_img_thumb($filepath, 'banner');
+        $uploadResult = _qiniu_upload_img_thumb($filepath, 'banner/'.user_info()['id']);
         $cover_url = '';
         if(empty($uploadResult['err'])){
             $cover_url = $uploadResult['url'];
@@ -457,7 +457,7 @@ class PartnerController extends Controller
     public function cardCreateImg(Request $request){
         $filepath = $_FILES['file']['tmp_name'];
         //$uploadResult = _qiniu_upload_img($filepath, 'photo');
-        $uploadResult = _qiniu_upload_img_thumb($filepath, 'photo');
+        $uploadResult = _qiniu_upload_img_thumb($filepath, 'photo/'.user_info()['id']);
         $cover_url = "";
         if(empty($uploadResult['err'])){
             $cover_url = $uploadResult['url'];

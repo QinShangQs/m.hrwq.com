@@ -1,5 +1,6 @@
 @extends('layout.default')
 @section('content')
+<link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/partner-card.css"/>
 
 <div class="card-body">
@@ -105,15 +106,15 @@
             @endif
             
             <div style="height:0.8rem"></div>
-            <div class='tcont'
-                 @if(empty($card_info->video_url))
-                    style="display:none"
-                 @endif
-                 >
-                <div class='video' >
-                    <img src='/images/partner/play.png'/>
-                </div>
+            @if(!empty($card_info->video_url))
+            <div class="tcont"><!--height="550"-->
+                <video id="bus_video_vj" name="bus_video_vj" class="video-js vjs-default-skin" 
+			width="100%" 
+			poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" data-setup="{}">
+			<source src="{{ $card_info->video_url }}" type='video/mp4' />
+		</video> 
             </div>
+            @endif
         </div>
         
         <img id="tolearn" class='save' src='/images/partner/to-learn.png'/>
@@ -174,5 +175,14 @@
                 $('.qrcode-bg').show();
             });
         });
+    </script>
+    
+    <script src="/qiniu/js/videojs/video.min.js"></script>
+    <script >
+        (function(){
+            var width = $('.banner').width();
+            $("#bus_video_vj").width(width).height((width/4)*3);
+            $(".video-js").removeClass("vjs-controls-disabled");
+        })();
     </script>
 @endsection

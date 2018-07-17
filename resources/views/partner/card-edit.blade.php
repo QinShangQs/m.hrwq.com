@@ -1,6 +1,7 @@
 @extends('layout.default')
 @section('content')
 <link rel="stylesheet" href="/css/partner-card.css"/>
+<link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 
 <div class="card-body">
      <form enctype="multipart/form-data" id="banner-from">
@@ -133,7 +134,7 @@
 <form enctype="multipart/form-data" id="photo-from" style="display:none"></form>
 
 <div class='card-loading' style="display:none">
-    <div class='body'>上传中...</div>
+    <div class='body'>文件上传中，请耐心等待...</div>
 </div>
 
 @endsection
@@ -308,4 +309,13 @@
         });
     }
 </script>
+
+    <script src="/qiniu/js/videojs/video.min.js"></script>
+    <script >
+        (function(){
+            var width = $('.banner').width();
+            $("#bus_video_vj").width(width).height((width/4)*3);
+            $(".video-js").removeClass("vjs-controls-disabled");
+        })();
+    </script>
 @endsection
