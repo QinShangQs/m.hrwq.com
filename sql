@@ -1,6 +1,9 @@
 ####
 test deploy
 
+###############2018-07-18#################
+alter table `user_partner_card` add column video_hash varchar(100) default '' comment '视频七牛hash' after video_url;
+
 ###############2018-07-15#################
 CREATE TABLE `user_partner_card` (
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',

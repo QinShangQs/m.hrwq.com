@@ -1,7 +1,10 @@
 @extends('layout.default')
 @section('content')
 <link rel="stylesheet" href="/css/partner-card.css"/>
-<link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
+
+<input type=hidden id="token_url" value="{{route('home.qav.token')}}"/>
+<input type=hidden id="domain_url" value="{{$domain_url}}"/>
+<input type=hidden id="uid" value="{{$user_info['id']}}"/>
 
 <div class="card-body">
      <form enctype="multipart/form-data" id="banner-from">
@@ -88,6 +91,9 @@
                     <textarea name='remark' rows='8'>{{$card_info->remark}}</textarea>
                 </div>
             </div>
+            
+            <img class='save' src='/images/partner/save.png'/>
+            
             <div class='item'>
                 <div class='title'>
                     <img src='/images/partner/left-line.png'/>
@@ -118,15 +124,16 @@
                     <img src='/images/partner/left-line.png'/>
                     <span>视频</span>
                 </div>
-                <div class='tcont'>
-                    <img src='/images/partner/video.png' />
-                    <div class='desc'>
-                        点击上传视频
+                <div class='tcont' id="container">
+                    <img src='/images/partner/video.png'  id="pickfiles"/>
+                    <div class='desc' >
+                        选择视频后立即上传
                     </div>
-                </div>
+                    <!-- 上传按钮，由保存资料触发 -->
+                    <!--<input type="button" style="display:none" id="avd-btn-upload" />-->
+                </div>              
             </div>
 
-            <img class='save' src='/images/partner/save.png'/>
         </div>
     </form>
 </div>
@@ -134,7 +141,21 @@
 <form enctype="multipart/form-data" id="photo-from" style="display:none"></form>
 
 <div class='card-loading' style="display:none">
-    <div class='body'>文件上传中，请耐心等待...</div>
+    <div class='body'>
+        文件上传中，请耐心等待...
+    </div>
+</div>
+
+<div class='avd-loading' style="display:none">
+    <div class='body'>
+        <table id="tav">
+            <tbody id="fsUploadProgress">
+                <tr style="opacity: 1;" class="progressContainer" >
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @endsection
@@ -249,9 +270,20 @@
     
     function uploadBanner(){
         var formData = new FormData($('#banner-from')[0]);
+        var file = $('#banner-file')[0].files[0];
+        if(!file){
+            return;
+        }
         uploadImg('{{route('partner.card.change_banner')}}',formData,function(data){
             if (data.code == 0) {
                 $('#banner-img').attr('src', data.url);
+                Popup.init({
+                    popHtml: '<p>上传成功</p>',
+                    popFlash: {
+                        flashSwitch: true,
+                        flashTime: 1000,
+                    }
+                });
             } else {
                 Popup.init({
                     popHtml: '<p>' + data.message + '</p>',
@@ -266,7 +298,13 @@
     
     function uploadPhoto(){
         var formData = new FormData($('#photo-from')[0]);
-        formData.append('file',$('#photo-file')[0].files[0]);
+        var file = $('#photo-file')[0].files[0];
+        if(file){
+            formData.append('file',file);
+        }else{
+            return;
+        }
+        
         uploadImg('{{route('partner.card.create_img')}}',formData,function(data){
             if (data.code == 0) {
                 var div = "<div class='lmg' onclick='removePhoto("+data.id+", this)'>"
@@ -276,6 +314,14 @@
                 $('.pics').append($(div));
                 
                 hidePhotoDiv();
+                
+                Popup.init({
+                    popHtml: '<p>上传成功</p>',
+                    popFlash: {
+                        flashSwitch: true,
+                        flashTime: 1000,
+                    }
+                });
             } else {
                 Popup.init({
                     popHtml: '<p>' + data.message + '</p>',
@@ -289,7 +335,7 @@
     }
     
     function removePhoto(id, img){
-         Popup.init({
+        Popup.init({
             popHtml: '确定要删除该图片吗？',
             popOkButton: {
                 buttonDisplay: true,
@@ -310,12 +356,39 @@
     }
 </script>
 
-    <script src="/qiniu/js/videojs/video.min.js"></script>
-    <script >
-        (function(){
-            var width = $('.banner').width();
-            $("#bus_video_vj").width(width).height((width/4)*3);
-            $(".video-js").removeClass("vjs-controls-disabled");
-        })();
-    </script>
+<!--视频播放-->
+@if($card_info->video_url)
+<script >
+    (function(){
+        var width = $('.banner').width();
+        $("#container").css('background-image', 'url({{ $card_info->video_url }}?vframe/jpg/offset/1)')
+                .height((width/4)*3)
+                .css('background-size', 'cover');
+    })();
+</script>
+@endif
+
+<script>
+    function changeVideo(url , hash){
+        $.post('{{route('partner.card.change_video')}}', {video_url: url, video_hash: hash},function(json){
+            Popup.init({
+                popHtml: json.message,
+                popOkButton: {
+                    buttonDisplay: true,
+                    buttonName: "确认",
+                    buttonfunction: function () {
+                        location.href = '{{route('partner.card')}}';
+                    }
+                }
+            });
+        },'json');
+    }
+</script>
+
+<!-- 视频上传 -->
+<script type="text/javascript" src="/qiniu/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="/qiniu/js/plupload/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/qiniu/js/qiniu.js"></script>
+<script type="text/javascript" src="/qiniu/js/partner-card.js"></script>
+<script type="text/javascript" src="/qiniu/js/partner-card-ui.js"></script>
 @endsection

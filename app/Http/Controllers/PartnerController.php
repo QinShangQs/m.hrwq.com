@@ -365,7 +365,7 @@ class PartnerController extends Controller
         }
         $remark = "和润万青（北京）教育科技有限公司，专注华人家庭教育和青少年成长教育15年，是由华人家庭教育领域唯一的父子专家——全国十佳教育公益人物贾容韬老师、北京师范大学心理学硕士贾语凡老师共同创立。
 全国免费咨询电话：400-6363-555";
-        $cover_url = "http://pbweca8a0.bkt.clouddn.com/banner.png";
+        $cover_url = "http://pbwx8rta0.bkt.clouddn.com/banner.png";
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
         
         if(empty($cardInfo)){
@@ -422,8 +422,10 @@ class PartnerController extends Controller
         
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
-        $userInfo = $this->_cardFixUser($userInfo);
-        return view('partner.card-edit', ['user_info' => $userInfo, 'card_info' => $cardInfo, 'base64_id' => $base64Id]);
+        $userInfo = $this->_cardFixUser($userInfo);   
+        $domain_url = _qiniu_get_domain("usercover");
+        return view('partner.card-edit', ['user_info' => $userInfo, 'card_info' => $cardInfo,
+            'base64_id' => $base64Id, 'domain_url' => $domain_url]);
     }
     
     public function cardUpdate(Request $request){
@@ -452,6 +454,16 @@ class PartnerController extends Controller
         }
        
         return response()->json(['code' => 1, 'message' => '上传失败:', 'result'=>json_encode($uploadResult)]);
+    }
+    
+    public function cardChangeVideo(Request $request){
+        $video_url = $request->input('video_url');
+        $video_hash = $request->input('video_hash');
+        if(empty($video_url) || empty($video_hash)){
+            return response()->json(['code' => 1, 'message' => '上传视频失败']);
+        }
+        UserPartnerCard::find(user_info()['id'])->update(['video_url' => $video_url, 'video_hash' => $video_hash]);
+        return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $video_url]);
     }
     
     public function cardCreateImg(Request $request){

@@ -490,6 +490,12 @@ function _qiniu_get_buket($place = "usercover"){
     }
 }
 
+/**
+ * 
+ * @param type $place
+ * @return string
+ * @throws Exception
+ */
 function _qiniu_get_domain($place = "usercover"){
     if($place == "usercover"){
         $domain = config('qiniu.DOMAIN_USERCOVER');
@@ -502,6 +508,13 @@ function _qiniu_get_domain($place = "usercover"){
     }
 }
 
+/**
+ * 生成七牛token
+ * @param type $key 新文件名或null
+ * @param type $policy
+ * @param type $place usercover
+ * @return string
+ */
 function _qiniu_create_token($key, $policy = array(), $place = "usercover"){
     $ak = config('qiniu.AK');
     $sk = config('qiniu.SK');

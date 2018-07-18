@@ -33,10 +33,14 @@ Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat', 'FrontAuth']
 
 });
 
-
 Route::group(['prefix' => 'wechat'], function () {
     Route::get('/qrcode', 'WechatController@qrcode')->name('wechat.qrcode');
 });
+
+Route::group(['prefix' => 'home'], function () {
+    Route::get('/qav_token', 'HomeController@getQiniuQavToken')->name('home.qav.token');
+});
+
 Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat']], function () {
     Route::get('/vcourse_pay', 'WechatController@vcourse_pay')->name('wechat.vcourse_pay');
     Route::get('/course_pay', 'WechatController@course_pay')->name('wechat.course_pay');
@@ -246,7 +250,7 @@ Route::group(['prefix'=>'partner', 'middleware'=>['FrontWechat']], function(){
     Route::post('/card/change/banner', 'PartnerController@cardChangeBanner')->name('partner.card.change_banner');
     Route::post('/card/create/img', 'PartnerController@cardCreateImg')->name('partner.card.create_img');
     Route::post('/card/remove/img', 'PartnerController@cardRemoveImg')->name('partner.card.remove_img');
-    
+    Route::post('/card/change/video', 'PartnerController@cardChangeVideo')->name('partner.card.change_video');
 });
 
 /** 和会员业务 */

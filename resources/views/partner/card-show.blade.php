@@ -108,9 +108,9 @@
             <div style="height:0.8rem"></div>
             @if(!empty($card_info->video_url))
             <div class="tcont"><!--height="550"-->
-                <video id="bus_video_vj" name="bus_video_vj" class="video-js vjs-default-skin" 
+                <video id="bus_video_vj" name="bus_video_vj" class="video-js vjs-default-skin  vjs-big-play-centered" 
 			width="100%" 
-			poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" data-setup="{}">
+                        poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" data-setup="{}" preload="auto">
 			<source src="{{ $card_info->video_url }}" type='video/mp4' />
 		</video> 
             </div>
