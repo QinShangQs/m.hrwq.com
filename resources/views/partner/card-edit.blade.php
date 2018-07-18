@@ -11,7 +11,8 @@
         <div class="banner">
             <img id="banner-img" src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
             <div class="change" onclick="$('#banner-file').click()"></div>
-            <input type="file" name="file" id="banner-file" style="display: none" onchange="uploadBanner()" >
+            <input type="file" name="file" id="banner-file" style="display: none" onchange="uploadBanner()" 
+                   accept="image/*"/>
         </div>
     </form>
 
@@ -109,14 +110,16 @@
                             </div>
                             @endforeach
                         @endif
+                        
+                        <div class='lmg' id='photo-div'>
+                            <img src='/images/partner/pic.png' onclick="$('#photo-file').click()" />
+                            <div class='desc'>
+                                点击上传图片
+                            </div>
+                            <input type="file" name="file" id="photo-file" style="display: none" onchange="uploadPhoto()" 
+                                   accept="image/*"/>
+                        </div>
                     </div>
-                </div>
-                <div class='tcont' id='photo-div'>
-                    <img src='/images/partner/pic.png' onclick="$('#photo-file').click()" />
-                    <div class='desc'>
-                        点击上传图片
-                    </div>
-                    <input type="file" name="file" id="photo-file" style="display: none" onchange="uploadPhoto()" >
                 </div>
             </div>
             <div class='item'>
@@ -215,7 +218,7 @@
 
 <script>
     function hidePhotoDiv(){
-        if($('.pics .lmg').length >= 6){
+        if($('.pics .lmg').length >= 7){
             $('#photo-div').hide();
         }else{
             $('#photo-div').show();
@@ -311,8 +314,9 @@
                           +"<img src='"+data.url+"' />"
                           +"<img class='remove' src='/images/partner/remove.png'/>"
                           +"</div>";
-                $('.pics').append($(div));
-                
+                //$('.pics').append($(div));
+                $(div).insertAfter($('#photo-div'));
+                $('#photo-div').insertAfter($('.lmg').eq($('.lmg').length -1));
                 hidePhotoDiv();
                 
                 Popup.init({

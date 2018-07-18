@@ -19,15 +19,40 @@ $(function () {
         chunk_size: '4mb',
         uptoken_url: $("#token_url").val(),
         domain: $("#domain_url").val(),
-        auto_start: true,
+        auto_start: false,
         multi_selection: false,
         upload_domain: "http://up-z1.qiniup.com", //定义上传域名
+        filters : {
+            max_file_size : '60mb',
+            prevent_duplicates : true,
+            mime_types : [ {
+                    title : "视频文件",
+                    extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"
+		}, 
+            ]
+        },
         init: {
             'FilesAdded': function (up, files) {
-                showloading();
-                plupload.each(files, function (file) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    progress.setStatus("等待...");
+                Popup.init({
+                    popHtml: '确认要上传该视频吗？',
+                    popOkButton: {
+                        buttonDisplay: true,
+                        buttonName: "确认",
+                        buttonfunction: function () {
+                            uploader.start();//启动上传
+                            //显示效果
+                            showloading();
+                            plupload.each(files, function (file) {
+                                var progress = new FileProgress(file, 'fsUploadProgress');
+                                progress.setStatus("等待...");
+                            });
+                        }
+                    },
+                    popCancelButton:{
+                        buttonDisplay:true,
+                        buttonName:"取消",
+                        buttonfunction:function(){}
+                    }
                 });
             },
             'BeforeUpload': function (up, file) {
@@ -89,7 +114,4 @@ $(function () {
         console.log('hello man,a file is uploaded');
     });
     
-//    $("#avd-btn-upload").click(function(){
-//        uploader.start();
-//    });
 });
