@@ -21,13 +21,14 @@ $(function () {
         domain: $("#domain_url").val(),
         auto_start: false,
         multi_selection: false,
-        upload_domain: "http://up-z1.qiniup.com", //定义上传域名
+        //生产环境注销upload_domain这一行
+        //upload_domain: "http://up-z1.qiniup.com", //定义上传域名
         filters : {
             max_file_size : '60mb',
             prevent_duplicates : true,
             mime_types : [ {
                     title : "视频文件",
-                    extensions : "flv,mpg,mpeg,avi,wmv,mov,asf,rm,rmvb,mkv,m4v,mp4"
+                    extensions : "mp4" //mov
 		}, 
             ]
         },

@@ -110,7 +110,10 @@
             <div class="tcont"><!--height="550"-->
                 <video id="bus_video_vj" name="bus_video_vj" class="video-js vjs-default-skin  vjs-big-play-centered" 
 			width="100%" 
-                        poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" data-setup="{}" preload="auto">
+                        controls
+                        poster="{{ $card_info->video_url }}?vframe/jpg/offset/1" 
+                        data-setup="{}" 
+                        preload="auto">
 			<source src="{{ $card_info->video_url }}" type='video/mp4' />
 		</video> 
             </div>
@@ -181,8 +184,10 @@
     <script >
         (function(){
             var width = $('.banner').width();
-            $("#bus_video_vj").width(width).height((width/4)*3);
-            $(".video-js").removeClass("vjs-controls-disabled");
+            if($("#bus_video_vj").length > 0){
+                $("#bus_video_vj").width(width).height((width/4)*3);
+                $(".video-js").removeClass("vjs-controls-disabled");
+            }
         })();
     </script>
 @endsection
