@@ -419,6 +419,10 @@ if(!function_exists('get_new_vip_left_day')){
 	 * @return 新的和会员有效期格式如date('Y-m-d')
 	 */
 	function get_new_vip_left_day($vip_left_day, $days){
+            if(!empty($vip_left_day) && strtotime($vip_left_day) < time()){//已有和会员过期天数置空
+                $vip_left_day = null;
+            }
+            
 		$left_days = 0;
 		if(empty($vip_left_day)){
 			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
