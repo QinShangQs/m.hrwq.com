@@ -1,6 +1,30 @@
 ####
 test deploy
 
+###############2018-07-22##############
+CREATE TABLE `wechat_template_task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wechat_appid` varchar(50) NOT NULL DEFAULT '' COMMENT '微信appid',
+  `template_id` varchar(50) NOT NULL DEFAULT '' COMMENT '模板消息ID',
+  `template_name` varchar(50) NOT NULL DEFAULT '' COMMENT '模板消息名称',
+  `url` varchar(200) NOT NULL DEFAULT '' COMMENT '跳转URL',
+  `topcolor` varchar(20) NOT NULL DEFAULT '' COMMENT '模版顶部颜色',
+  `content` varchar(5000) NOT NULL DEFAULT '' COMMENT '内容json格式',
+  `remark` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
+  `user_type` varchar(10) NOT NULL DEFAULT '' COMMENT '用户类型vip,free,all',
+  `task_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '任务类型1一次性任务;2每天执行任务',
+  `task_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '任务状态1待运行;2运行中;3已停止;4已完成',
+  `task_run_time` varchar(20) NOT NULL DEFAULT '' COMMENT '年-月-日 时:分',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `finish_time` datetime NOT NULL COMMENT '停止时间',
+  `cnts` int(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击次数',
+  `send_total_num` int(10) unsigned DEFAULT '0' COMMENT '发送总人数',
+  `send_success_num` int(10) unsigned DEFAULT '0' COMMENT '发送成功数',
+  `send_fail_num` int(10) unsigned DEFAULT '0' COMMENT '发送失败数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信模板消息任务';
+
+
 ###############2018-07-18#################
 alter table `user_partner_card` add column video_hash varchar(100) default '' comment '视频七牛hash' after video_url;
 
