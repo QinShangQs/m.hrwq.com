@@ -2,6 +2,8 @@
 test deploy
 
 ###############2018-07-22##############
+drop table wechat_template_task;
+
 CREATE TABLE `wechat_template_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `wechat_appid` varchar(50) NOT NULL DEFAULT '' COMMENT '微信appid',
@@ -11,16 +13,19 @@ CREATE TABLE `wechat_template_task` (
   `topcolor` varchar(20) NOT NULL DEFAULT '' COMMENT '模版顶部颜色',
   `content` varchar(5000) NOT NULL DEFAULT '' COMMENT '内容json格式',
   `remark` varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
+  `openid` varchar(100) NOT NULL DEFAULT '' COMMENT '测试openid',
   `user_type` varchar(10) NOT NULL DEFAULT '' COMMENT '用户类型vip,free,all',
   `task_type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '任务类型1一次性任务;2每天执行任务',
   `task_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '任务状态1待运行;2运行中;3已停止;4已完成',
   `task_run_time` varchar(20) NOT NULL DEFAULT '' COMMENT '年-月-日 时:分',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `finish_time` datetime NOT NULL COMMENT '停止时间',
   `cnts` int(4) unsigned NOT NULL DEFAULT '0' COMMENT '点击次数',
   `send_total_num` int(10) unsigned DEFAULT '0' COMMENT '发送总人数',
   `send_success_num` int(10) unsigned DEFAULT '0' COMMENT '发送成功数',
   `send_fail_num` int(10) unsigned DEFAULT '0' COMMENT '发送失败数',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信模板消息任务';
 
