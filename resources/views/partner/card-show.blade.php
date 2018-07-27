@@ -89,7 +89,7 @@
                 style="display:none"
               @endif
              >
-            @if ($card_info->images)
+            @if (count($card_info->images) > 0)
                 <div class='title'>
                     <img src='/images/partner/left-line.png'/>
                     <span>照片</span>
@@ -142,6 +142,7 @@
 @section('script')
     <script>
         (function(){
+            $('.lcd_evaluate').hide();
             $('.mid-content .show').click(function(){
                 $('.mid-content').hide();
                 $('.last-content').show();

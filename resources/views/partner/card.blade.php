@@ -81,6 +81,7 @@
                 </p>
             </div>
         </div>
+        @if (count($card_info->images) > 0)
         <div class='item'>
             <div class='title'>
                 <img src='/images/partner/left-line.png'/>
@@ -98,6 +99,7 @@
                 </div>
             </div>
         </div>
+        @endif
         <div class='item'>
             <div class='title'>
                 <img src='/images/partner/left-line.png'/>
