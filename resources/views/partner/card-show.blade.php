@@ -143,6 +143,7 @@
     <script>
         (function(){
             $('.lcd_evaluate').hide();
+            $('.return_index').hide();
             $('.mid-content .show').click(function(){
                 $('.mid-content').hide();
                 $('.last-content').show();

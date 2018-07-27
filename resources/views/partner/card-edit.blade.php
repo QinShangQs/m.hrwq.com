@@ -225,8 +225,9 @@
         }
     }
     
-    function showLoading(){
+    function showLoading(txt){
         $('.card-loading').show();
+        $('.card-loading .body').text(txt ? txt : '文件上传中，请耐心等待...');
     }
     
     function hideLoading(){
@@ -287,7 +288,7 @@
             },
             xhr:xhrOnProgress(function(e){
                 var percent=e.loaded / e.total;//计算百分比
-                console.log('percent = ' + (percent*100).toFixed(2) + "%");
+                showLoading((percent*100).toFixed(2) + "%");
             })
         });
     }
