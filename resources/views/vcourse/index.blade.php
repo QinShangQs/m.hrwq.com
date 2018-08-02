@@ -17,17 +17,17 @@
                         <ul>
                            @foreach($carouselList as $item)
                                 @if($item->redirect_type == 1)
-                                <li> <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%;">
+                                <li> <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top round; background-size:100%;">
                                     </span></li>
                                 @elseif($item->redirect_type == 2)
                                 <li>
                                     <a href="{{$item->redirect_url}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top round; background-size:100%">
                                     </span>
                                     </a>
                                 @else
                                  <li><a href="{{route('course.staticlink',['id'=>$item->id])}}">
-                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top no-repeat; background-size:100%">
+                                        <span class="img_{{$item->id}}" style="background:url({{ config('constants.admin_url').$item->image_url}}) left top  round; background-size:100%">
                                     </span>
                                     </a>
                                 @endif
