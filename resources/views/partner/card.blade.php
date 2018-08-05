@@ -13,7 +13,7 @@
 <div class="card-body">
     <div class="banner">
         <img src="{{$card_info->cover_url or "/images/partner/banner.png"}}" />
-<!--        <div class="change"></div>-->
+        <div class="change" onclick="location.href='{{route('partner.cardEdit')}}'"></div>
     </div>
     
     <div class="info-content">
