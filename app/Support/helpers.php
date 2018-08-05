@@ -575,7 +575,7 @@ function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldNam
     #$key = $newName;
     # 设置图片缩略参数
     //https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2
-    $fops = 'imageView2/1/w/200/h/200'; //宽最少200，等比剪裁
+    $fops = 'imageView2/4/w/200/h/200'; //宽最少200，等比剪裁
     //生成EncodedEntryURI的值
     $entry = "{$buket}:{$newName}";//<Key>为生成缩略图的文件名
     //生成的值

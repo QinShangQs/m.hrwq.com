@@ -39,7 +39,7 @@
                     <div class='remark' >
                         <div class='title'>电话</div>
                         <div class='name'>
-                            <input name='tel' type='text' value='{{$card_info->tel}}'/>
+                            <input name='tel' type='text' value='{{$card_info->tel}}' required="" pattern="\d{11}"/>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class='remark' >
                         <div class='title'>微信</div>
                         <div class='name'>
-                            <input name='wechat' type='text' value='{{$card_info->wechat}}'/>
+                            <input name='wechat' type='text' value='{{$card_info->wechat}}' required=""/>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <div class='remark' >
                         <div class='title'>邮箱</div>
                         <div class='name'>
-                            <input name='email' type='email' value='{{$card_info->email}}'/>
+                            <input name='email' type='email' value='{{$card_info->email}}' required=""/>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class='remark' >
                         <div class='title'>地址</div>
                         <div class='name'>                       
-                            <input name='address' type='text' value='{{$card_info->address}}'/>
+                            <input name='address' type='text' value='{{$card_info->address}}' required=""/>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                     <div class='remark' >
                         <div class='title'>网址</div>
                         <div class='name'>
-                            <input name='website' type='text' value='{{$card_info->website}}'/>
+                            <input name='website' type='url' value='{{$card_info->website}}'/>
                         </div>
                     </div>
                 </div>
@@ -93,6 +93,7 @@
                 </div>
             </div>
             
+            
             <img class='save' src='/images/partner/save.png'/>
             
             <div class='item'>
@@ -105,7 +106,7 @@
                         @if ($card_info->images)
                             @foreach($card_info->images as $image)
                             <div class='lmg' onclick='removePhoto({{$image->id}}, this)'>
-                                <img src='{{$image->url}}' />
+                                <img src='{{$image->url}}'/>
                                 <img class='remove' src='/images/partner/remove.png'/>
                             </div>
                             @endforeach
@@ -166,8 +167,46 @@
 <!-- 提交修改 -->
 <script>
     $(document).ready(function () {
+        
+        function checkForm(){
+            var form = document.forms['profile-form'];
+            var message = '';
+            if(form.tel.checkValidity() == false){
+                message += "请正确填写手机号。<br/>";
+            }
+            if(form.wechat.checkValidity() == false){
+                message += "请填写微信。<br/>";
+            }
+            if(form.email.checkValidity() == false){
+                message += "请正确填写邮箱。<br/>";
+            }
+            if(form.address.checkValidity() == false){
+                message += "请填写地址。<br/>";
+            }
+            if(form.website.checkValidity() == false){
+                message += "请正确填写网址。<br/>";
+            }
+            
+            if(message.length > 0){
+                Popup.init({
+                    popHtml: '<p style="text-align:left">' + message + '</p>',
+                    popOkButton: {
+                        buttonDisplay: true,
+                        buttonName: "确认",
+                    }
+                });
+                return false;
+            }
+            
+            return true;
+        }
+        
         var lock = false;
         $('.save').click(function (e) {
+            if(!checkForm()){
+                return;
+            }
+        
             e.preventDefault();
             if (lock)
                 return;
@@ -288,7 +327,7 @@
             },
             xhr:xhrOnProgress(function(e){
                 var percent=e.loaded / e.total;//计算百分比
-                showLoading((percent*100).toFixed(2) + "%");
+                showLoading("上传进度:" +(percent*100).toFixed(2) + "%");
             })
         });
     }

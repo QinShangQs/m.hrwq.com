@@ -2,6 +2,13 @@
 @section('content')
 <link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/partner-card.css"/>
+<style>
+.popupWindow_frame{
+    top:35%;
+    left:40%;
+    width:90%;
+}
+</style>
 
 <div class="card-body">
     <div class="banner">
@@ -87,12 +94,12 @@
                 <img src='/images/partner/left-line.png'/>
                 <span>照片</span>
             </div>
-            <div class='tcont' onclick="location.href='{{route('partner.cardEdit')}}'">
+            <div class='tcont'>
                 <div class='pics'>
                     @if ($card_info->images)
                         @foreach($card_info->images as $image)
                         <div class='lmg' >
-                            <img src='{{$image->url}}'/>
+                            <img src='{{$image->url}}'  onclick="showPhoto('{{$image->url}}');"/>
                         </div>
                         @endforeach
                     @endif
@@ -223,5 +230,12 @@
             $("#bus_video_vj").width(width).height((width/4)*3);
             $(".video-js").removeClass("vjs-controls-disabled");
         })();
+        
+            
+        function showPhoto(src){
+            Popup.init({
+                popHtml: '<img src="'+src+'" style="width:100%"/>'
+            });
+        }
     </script>
 @endsection
