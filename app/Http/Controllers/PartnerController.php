@@ -10,7 +10,7 @@ use App\Models\UserPartnerApply;
 use App\Models\UserPartnerCard;
 use App\Models\UserPartnerCardImages;
 use Carbon\Carbon;
-use DB;
+use DB,Log;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -358,14 +358,30 @@ class PartnerController extends Controller
         return $userInfo;
     }
     
-    public function card(Request $request){
+    /**
+     * 验证可否看到合伙人卡片
+     * @param type $isAbort
+     * @return boolean
+     */
+    private function _validateCard($isAbort = true){
         $userInfo = user_info();
-        if ($userInfo['role'] != 3){
-            abort(403, '不是合伙人，无法查看卡片');
+        $whiteList = array();//非合伙人的白名单
+        if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)){
+            if($isAbort === true){
+                abort(403, '身份不合法，无法查看卡片');
+            }
+            return false;
         }
+        return true;
+    }
+    
+    public function card(Request $request){
+        $this->_validateCard();
+        
+        $userInfo = user_info();
         $remark = "和润万青（北京）教育科技有限公司，专注华人家庭教育和青少年成长教育15年，是由华人家庭教育领域唯一的父子专家——全国十佳教育公益人物贾容韬老师、北京师范大学心理学硕士贾语凡老师共同创立。
 全国免费咨询电话：400-6363-555";
-        $cover_url = "http://pbwx8rta0.bkt.clouddn.com/banner.png";
+        $cover_url = "http://photos.partner.hrwq.com/banner.png";
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
         
         if(empty($cardInfo)){
@@ -402,9 +418,6 @@ class PartnerController extends Controller
         if(empty($userInfo)){
             abort(403, '用户不存在');
         }
-        if($userInfo->role != 3){
-            abort(403, '不是合伙人，无法查看卡片');
-        }
         
         $userInfo = $userInfo->toArray();
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
@@ -414,11 +427,8 @@ class PartnerController extends Controller
     }
     
     public function cardEdit(Request $request){
+        $this->_validateCard();
         $userInfo = user_info();
-
-        if ($userInfo['role'] != 3){
-            abort(403, '不是合伙人，无法查看卡片');
-        }
         
         $cardInfo = UserPartnerCard::with('images')->find($userInfo['id']);
         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
@@ -492,4 +502,21 @@ class PartnerController extends Controller
         }
         return response()->json(['code' => 1, 'message' => '删除失败']);
     }
+    
+    public function buildLover(Request $request){
+        $lover_id = $request->input('lover_id');
+        $userInfo = user_info();
+        
+        if($lover_id != 0 
+            && $userInfo['vip_flg'] == 1
+            && $lover_id != $userInfo['id']){
+                if($userInfo['lover_id'] == 0){//没有关联关系，建立关系
+                    User::whereOpenid($userInfo['openid'])->update(['lover_id'=>$lover_id,'lover_time' => date("Y-m-d H:i:s")]);
+                    Log::info('lover_relation', ['用户'.$userInfo['id']."与合伙人".$lover_id."建立关系"]);
+                }
+        }
+        
+        return response()->json(['code' => 0, 'message' => '删除成功']);
+    }
+    
 }

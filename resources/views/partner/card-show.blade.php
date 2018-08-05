@@ -161,7 +161,9 @@
     <script>
         (function(){
             $('#tolearn').click(function(){
-                location.href = '/';
+                $.post("{{route('partner.card.build_love')}}",{lover_id: {{$user_info['id']}}},function(json){
+                    location.href = '/';
+                },'json');
             });
         })();
     </script>

@@ -30,17 +30,6 @@ class FrontWechat
     		$lover_id = $out[1];
     		$lover_time = date('Y-m-d H:i:s');
     	}
-        //合伙人卡片
-        if(preg_match('/partner\/card\/show\/(\S+)/i', $request->path(), $out)){
-            $lover_id = base64_decode($out[1]) ;
-            \Log::info("合伙人卡片 lover_id={$lover_id} " . $request->path() );
-            if(is_numeric($lover_id)){//避免非法字符吃
-                $lover_id = (int)$lover_id;
-                $lover_time = date("Y-m-d H:i:s");
-            }else{
-                $lover_id = 0;
-            }   
-        }
         
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
