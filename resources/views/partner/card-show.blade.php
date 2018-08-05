@@ -2,6 +2,13 @@
 @section('content')
 <link href="/qiniu/js/videojs/video-js.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/partner-card.css"/>
+<style>
+.popupWindow_frame{
+    top:35%;
+    left:40%;
+    width:90%;
+}
+</style>
 
 <div class="card-body">
     <div class="banner">
@@ -98,7 +105,7 @@
                     <div class='pics'>
                         @foreach($card_info->images as $image)
                         <div class='lmg' >
-                            <img src='{{$image->url}}'/>
+                            <img src='{{$image->url}}?imageslim' onclick="showPhoto('{{$image->url}}');"/>
                         </div>
                         @endforeach
                     </div>
@@ -191,5 +198,11 @@
                 $(".video-js").removeClass("vjs-controls-disabled");
             }
         })();
+        
+        function showPhoto(src){
+            Popup.init({
+                popHtml: '<img src="'+src+'" style="width:100%"/>'
+            });
+        }
     </script>
 @endsection
