@@ -365,7 +365,7 @@ class PartnerController extends Controller
      */
     private function _validateCard($isAbort = true){
         $userInfo = user_info();
-        $whiteList = array();//非合伙人的白名单
+        $whiteList = array(6,55,148,152,2777,8612,8775);//非合伙人的白名单
         if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)){
             if($isAbort === true){
                 abort(403, '身份不合法，无法查看卡片');
