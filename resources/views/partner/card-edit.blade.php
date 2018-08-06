@@ -23,7 +23,13 @@
                     <img src="{{$user_info['profileIcon']}}"/>
                     <div class="desc">
                         <div class="name">{{$user_info['realname']}}</div>
-                        <div class="cityname">{{$user_info['city']['area_name']}}合伙人</div>
+                        <div class="cityname">
+                            @if($user_info['role'] == 3)
+                                {{$user_info['city']['area_name']}}合伙人
+                            @else
+                                家庭教育指导师
+                            @endif
+                        </div>
                     </div>
                 </div>
 

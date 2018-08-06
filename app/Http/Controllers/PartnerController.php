@@ -368,7 +368,7 @@ class PartnerController extends Controller
         $whiteList = array(6,55,148,152,2777,8612,8775);//非合伙人的白名单
         if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)){
             if($isAbort === true){
-                abort(403, '身份不合法，无法查看卡片');
+                abort(403, '此功能仅对百万家庭幸福工程合伙人开放。');
             }
             return false;
         }
@@ -408,7 +408,6 @@ class PartnerController extends Controller
         
         $base64Id = $this->_createPartnerBase64Id($userInfo['id']);
         $userInfo = $this->_cardFixUser($userInfo);
-        
         return view('partner.card', ['user_info' => $userInfo,'card_info' => $cardInfo, 'base64_id' => $base64Id]);
     }
     
