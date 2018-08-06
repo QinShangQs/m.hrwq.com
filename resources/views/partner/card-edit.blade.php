@@ -135,6 +135,7 @@
                     <span>视频</span>
                 </div>
                 <div class='tcont' id="container">
+                    <img class='remove' src='/images/partner/remove.png'/>
                     <img src='/images/partner/video.png'  id="pickfiles"/>
                     <div class='desc' >
                         选择视频后立即上传
@@ -432,6 +433,26 @@
 <script >
     (function(){
         var width = $('.banner').width();
+        $('#container .remove').show().click(function(){
+            Popup.init({
+                popHtml: '确定要删除视频吗？',
+                popOkButton: {
+                    buttonDisplay: true,
+                    buttonName: "确认",
+                    buttonfunction: function () {
+                        $.post('{{route('partner.card.remove_video')}}',{}, function(data){
+                            $("#container").css('background-image', 'url()');
+                            $('#container .remove').hide();
+                        },'json');
+                    }
+                },
+                popCancelButton:{
+                    buttonDisplay:true,
+                    buttonName:"取消",
+                    buttonfunction:function(){}
+                }
+            });
+        });
         $("#container").css('background-image', 'url({{ $card_info->video_url }}?vframe/jpg/offset/1)')
                 .height((width/4)*3)
                 .css('background-size', 'cover');

@@ -259,6 +259,14 @@ body {
     right: 0;
 }
 
+#container .remove{
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 0;
+    right: 0;
+    display:none;
+}
 
 .card-body .last-content .fixed {
     margin-bottom: 1.0rem
