@@ -164,7 +164,6 @@ class UserController extends Controller
      */
     public function setting(){
     	$tutorCourse = Course::where('is_tutor_course', 1)->where('status', 2)->first();
-            dd($tutorCourse);
     	return view('user.setting', [
             'data' => user_info(),
     		'tutorCourse' => $tutorCourse

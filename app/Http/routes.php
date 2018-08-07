@@ -250,6 +250,7 @@ Route::group(['prefix'=>'partner', 'middleware'=>['FrontWechat']], function(){
     Route::post('/card/change/banner', 'PartnerController@cardChangeBanner')->name('partner.card.change_banner');
     Route::post('/card/create/img', 'PartnerController@cardCreateImg')->name('partner.card.create_img');
     Route::post('/card/remove/img', 'PartnerController@cardRemoveImg')->name('partner.card.remove_img');
+    Route::post('/card/remove/video', 'PartnerController@cardRemoveVideo')->name('partner.card.remove_video');
     Route::post('/card/change/video', 'PartnerController@cardChangeVideo')->name('partner.card.change_video');
     Route::post('/card/build/love', 'PartnerController@buildLover')->name('partner.card.build_love');
 });

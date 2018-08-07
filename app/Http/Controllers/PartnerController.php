@@ -475,6 +475,11 @@ class PartnerController extends Controller
         return response()->json(['code' => 0, 'message' => '上传成功', 'url' => $video_url]);
     }
     
+    public function cardRemoveVideo(Request $request){
+        UserPartnerCard::find(user_info()['id'])->update(['video_url' => '', 'video_hash' => '']);
+        return response()->json(['code' => 0, 'message' => '删除成功']);
+    }
+    
     public function cardCreateImg(Request $request){
         $filepath = $_FILES['file']['tmp_name'];
         //$uploadResult = _qiniu_upload_img($filepath, 'photo');
