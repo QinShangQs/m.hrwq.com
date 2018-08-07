@@ -99,9 +99,6 @@
                 </div>
             </div>
             
-            
-            <img class='save' src='/images/partner/save.png'/>
-            
             <div class='item'>
                 <div class='title'>
                     <img src='/images/partner/left-line.png'/>
@@ -144,6 +141,7 @@
                 </div>              
             </div>
 
+            <img class='save' src='/images/partner/save.png'/>
         </div>
     </form>
 </div>
@@ -448,7 +446,7 @@
                     buttonDisplay: true,
                     buttonName: "确认",
                     buttonfunction: function () {
-                        location.href = '{{route('partner.card')}}';
+                        location.reload();
                     }
                 }
             });
