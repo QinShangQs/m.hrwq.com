@@ -48,6 +48,7 @@ class ProfileController extends Controller
         }
         $user->profileIcon = isset($upload)?$upload:$user->profileIcon;
         $user->nickname = request()->has('nickname')?request('nickname'):$user->nickname;
+        $user->realname = request()->has('realname') ? request('realname') : $user->realname;
         $user->label = request()->has('label')?request('label'):$user->label;
         $user->age = request()->has('age')?request('age'):$user->age;
         $user->birth = request()->has('birth')?Carbon::createFromFormat('Y/m/d', request('birth')):$user->birth;

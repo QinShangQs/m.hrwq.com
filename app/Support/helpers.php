@@ -410,6 +410,10 @@ if (!function_exists('qiniu_previews')) {
 if (!function_exists('computer_vip_left_day')) {
 
     function computer_vip_left_day($vip_left_day) {
+        if ($vip_left_day == '9999-01-01'){
+            return '永久';
+        }
+        
         $left_day = 0;
         if (!empty($vip_left_day)) {
             $d1 = strtotime(date('Y-m-d'));

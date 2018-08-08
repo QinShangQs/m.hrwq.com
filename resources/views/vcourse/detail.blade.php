@@ -41,7 +41,7 @@
             <div class="lcd_banner">
                 @if(count($vcourseDetail->order)>0 && $vip_left_day > 0)
                     <div class="lcd_banner_img" order="gt_0" id="video-container" data-flg="tran" data-url="{{config('qiniu.DOMAIN').$vcourseDetail->video_tran}}"></div>
-                @elseif($vcourseDetail->type=='2' && $vip_left_day == 0)
+                @elseif($vcourseDetail->type=='2' && $vip_left_day === 0)
                     <div class="lcd_banner_img" order="type_2_vip_1" id="video-container" data-flg="free" data-url="{{config('qiniu.DOMAIN').$vcourseDetail->video_free}}"></div>
                 @else
                     <div class="lcd_banner_img" order="other">
@@ -69,7 +69,7 @@
             
             @if($vcourseDetail->type=='2')
         	<div class="vip-status-show">
-        	 @if($vip_left_day == 0)
+        	 @if($vip_left_day === 0)
         		<span></span>试看版
         	 @else
         		VIP完整版
@@ -501,7 +501,7 @@ $(document).ready(function(){
                         flashSwitch:false
                     }
                 });
-          @elseif($vip_left_day == 0)
+          @elseif($vip_left_day === 0)
           	Popup.init({
               	popTitle:'试看结束',
                   popHtml:'<p>成为和会员可收听父母学院每周更新的完整版课程</p>',                
@@ -552,7 +552,7 @@ $(document).ready(function(){
     //if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
     @if((count($vcourseDetail->order) > 0 && $vip_left_day > 0) 
     	    || ($vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
-        	|| ($vcourseDetail->type=='2'&& $vip_left_day == 0))
+        	|| ($vcourseDetail->type=='2'&& $vip_left_day === 0))
 		var waitingPub = null;
 	try{
 	    videojs('video-embed', {
