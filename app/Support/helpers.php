@@ -1,32 +1,36 @@
 <?php
 
 use GuzzleHttp\Psr7\str;
+
 if (!function_exists('is_mobile')) {
+
     /**
      * 粗略判断是否移动端浏览器
      *
      * @return bool
      */
-    function is_mobile()
-    {
+    function is_mobile() {
         $regex = '/(iPhone|iPod|iPad|Android|BlackBerry|mobile|MicroMessenger)/';
         return preg_match($regex, $_SERVER['HTTP_USER_AGENT']) ? true : false;
     }
+
 }
 
 if (!function_exists('is_wechat')) {
+
     /**
      * 判断是否微信浏览器
      *
      * @return bool
      */
-    function is_wechat()
-    {
+    function is_wechat() {
         return strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false;
     }
+
 }
 
 if (!function_exists('thumb_uri')) {
+
     /**
      * 根据原图 uri 获取缩略图 uri
      *
@@ -34,8 +38,7 @@ if (!function_exists('thumb_uri')) {
      * @param $prefix
      * @return string
      */
-    function thumb_uri($uri, $prefix)
-    {
+    function thumb_uri($uri, $prefix) {
         $uriParts = explode('/', $uri);
         $partsCount = count($uriParts);
         if ($partsCount) {
@@ -44,65 +47,68 @@ if (!function_exists('thumb_uri')) {
         $thumbUri = implode('/', $uriParts);
         return $thumbUri;
     }
+
 }
 
 if (!function_exists('replace_content_image_url')) {
+
     /**
      * 替换u-editor里面的图片地址为后台完整地址
      *
      * @param $data   U-editor里面的content
      * @return mixed
      */
-    function replace_content_image_url($data)
-    {
+    function replace_content_image_url($data) {
         return preg_replace('/(?<=src=)(\"\/)/i', '"' . config('constants.admin_url'), $data);
     }
+
 }
 
 if (!function_exists('get_order_code')) {
+
     /**
      * @param $type
      * @return string
      *
      * 获取订单号
      */
-    function get_order_code($type)
-    {
+    function get_order_code($type) {
         $type = intval($type);
         //产品类型  01好课 02好看 03壹家壹 04好问提问 05好问偷听 06和会员
         $type_list = array('1' => '01', '2' => '02', '3' => '03', '4' => '04', '5' => '05', '6' => '06');
         $order_code = $type_list[$type] . date('YmdHis') . rand(1000, 9999);
         return $order_code;
     }
+
 }
 
 
 if (!function_exists('get_score')) {
+
     /**
      * 获取积分
      *
      */
-    function get_score($type, $money = 0, $user_id = '')
-    {
-        if(config('app.debug') === true){
-             return true;
+    function get_score($type, $money = 0, $user_id = '') {
+        if (config('app.debug') === true) {
+            return true;
         }
-        
+
         $type = intval($type);
         $money = intval($money);
         if (empty($user_id)) {
-           $user_id = session('user_info')['id'];
+            $user_id = session('user_info')['id'];
         }
         //来源:1注册 2分享 4发帖 5评论 6作业 7笔记 8推荐好友注册  12观看视频 13消费 14线下核销
-        $score_list = array('1' => '10', '2' => '10', '4' => '5', '5' => '5', '6' => '5', '7' => '5', '8' => '10', '12' => '5', '13' => '1', '14'=>'10');
+        $score_list = array('1' => '10', '2' => '10', '4' => '5', '5' => '5', '6' => '5', '7' => '5', '8' => '10', '12' => '5', '13' => '1', '14' => '10');
 
         // 计算当天已经获得的总的积分
         $score_total = App\Models\UserPoint::where('move_way', 1)
-            ->where('created_at', '>=', date('Y-m-d 00:00:00'))
-            ->where('created_at', '<=', date('Y-m-d 23:59:59'))
-            ->where('user_id', $user_id)
-            ->where('source', '<>', 10)//10为取消订单等返还积分  不计在内
-            ->sum('point_value');
+                ->where('created_at', '>=', date('Y-m-d 00:00:00'))
+                ->where('created_at', '<=', date('Y-m-d 23:59:59'))
+                ->where('user_id', $user_id)
+                ->where('source', '<>', 10)//10为取消订单等返还积分  不计在内
+                ->sum('point_value');
 
         // 每天的积分上限是200
         if ($score_total >= 200) {
@@ -126,8 +132,8 @@ if (!function_exists('get_score')) {
             if ($userpoint->save() && $user->save()) {
                 //发送微信提醒
                 $scoreSources = config('constants.income_point_source');
-                if(isset($scoreSources[$type])) {
-                    if(config('app.debug') === false){
+                if (isset($scoreSources[$type])) {
+                    if (config('app.debug') === false) {
                         $notice = \Wechat::notice();
                         $notice->send([
                             'touser' => $user->openid,
@@ -138,7 +144,7 @@ if (!function_exists('get_score')) {
                                 'first' => '恭喜你获得和贝奖励',
                                 'keyword1' => '+' . $score,
                                 'keyword2' => $scoreSources[$type],
-                                'keyword3' => (string)\Carbon\Carbon::now(),
+                                'keyword3' => (string) \Carbon\Carbon::now(),
                                 'keyword4' => $user->score,
                                 'remark' => '和贝可抵扣听课费，点击查看积分详情'
                             ],
@@ -150,18 +156,18 @@ if (!function_exists('get_score')) {
                 return 0;
             }
         }
-
     }
+
 }
 
 
 if (!function_exists('format_date')) {
+
     /**
      * @param $time     要格式化的时间戳
      * @return string   返回的字符串表示  如：2天前，3星期前
      */
-    function format_date($time)
-    {
+    function format_date($time) {
         $t = time() - $time;
         $f = array(
             '31536000' => '年',
@@ -173,58 +179,61 @@ if (!function_exists('format_date')) {
             '1' => '秒'
         );
         foreach ($f as $k => $v) {
-            if (0 != $c = floor($t / (int)$k)) {
+            if (0 != $c = floor($t / (int) $k)) {
                 return $c . $v . '前';
             }
         }
     }
+
 }
 
 if (!function_exists('user_info')) {
+
     /**
      * 根据session user id
      *
      * @param string $key 获取用户指定地段值 空 或者 用户信息数组
      * @return string
      */
-    function user_info($key = '')
-    {
-	//if (! session('user_info')) return null;
+    function user_info($key = '') {
+        //if (! session('user_info')) return null;
         if ($key == 'id') {
             return session('user_info')['id'];
         } else {
             $user_info = App\Models\User::find(session('user_info')['id'])->toArray();
-            
-            $order = App\Models\Order::where('user_id',$user_info['id'])->where('pay_type',6)->whereIn('order_type',[2,4])->first();
+
+            $order = App\Models\Order::where('user_id', $user_info['id'])->where('pay_type', 6)->whereIn('order_type', [2, 4])->first();
             $user_info['finish_order'] = $order;
-            
+
             return $key ? (isset($user_info[$key]) ? $user_info[$key] : '') : $user_info;
         }
     }
+
 }
 
 if (!function_exists('replace_em')) {
+
     /**
      * QQ表情插件显示正则替换
      *
      * @param $str
      * @return mixed
      */
-    function replace_em($str)
-    {
+    function replace_em($str) {
         $str = preg_replace("/\\[em_([0-9]*)\\]/i", '<img src="' . asset('images/face/$1.gif') . '" border="0" />', $str);
         return $str;
     }
+
 }
 
 if (!function_exists('set_audio_state')) {
+
     /**
      * 设置音频状态      1一元旁听  2限时免费 3vip免费 4已支付
      *
      * @param $item  问题question  AR
      */
-    function set_audio_state($item)
-    {
+    function set_audio_state($item) {
         $cur_time = time();
         $user_info = user_info();
 
@@ -253,21 +262,24 @@ if (!function_exists('set_audio_state')) {
             }
         }
     }
+
 }
 
 
 if (!function_exists('get_platform_current_amount')) {
+
     /**
      * 获取平台当前总金额
      *
      */
-    function get_platform_current_amount()
-    {
+    function get_platform_current_amount() {
         return App\Models\Income::orderBy('id', 'desc')->limit(1)->pluck('total_amount');
     }
+
 }
 
 if (!function_exists('admin_url')) {
+
     /**
      * 根据原图 uri 获取缩略图 uri
      *
@@ -275,13 +287,14 @@ if (!function_exists('admin_url')) {
      * @param $host
      * @return string
      */
-    function admin_url($uri, $host = NULL)
-    {
+    function admin_url($uri, $host = NULL) {
         return $host ? $host : config('constants.admin_url') . $uri;
     }
+
 }
 
 if (!function_exists('qiniu_url')) {
+
     /**
      * @param $uri
      * @param null $host
@@ -289,31 +302,31 @@ if (!function_exists('qiniu_url')) {
      *
      *
      */
-    function qiniu_url($uri, $host = NULL)
-    {
+    function qiniu_url($uri, $host = NULL) {
         return $host ? $host : config('qiniu.DOMAIN') . $uri;
     }
+
 }
 
 if (!function_exists('get_month_days')) {
+
     /**
      * 根据 年月 获取当月的具体天
      *
      * @param string $year_month
      * @return array
      */
-    function get_month_days($year_month='')
-    {
-        $year_month = $year_month ? : date('Y-m');
+    function get_month_days($year_month = '') {
+        $year_month = $year_month ?: date('Y-m');
         $times = strtotime($year_month);
 
         $day_arr = [];
-        $days=date('t',$times);
-        for($i=1;$i<=$days;$i++){
-            if($i<10){
-                $i = '0'.$i;
+        $days = date('t', $times);
+        for ($i = 1; $i <= $days; $i++) {
+            if ($i < 10) {
+                $i = '0' . $i;
             }
-            $day_arr[] = date('Y-m-',$times).$i;
+            $day_arr[] = date('Y-m-', $times) . $i;
         }
         return $day_arr;
     }
@@ -321,6 +334,7 @@ if (!function_exists('get_month_days')) {
 }
 
 if (!function_exists('send_sms')) {
+
     /**
      * @param $mobile
      * @param $content
@@ -334,9 +348,11 @@ if (!function_exists('send_sms')) {
         $res = $client->sendSMS($mobile, $content);
         return $res;
     }
+
 }
 
 if (!function_exists('curl_file_get_contents')) {
+
     /**
      * @param $durl
      * @return mixed
@@ -345,25 +361,26 @@ if (!function_exists('curl_file_get_contents')) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $durl);
         curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-        curl_setopt($ch, CURLOPT_HEADER,0);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $r = curl_exec($ch);
         curl_close($ch);
         return $r;
     }
+
 }
 
-if(!function_exists('qiniu_previews')) {
+if (!function_exists('qiniu_previews')) {
+
     /**
      * @param $file
      * @return array|bool
      *
      * 获取七牛文件经过 yifangyun_preview 的预览图
      */
-    function qiniu_previews($file)
-    {
+    function qiniu_previews($file) {
         $extension = pathinfo($file, PATHINFO_EXTENSION);
-        $prefix = substr($file, 0, -(strlen($extension) + 1)).'.';
+        $prefix = substr($file, 0, -(strlen($extension) + 1)) . '.';
 
         $auth = new \Qiniu\Auth(config('qiniu.AK'), config('qiniu.SK'));
         $bucketMgr = new \Qiniu\Storage\BucketManager($auth);
@@ -378,118 +395,125 @@ if(!function_exists('qiniu_previews')) {
             return false;
         } else {
             $fileList = [];
-            if(!empty($items)) {
+            if (!empty($items)) {
                 $count = count($items);
-                for ($i=1; $i<= $count-1;++$i) {
-                    $fileList[] = $prefix.$i.'.jpg';
+                for ($i = 1; $i <= $count - 1;  ++$i) {
+                    $fileList[] = $prefix . $i . '.jpg';
                 }
             }
             return $fileList;
         }
     }
+
 }
 
-if(!function_exists('computer_vip_left_day')) {
-	function computer_vip_left_day($vip_left_day){
-		$left_day = 0;
-		if(!empty($vip_left_day)){
-			$d1 = strtotime(date('Y-m-d'));
-			$d2 = strtotime($vip_left_day);
-			$left_day = round(($d2-$d1)/3600/24);
-		}
-		
-		if($left_day < 0){
-			$left_day = 0;
-		}
-		
-		if($left_day > 365 * 10){
-			return '永久';
-		}
+if (!function_exists('computer_vip_left_day')) {
 
-		return $left_day;
-	}
-}
+    function computer_vip_left_day($vip_left_day) {
+        $left_day = 0;
+        if (!empty($vip_left_day)) {
+            $d1 = strtotime(date('Y-m-d'));
+            $d2 = strtotime($vip_left_day);
+            $left_day = round(($d2 - $d1) / 3600 / 24);
+        }
 
+        if ($left_day < 0) {
+            $left_day = 0;
+        }
 
-if(!function_exists('get_new_vip_left_day')){
-	/**
-	 * 增加天数的和会员有效期
-	 * @param date $vip_left_day 格式date('Y-m-d')
-	 * @param int $days 新增天数
-	 * @return 新的和会员有效期格式如date('Y-m-d')
-	 */
-	function get_new_vip_left_day($vip_left_day, $days){
-            if(!empty($vip_left_day) && strtotime($vip_left_day) < time()){//已有和会员过期天数置空
-                $vip_left_day = null;
-            }
-            
-		$left_days = 0;
-		if(empty($vip_left_day)){
-			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
-		}else{
-			$left_days = date('Y-m-d',strtotime("+ {$days} day", strtotime($vip_left_day)));
-		}
-		if($left_days < 0){
-			$left_days = 0;
-		}
-		if(computer_vip_left_day($left_days) <= 0){
-			$left_days = date('Y-m-d',strtotime("+ {$days} day"));
-		}
-		
-		return $left_days;
-	}
+        if ($left_day > 365 * 10) {
+            return '永久';
+        }
+
+        return $left_day;
+    }
+
 }
 
 
-if(!function_exists('diff_two_days')){
-	/**
-	 * 得到两个日期间的天数
-	 * @param string $day1 date('Y-m-d H:i:s')
-	 * @param string $day2 date('Y-m-d H:i:s')
-	 * @return number 相差天数
-	 */
-	function diff_tow_days($day1, $day2){
-		$second1 = strtotime ( $day1 );
-		$second2 = strtotime ( $day2 );
-		
-		if ($second1 < $second2) {
-			$tmp = $second2;
-			$second2 = $second1;
-			$second1 = $tmp;
-		}
-		return intval( ($second1 - $second2) / 86400);
-	}
+if (!function_exists('get_new_vip_left_day')) {
+
+    /**
+     * 增加天数的和会员有效期
+     * @param date $vip_left_day 格式date('Y-m-d')
+     * @param int $days 新增天数
+     * @return 新的和会员有效期格式如date('Y-m-d')
+     */
+    function get_new_vip_left_day($vip_left_day, $days) {
+        if (!empty($vip_left_day) && strtotime($vip_left_day) < time()) {//已有和会员过期天数置空
+            $vip_left_day = null;
+        }
+
+        $left_days = 0;
+        if (empty($vip_left_day)) {
+            $left_days = date('Y-m-d', strtotime("+ {$days} day"));
+        } else {
+            $left_days = date('Y-m-d', strtotime("+ {$days} day", strtotime($vip_left_day)));
+        }
+        if ($left_days < 0) {
+            $left_days = 0;
+        }
+        if (computer_vip_left_day($left_days) <= 0) {
+            $left_days = date('Y-m-d', strtotime("+ {$days} day"));
+        }
+
+        return $left_days;
+    }
+
+}
+
+
+if (!function_exists('diff_two_days')) {
+
+    /**
+     * 得到两个日期间的天数
+     * @param string $day1 date('Y-m-d H:i:s')
+     * @param string $day2 date('Y-m-d H:i:s')
+     * @return number 相差天数
+     */
+    function diff_tow_days($day1, $day2) {
+        $second1 = strtotime($day1);
+        $second2 = strtotime($day2);
+
+        if ($second1 < $second2) {
+            $tmp = $second2;
+            $second2 = $second1;
+            $second1 = $tmp;
+        }
+        return intval(($second1 - $second2) / 86400);
+    }
+
 }
 
 /**
  * 获取直播地址
  * @return Ambigous <string, multitype:>
  */
-function _get_telecast_link (){
-        if(preg_match('/^win/i', PHP_OS)){
-            $data = file_get_contents('E:/sug_link.log');
-        }else{
-            $data = file_get_contents('/mnt/sug_link.log');
-        }
+function _get_telecast_link() {
+    if (preg_match('/^win/i', PHP_OS)) {
+        $data = file_get_contents('E:/sug_link.log');
+    } else {
+        $data = file_get_contents('/mnt/sug_link.log');
+    }
 
-	if(!empty($data)){
-		list($telecast, $foreshow) = explode("\n", $data);
-	}else{
-		$telecast = '';
-		$foreshow = '';
-	}
-	
-	return $telecast;
+    if (!empty($data)) {
+        list($telecast, $foreshow) = explode("\n", $data);
+    } else {
+        $telecast = '';
+        $foreshow = '';
+    }
+
+    return $telecast;
 }
 
-function _qiniu_get_buket($place = "usercover"){
-    if($place == "usercover"){
+function _qiniu_get_buket($place = "usercover") {
+    if ($place == "usercover") {
         $buket = config('qiniu.BUCKET_NAME_USERCOVER');
-        if(config('app.env') === 'dev'){
+        if (config('app.env') === 'dev') {
             $buket = config('qiniu.BUCKET_NAME_DEVELOP');
         }
         return $buket;
-    }else{
+    } else {
         throw new Exception('未定义空间_qiniu_get_buket');
     }
 }
@@ -500,14 +524,14 @@ function _qiniu_get_buket($place = "usercover"){
  * @return string
  * @throws Exception
  */
-function _qiniu_get_domain($place = "usercover"){
-    if($place == "usercover"){
+function _qiniu_get_domain($place = "usercover") {
+    if ($place == "usercover") {
         $domain = config('qiniu.DOMAIN_USERCOVER');
-        if(config('app.env') === 'dev'){
+        if (config('app.env') === 'dev') {
             $domain = config('qiniu.DOMAIN_DEVELOP');
         }
-        return rtrim($domain, '/') .'/';
-    }else{
+        return rtrim($domain, '/') . '/';
+    } else {
         throw new Exception('未定义域名_qiniu_get_domain');
     }
 }
@@ -519,11 +543,11 @@ function _qiniu_get_domain($place = "usercover"){
  * @param type $place usercover
  * @return string
  */
-function _qiniu_create_token($key, $policy = array(), $place = "usercover"){
+function _qiniu_create_token($key, $policy = array(), $place = "usercover") {
     $ak = config('qiniu.AK');
     $sk = config('qiniu.SK');
     $buket = _qiniu_get_buket($place);
-    
+
     $auth = new \Qiniu\Auth($ak, $sk);
     $token = $auth->uploadToken($buket, $key, 3600, $policy);
     return $token;
@@ -537,22 +561,22 @@ function _qiniu_create_token($key, $policy = array(), $place = "usercover"){
  * @param type $useOldName
  * @return type
  */
-function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = false, $place="usercover"){
+function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = false, $place = "usercover") {
     $uuid = $oldName;
-    if($useOldName === false){
+    if ($useOldName === false) {
         $extistion = empty($oldName) ? 'jpg' : substr(strrchr($oldName, '.'), 1);
         $uuid = str_replace('.', '', uniqid("", TRUE)) . "." . $extistion;
     }
     $newName = $qu_dir . '/' . $uuid;
 
-    $token = _qiniu_create_token(null,null);
+    $token = _qiniu_create_token(null, null);
     // 初始化 UploadManager 对象并进行文件的上传。
     $uploadMgr = new \Qiniu\Storage\UploadManager ();
     // 调用 UploadManager 的 putFile 方法进行文件的上传。
     list ( $ret, $err ) = $uploadMgr->putFile($token, $newName, $filepath);
-        
-    $url = _qiniu_get_domain($place). $newName;
-    return array('url' => $url, 'ret'=> $ret, 'err' => $err);
+
+    $url = _qiniu_get_domain($place) . $newName;
+    return array('url' => $url, 'ret' => $ret, 'err' => $err);
 }
 
 /**
@@ -563,29 +587,29 @@ function _qiniu_upload_img($filepath, $qu_dir, $oldName = null, $useOldName = fa
  * @param type $useOldName
  * @return type
  */
-function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldName = false, $place="usercover"){
+function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldName = false, $place = "usercover") {
     $uuid = $oldName;
-    if($useOldName === false){
+    if ($useOldName === false) {
         $extistion = empty($oldName) ? 'jpg' : substr(strrchr($oldName, '.'), 1);
         $uuid = str_replace('.', '', uniqid("", TRUE)) . "-thumb." . $extistion;
     }
     $newName = $qu_dir . '/' . $uuid;
-    
+
     $buket = _qiniu_get_buket($place);
     #$key = $newName;
     # 设置图片缩略参数
     //https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2
     $fops = 'imageView2/4/w/200/h/200'; //宽最少200，等比剪裁
     //生成EncodedEntryURI的值
-    $entry = "{$buket}:{$newName}";//<Key>为生成缩略图的文件名
+    $entry = "{$buket}:{$newName}"; //<Key>为生成缩略图的文件名
     //生成的值
     $saveas_key = \Qiniu\base64_urlSafeEncode($entry);
-    
-    $fops = $fops.'|saveas/'.$saveas_key;
+
+    $fops = $fops . '|saveas/' . $saveas_key;
     # 在上传策略中指定fobs和pipeline
     $policy = array(
-      'persistentOps' => $fops,
-      //'persistentPipeline' => ""
+        'persistentOps' => $fops,
+            //'persistentPipeline' => ""
     );
 
     $token = _qiniu_create_token($newName, $policy);
@@ -593,6 +617,23 @@ function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldNam
     $uploadMgr = new \Qiniu\Storage\UploadManager ();
     // 调用 UploadManager 的 putFile 方法进行文件的上传。
     list ( $ret, $err ) = $uploadMgr->putFile($token, $newName, $filepath);
-    $url = _qiniu_get_domain($place).'/'. $newName;
-    return array('url' => $url, 'ret'=> $ret, 'err' => $err);
+    $url = _qiniu_get_domain($place) . '/' . $newName;
+    return array('url' => $url, 'ret' => $ret, 'err' => $err);
+}
+
+/**
+ * 验证可否看到合伙人卡片
+ * @param type $isAbort
+ * @return boolean
+ */
+function _validateCard($isAbort = true) {
+    $userInfo = user_info();
+    $whiteList = array(6, 55, 148, 152, 2777, 8612, 8775); //非合伙人的白名单
+    if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)) {
+        if ($isAbort === true) {
+            abort(403, '此功能仅对百万家庭幸福工程合伙人开放。');
+        }
+        return false;
+    }
+    return true;
 }

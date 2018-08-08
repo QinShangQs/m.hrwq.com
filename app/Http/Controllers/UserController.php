@@ -61,7 +61,8 @@ class UserController extends Controller
             'balanceCount' => $balanceCount,
             'myWalletCount' => $myWalletCount,
             'partnerNewOrderCount'=>$partnerNewOrderCount,
-            'unreadTalkCommentCount' => $unreadTalkCommentCount
+            'unreadTalkCommentCount' => $unreadTalkCommentCount,
+            'show_card' => _validateCard(false)
         ]);
     }
 

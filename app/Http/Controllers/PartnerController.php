@@ -364,15 +364,7 @@ class PartnerController extends Controller
      * @return boolean
      */
     private function _validateCard($isAbort = true){
-        $userInfo = user_info();
-        $whiteList = array(6,55,148,152,2777,8612,8775);//非合伙人的白名单
-        if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)){
-            if($isAbort === true){
-                abort(403, '此功能仅对百万家庭幸福工程合伙人开放。');
-            }
-            return false;
-        }
-        return true;
+        return _validateCard($isAbort);
     }
     
     public function card(Request $request){

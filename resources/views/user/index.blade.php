@@ -70,6 +70,11 @@
                     	 	爱心大使
                     	 	</a>
                     	</li>
+                        @if($show_card === true)
+                        <li>
+                            <a href="{{route('partner.card')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>个人名片</a>
+                        </li>
+                        @endif
                     </ul>
                    <ul class="mmo_list">
                         <li><a href="{{route('my.notes')}}"><span><img src="/images/public/select_right.jpg"

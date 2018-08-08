@@ -194,7 +194,12 @@
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
 	$(document).ready(function(){
-                var _title = "我是和润万青合伙人{{$user_info['realname']}}";
+                @if($user_info['role'] == 3)
+                    var _title = "我是和润万青合伙人{{$user_info['realname']}}";
+                @else
+                    var _title = "我是和润万青指导师{{$user_info['realname']}}";
+                @endif
+                
                 var _link = "{{ route('partner.card.show',[ 'uid'=> $base64_id ] ) }}?from=singlemessage";
                 var _imgUrl = "{{$user_info['profileIcon']}}";
 
