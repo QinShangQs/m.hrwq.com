@@ -161,6 +161,9 @@ class VcourseController extends Controller {
         $wx_js = Wechat::js();
 
         $vip_left_day = computer_vip_left_day(@$user_info['vip_left_day']);
+        if(is_string($vip_left_day)){
+            $vip_left_day = 100000;
+        }
         return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js', 'vip_left_day'));
     }
 

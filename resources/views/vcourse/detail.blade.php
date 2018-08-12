@@ -547,7 +547,7 @@ $(document).ready(function(){
       };
     };
     
-	//alert('{{$vip_left_day}}');
+    //alert('{{$vip_left_day}}');
     //已经参加课程或收费课程试看或vip
     //if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
     @if((count($vcourseDetail->order) > 0 && $vip_left_day > 0) 
