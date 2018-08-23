@@ -41,7 +41,8 @@ class SendVipLeftDayNotices extends Command
     public function handle()
     {
     	Log::info("[运行消息]notices:vipleftday");
-        $users = DB::select("select *, DATEDIFF(vip_left_day,CURDATE()) as left_day from `user` order by vip_left_day desc");
+        //非永久和会员
+        $users = DB::select("select *, DATEDIFF(vip_left_day,CURDATE()) as left_day from `user` where vip_forever = 1 order by vip_left_day desc");
        	foreach ($users as $k=>$user){
        		if(is_numeric($user->left_day) && $user->left_day < 0){
        			//置空剩余天数，修改为普通会员

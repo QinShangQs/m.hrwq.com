@@ -30,7 +30,7 @@
                         <div class="mmo_line">
                         	<div class="mmo_title">
                         		{{$data['realname'] or $data['nickname']}}
-                        		@if(computer_vip_left_day($data['vip_left_day']) > 0)
+                        		@if(get_vip_left_day_number() > 0)
                         			<img src="/images/my/vip-2.png" alt=""/>
                         		@else
                         			<img src="/images/my/vip-1.png" alt=""/>
@@ -47,7 +47,7 @@
                             	<div class="mmo_identity_1">
                             		<div class="grow_txt">和会员有效期</div>
                             		<div class="grow">
-                            		 {{ computer_vip_left_day($data['vip_left_day']) }}
+                            		 {{ get_vip_left_day_text() }}
                             		 <span style="font-size:0.8rem">天</span>
                             		</div>
                             	</div>
@@ -88,16 +88,18 @@
   
                     </ul>
                     <ul class="mmo_list">
+                        @if(get_is_vip_forever() != true)
                         <li>
                         	<a href="{{route('article',['id'=>6])}}">
                         		<span> <img src="/images/public/select_right.jpg" alt=""/></span>
-                        		@if(computer_vip_left_day($data['vip_left_day']) > 0 && @user_info()['finish_order'])
+                        		@if(get_vip_left_day_number() > 0 && @user_info()['finish_order'])
                         			会员续费
                         		@else
                         			开通会员
                         		@endif
                         	</a>
-                        </li>                        
+                        </li>  
+                        @endif
                        <li><a href="{{route('leaveword')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
                         
                         

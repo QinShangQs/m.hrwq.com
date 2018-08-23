@@ -160,10 +160,7 @@ class VcourseController extends Controller {
                         ->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
         $wx_js = Wechat::js();
 
-        $vip_left_day = computer_vip_left_day(@$user_info['vip_left_day']);
-        if(is_string($vip_left_day)){
-            $vip_left_day = 100000;
-        }
+        $vip_left_day = get_vip_left_day_number();
         return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js', 'vip_left_day'));
     }
 

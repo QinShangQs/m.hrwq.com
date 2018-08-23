@@ -397,7 +397,7 @@ if (!function_exists('qiniu_previews')) {
             $fileList = [];
             if (!empty($items)) {
                 $count = count($items);
-                for ($i = 1; $i <= $count - 1;  ++$i) {
+                for ($i = 1; $i <= $count - 1; ++$i) {
                     $fileList[] = $prefix . $i . '.jpg';
                 }
             }
@@ -410,10 +410,6 @@ if (!function_exists('qiniu_previews')) {
 if (!function_exists('computer_vip_left_day')) {
 
     function computer_vip_left_day($vip_left_day) {
-        if ($vip_left_day == '9999-01-01'){
-            return '永久';
-        }
-        
         $left_day = 0;
         if (!empty($vip_left_day)) {
             $d1 = strtotime(date('Y-m-d'));
@@ -431,9 +427,52 @@ if (!function_exists('computer_vip_left_day')) {
 
         return $left_day;
     }
-
 }
 
+/**
+ * 获取当前登录用户是否vip
+ * @return boolean true是
+ */
+function get_is_vip (){
+    $user = user_info();
+    return $user['vip_forever'] == 2 || $user['vip_flg'] == 2 ;
+}
+
+/**
+ * 是否永久和会员
+ * @return boolean true是
+ */
+function get_is_vip_forever(){
+    $user = user_info();
+    return $user['vip_forever'] == 2;
+}
+
+/**
+ * 获取当前登录用户的vip剩余天数
+ * @tutorial 用户和会员返回9999999
+ * @return int
+ */
+function get_vip_left_day_number() {
+    if (get_is_vip_forever()) {
+        return 9999999;
+    }
+    $left_day = computer_vip_left_day(user_info()['vip_left_day']);
+    if(is_string($left_day)){
+        return 100000;
+    }
+    return $left_day;
+}
+
+/**
+ * 获取当前登录用户的vip剩余天数，永久和会员返回“永久”
+ * @return string
+ */
+function get_vip_left_day_text(){
+    if (get_is_vip_forever()) {
+        return '永久';
+    }
+    return computer_vip_left_day(user_info()['vip_left_day']);
+}
 
 if (!function_exists('get_new_vip_left_day')) {
 
@@ -632,7 +671,7 @@ function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldNam
  */
 function _validateCard($isAbort = true) {
     $userInfo = user_info();
-    $whiteList = array(6, 55, 148, 152, 2777, 8612, 8775, 7,17,9058,8056); //非合伙人的白名单
+    $whiteList = array(6, 55, 148, 152, 2777, 8612, 8775, 7, 17, 9058, 8056); //非合伙人的白名单
     if ($userInfo['role'] != 3 && !in_array($userInfo['id'], $whiteList)) {
         if ($isAbort === true) {
             abort(403, '此功能仅对百万家庭幸福工程合伙人开放。');

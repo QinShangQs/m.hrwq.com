@@ -1,8 +1,10 @@
 ####
 test deploy
 
+###############2018-08-23##############
+alter table `user` add column `vip_forever` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否为永久和会员（1否 2是）' after vip_flg;
+
 ###############2018-07-22##############
-drop table wechat_template_task;
 
 CREATE TABLE `wechat_template_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
