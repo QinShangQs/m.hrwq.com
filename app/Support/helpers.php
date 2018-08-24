@@ -422,7 +422,7 @@ if (!function_exists('computer_vip_left_day')) {
         }
 
         if ($left_day > 365 * 10) {
-            return '永久';
+            return '长期';
         }
 
         return $left_day;
@@ -439,7 +439,7 @@ function get_is_vip (){
 }
 
 /**
- * 是否永久和会员
+ * 是否长期和会员
  * @return boolean true是
  */
 function get_is_vip_forever(){
@@ -464,12 +464,12 @@ function get_vip_left_day_number() {
 }
 
 /**
- * 获取当前登录用户的vip剩余天数，永久和会员返回“永久”
+ * 获取当前登录用户的vip剩余天数，长期和会员返回“长期”
  * @return string
  */
 function get_vip_left_day_text(){
     if (get_is_vip_forever()) {
-        return '永久';
+        return '长期';
     }
     return computer_vip_left_day(user_info()['vip_left_day']);
 }
