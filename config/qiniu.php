@@ -9,7 +9,7 @@ return [
     'PIPELINE'  => 'hrwq20160811',
     'FREE_TIME'  => '60',
     'COVER_TIME'  => '30',
-    'DOMAIN' => 'http://oflm462i7.qnssl.com/',
+    'DOMAIN' => 'http://video.hrwq.com/',
     'DOMAIN_USERCOVER' => 'http://photos.partner.hrwq.com/',
     'DOMAIN_DEVELOP' => 'http://pbong34w2.bkt.clouddn.com/',
     'AK'  => 'CNSLO6Zft_HXWPuVve4fvH98kMbfIdlJBJaAlJCA',
