@@ -410,6 +410,11 @@ class VipController extends Controller
             $user_update['vip_code'] = $code;
             $user_update['vip_left_day'] = $left_days;
             
+            //长期和会员
+            if(in_array($code, config('constants.forever_vip_code'))){
+                $user_update['vip_forever'] = 2;
+            }
+
             DB::beginTransaction();
             try {
                 ///更新卡号状态
