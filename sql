@@ -1,6 +1,18 @@
 ####
 test deploy
 
+###############2018-08-27#################
+CREATE TABLE `user_partner_whites` (
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='合伙人卡片白名单';
+
+insert into user_partner_whites (user_id)
+values (6), (55), (148), (152), (2777), (8612), (8775), (7), (17), (9058), (8056);
+
 ###############2018-08-23##############
 alter table `user` add column `vip_forever` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否为永久和会员（1否 2是）' after vip_flg;
 
