@@ -53,7 +53,7 @@
     <div class="wrap">
         <div align="center" style="margin-top: 100px;">
         <img width="200" src="{{$url}}" alt="" />
-          <h2><span class="t">请先长按或扫描二维码关注和润万青公众号！</span></h2>
+          <h3><span class="t">请在微信中长按或扫描二维码关注和润万青公众号！</span></h3>
         </div>
     </div>
 </body>

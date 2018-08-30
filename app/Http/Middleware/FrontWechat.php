@@ -110,7 +110,10 @@ class FrontWechat
                         }
                     }
                 }
-            } else {
+            } 
+            else {
+                //非微信浏览器
+                return response()->redirectTo('wechat/qrcode');
             }
         } else {
             header("Content-type: text/html; charset=utf-8");
