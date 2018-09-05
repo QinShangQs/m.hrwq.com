@@ -33,7 +33,7 @@
                         <input id="gaq_title" placeholder="标题，4-25个字符" value="">
                     </div>
                     <div class="gaq_textarea">
-                        <textarea id="gaq_textarea" placeholder="内容，20个字符以上" value=""></textarea>
+                        <textarea id="gaq_textarea" placeholder="内容，20个字符以上" value="" style="box-sizing: border-box;"></textarea>
                         <span class="emotion"></span>
                     </div>
                     <div class="gaq_button"><input class="gaq_form_button"  value="提交" readonly></div>
@@ -56,29 +56,33 @@
 
     <script>
         $(document).ready(function(){
-            var disable = 0;
+            
             $(".gaq_list li").click(function(){//点击选择
-                if(disable == 1){
-                    return ;
-                }
-                disable = 1;
-                if(!$(this).hasClass('select')){
-                    if($(".gaq_list .select").length >= 3){
-                        Popup.init({
-                            popHtml:'最多只能选择3个标签',
-                            popFlash:{
-                                flashSwitch:true,
-                                flashTime:2000
-                            }
-                        });
-                        disable = 0;
-                        return;
-                    }
-                }
-                 $(this).toggleClass("select");
+                 $(this).addClass("select").siblings().removeClass('select');
             });
 
             $(".gaq_form_button").click(function(){//提交表单
+                var tag_ids = '';
+                //获取选中的标签id
+                $('.gaq_list .select').each(function(){
+                    if(tag_ids==''){
+                        tag_ids += $(this).attr('data-value');
+                    }else{
+                        tag_ids += ','+ $(this).attr('data-value');
+                    }
+                });
+                
+                if(!tag_ids){
+                    Popup.init({
+                        popHtml:'请选择"分享"或"求助"。',
+                        popFlash:{
+                            flashSwitch:true,
+                            flashTime:2000
+                        }
+                    });
+                    return false;
+                }
+                
                 var question_content = $('#gaq_textarea').val();
                 var gaq_title = $('#gaq_title').val();
 
@@ -90,7 +94,6 @@
                             flashTime:2000
                         }
                     });
-                    disable = 0;
                     return false;
                 }else if(gaq_title.length > 25){
                     Popup.init({
@@ -100,7 +103,6 @@
                             flashTime:2000
                         }
                     });
-                    disable = 0;
                     return false;
                 }
 
@@ -112,29 +114,8 @@
                             flashTime:2000
                         }
                     });
-                    disable = 0;
                     return false;
-                }/* else if(question_content.length > 100){
-                    Popup.init({
-                        popHtml:'你提出的问题不能大于150个字符',
-                        popFlash:{
-                            flashSwitch:true,
-                            flashTime:2000
-                        }
-                    });
-                    return false;
-                } */
-
-                var tag_ids = '';
-
-                //获取选中的标签id
-                $('.gaq_list .select').each(function(){
-                    if(tag_ids==''){
-                        tag_ids += $(this).attr('data-value');
-                    }else{
-                        tag_ids += ','+ $(this).attr('data-value');
-                    }
-                });
+                }
 
                 //ajax提交内容
                 $.ajax({

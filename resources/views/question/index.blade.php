@@ -1,5 +1,10 @@
 @extends('layout.default')
 @section('content')
+<style>
+    .ga_tab li {
+        width:33%
+    }
+</style>
     <div id="subject">
         <div id="main">
             <div class="good_asking">
@@ -38,7 +43,11 @@
                 </div>
             </div>
             @endif
-
+                    <ul class="ga_tab">
+                            <li id="ga_tab_1"  class="selected" >全部</li>
+                            <li id="ga_tab_2"  >分享</li>
+                            <li id="ga_tab_4"  >求助</li>
+                    </ul>
                     <div class="ga_div_3"  style="margin-top: -0.5rem">
                         <div class="clearboth"></div>
                         @if(count($talks))
@@ -270,29 +279,29 @@
                 location.href  = '{{route('wechat.question')}}?id='+qid;
             });
 
-            //默认加载tab
-            $(".ga_tab li").each(function(){
-                if($(this).attr("class")=="selected"){
-                    $(".ga_div>div").hide();
-                    switch($(this).attr("id")){
+            $(".ga_tab li").click(function(){//tab切换
+                switch($(this).attr("id")){
                         case "ga_tab_1":
-                            $(".ga_div_1").show();
+                            location.href = '{{route('question')}}'+'?selected_tab=3';
                             break;
                         case "ga_tab_2":
-                            $(".ga_div_2").show();
+                            location.href = '{{route('question')}}'+'?selected_tab=3&search_tag=9';
                             break;
-                        case "ga_tab_3":
-                            $(".ga_div_3").show();
+                        case "ga_tab_4":
+                            location.href = '{{route('question')}}'+'?selected_tab=3&search_tag=10';
                             break;
                         default:
                             break;
-                    }
                 }
             });
-
-            $(".ga_tab li").click(function(){//tab切换
-                location.href = '{{route('question')}}'+'?selected_tab='+($(this).index()+1);
-            });
+            
+            var search_tag = "{{ request('search_tag') }}";         
+            if(search_tag == 10){
+                $('#ga_tab_4').addClass('selected').siblings().removeClass('selected');
+            }else if(search_tag == 9){
+                $('#ga_tab_2').addClass('selected').siblings().removeClass('selected');
+            }
+            
             /*$(".ga_tab li").click(function(){//tab切换
                 if($(this).attr("class")!="selected"){
                     $(".ga_tab li").attr("class","");

@@ -33,7 +33,6 @@ class QuestionController extends Controller
         $talk_tags = TalkTag::with(['tag' => function ($query) {
             $query->withTrashed();
         }])->select('*', \DB::raw('COUNT(id) as num'))->groupBy('tag_id')->orderBy('num', 'desc')->limit(4)->get();
-
         //互助榜
         $talks = $this->talk_list($request);
         $wx_js = Wechat::js();

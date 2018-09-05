@@ -248,7 +248,11 @@ transform: rotate(-45deg);
 .gl_list2_people span { color:#ed6d11;}
 .gl_list2_address { position:absolute; bottom:0px; color:#fff; font-size:14px; right:20px; line-height:30px;}
 .gl_list2_address img { vertical-align:middle; position:relative; top:-2px;}
-.gl_list2_more { line-height:50px; font-size:18px; text-align:center; color:#ccc;}
+.gl_list2_more { line-height:50px; font-size:18px; text-align:center; color:#ccc;   
+    margin-bottom: 55px;
+    margin-top: -5px;
+    font-size: 1rem;
+}
 
 /*----------列表（好看&好课）----------*/
 .good_looking_list { width:100%;}
