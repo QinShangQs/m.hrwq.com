@@ -117,6 +117,7 @@
                     return false;
                 }
 
+                $(".gaq_form_button").attr('disabled',"disabled").val('正在提交...');
                 //ajax提交内容
                 $.ajax({
                     type: 'post',
@@ -124,6 +125,7 @@
                     data: {content:question_content,tag_ids:tag_ids,title:gaq_title},
                     dataType: 'json',
                     success: function (res) {
+                        $(".gaq_form_button").hide();
                         Popup.init({
                             popHtml:res.message,
                             popFlash:{
@@ -135,10 +137,9 @@
                         if(res.code == 0){
                             location.href = '{{route('question')}}?selected_tab=3'
                         }
-                        disable = 0;
                     },
                     error: function (res) {
-                        disable = 0;
+                        $(".gaq_form_button").removeAttr('disabled').val('提交');
                         var errors = res.responseJSON;
                         for (var o in errors) {
                             Popup.init({
