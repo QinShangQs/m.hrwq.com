@@ -511,7 +511,11 @@ class UserController extends Controller
 	    		UserPointVip::add($lover->id, $days, 4);
 	    	}
 	    	$lover->nickname = $user['nickname'];
-	    	Event::fire(new RegisterPeople($lover));
+                try{
+                    Event::fire(new RegisterPeople($lover));
+                }catch(\Exception $e){
+                }
+	    	
     		//}    		
     	}
     }
