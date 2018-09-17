@@ -495,7 +495,7 @@ class WechatController extends Controller {
                 'body' => '和润万青订单',
                 'detail' => $order->order_name,
                 'out_trade_no' => $order->order_code,
-                'total_fee' => $order->price * 100,
+                'total_fee' => $total_fee,
                 'notify_url' => route('wechat.notify'),
             ];
 
