@@ -483,6 +483,12 @@ class WechatController extends Controller {
         $view_data = [];
         if ($order) {
             $payment = Wechat::payment();
+            
+            $total_fee = $order->price * 100;
+            //测试人员
+            if(in_array(session('user_info')['openid'], ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY'])){
+                $total_fee = $order->price;
+            }
             $attributes = [
                 'trade_type' => 'JSAPI',
                 'openid' => session('user_info')['openid'],
