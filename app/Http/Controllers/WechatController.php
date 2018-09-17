@@ -487,7 +487,7 @@ class WechatController extends Controller {
             $total_fee = $order->price * 100;
             //测试人员
             if(in_array(session('user_info')['openid'], ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY'])){
-                $total_fee = $order->price;
+                $total_fee = intval($order->price);
             }
             $attributes = [
                 'trade_type' => 'JSAPI',
