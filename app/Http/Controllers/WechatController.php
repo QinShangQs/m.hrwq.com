@@ -546,7 +546,7 @@ class WechatController extends Controller {
         $wechatPayLog->save();
     }
 
-    //http://m.qs.tunnel.qydev.com/wechat/vip_listen?user_id=2795
+    //http://m.qs.tunnel.qydev.com/wechat/vip_listen?user_id=5
     public function vip_listen(Request $request) {
         $user_id = $request->input('user_id');
         $order = Order::where(['user_id' => $user_id, 'pay_type' => 6])->first();
@@ -641,6 +641,17 @@ class WechatController extends Controller {
                 }
             }
         }
+        
+        //活动
+        if(_is_festival()){
+            $this->_updateVipLeftDay($cUser->id, $left_days, 68, 7);
+        }
+    }
+    
+    private function _updateVipLeftDay($uid, $old_vip_left_day, $add_days, $point_vip_source){
+        $left_days = get_new_vip_left_day($old_vip_left_day, $add_days);
+        UserPointVip::add($uid, $add_days, $point_vip_source);
+        $this->_user_update($uid, ['vip_left_day' => $left_days]);
     }
 
     /**

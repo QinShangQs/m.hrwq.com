@@ -38,7 +38,7 @@
                 </div>  
                 @if(get_is_vip_forever() != true)
                 <div class="mbtd_button" style="margin-bottom: 2rem">
-                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{ (get_vip_left_day_number() > 0 && @user_info()['finish_order']) ? '续费会员':'开通会员'}}" style="width: 95%;background-color: #ed6d11"></a>
+                    <a href="#" id="vip_open"><input type="button" class="mbtd_button" value="{{ (get_vip_left_day_number() > 0 && @user_info()['finish_order']) ?  _festival_replace('续费会员','国庆期间续费立赠68天'):_festival_replace('开通会员','国庆期间开通立赠68天')}} " style="width: 95%;background-color: #ed6d11"></a>
                 </div>
                 @endif
             @endif

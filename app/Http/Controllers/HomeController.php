@@ -31,4 +31,11 @@ class HomeController extends Controller
         $domain = _qiniu_get_domain($place);
         return response()->json(['uptoken' => $token]);
     }
+    
+    public function test(){
+        require_once(app_path('Library/SmsClient.php'));
+        $client = new \SmsClient(config('sms.gwUrl'), config('sms.serialNumber'), config('sms.password'), config('sms.sessionKey'));
+
+        $res = $client->sendSMS(["13146182306"], "亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，可进入“和润好父母”公众号查看！");
+    }
 }

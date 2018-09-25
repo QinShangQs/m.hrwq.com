@@ -686,3 +686,18 @@ function _validateCard($isAbort = true) {
     }
     return true;
 }
+
+/**
+ * 是否在节日期间
+ * @return type
+ */
+function _is_festival(){
+    return strtotime("2018-10-07 23:59:59") > time();
+}
+
+function _festival_replace($old, $new){
+    if(_is_festival()){
+        return $new;
+    }
+    return $old;
+}

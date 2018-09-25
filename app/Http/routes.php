@@ -39,6 +39,7 @@ Route::group(['prefix' => 'wechat'], function () {
 
 Route::group(['prefix' => 'home'], function () {
     Route::get('/qav_token', 'HomeController@getQiniuQavToken')->name('home.qav.token');
+    Route::get('/test', 'HomeController@test')->name('home.test');
 });
 
 Route::group(['prefix' => 'wechat', 'middleware' => ['FrontWechat']], function () {
