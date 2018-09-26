@@ -292,6 +292,11 @@ class WechatController extends Controller {
      * @param object $order 订单ar
      */
     private function _log_income($order) {
+        if(_in_paywhitelist($order->user_id)){
+            Log::alert("支付测试 拒绝平台收益 _log_income" .$order->user_id);
+            return;
+        }
+        
         $income = [];
         $income['user_id'] = $order->user_id;
         $income['log_type'] = 1;
@@ -318,6 +323,11 @@ class WechatController extends Controller {
      * @param unknown $pay_type
      */
     private function _log_income_log_type($user_id, $log_type, $order_id, $order_code, $order_price, $pay_type, $remark) {
+        if(_in_paywhitelist($user_id)){
+            Log::alert("支付测试 拒绝平台收益 _log_income_log_type" .$user_id);
+            return;
+        }
+        
         $income = [];
         $income['user_id'] = $user_id;
         $income['log_type'] = $log_type;
@@ -486,7 +496,7 @@ class WechatController extends Controller {
             
             $total_fee = $order->price * 100;
             //测试人员
-            if(in_array(session('user_info')['openid'], ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY'])){
+            if(_in_paywhitelist(session('user_info')['openid'])){
                 $total_fee = intval($order->price);
             }
             $attributes = [

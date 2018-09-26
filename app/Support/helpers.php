@@ -688,6 +688,20 @@ function _validateCard($isAbort = true) {
 }
 
 /**
+ * 判断是否在支付白名单中
+ * @param string $openidOrUid
+ * @return boolean
+ */
+function _in_paywhitelist($openidOrUid){
+    $whitelist = ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'];
+    $idWhitelist = [4];
+    if(is_numeric($openidOrUid)){
+        return in_array($openidOrUid, $idWhitelist);
+    }
+    return in_array($openidOrUid, $whitelist);
+}
+
+/**
  * 是否在节日期间
  * @return type
  */
