@@ -202,6 +202,17 @@ class OrderEventListener
                             'remark'=> '点击此处立即完善个人信息，客服老师会在1-2个工作日内，联系您开通直播权限'
                         ],
                     ]);
+                    
+                    //活动提示
+                    if(_is_festival()){
+                        try {
+                            $notice = Wechat::staff();
+                            $result = $notice->send(["touser" => $order->user->openid, "msgtype" => "text",
+                                "text" => ["content" => "亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，<a href='http://m.hrwq.com/vip/records'>点击此处查看</a>"]]);
+                        } catch (\Exception $ex) {
+                        }
+                    }
+                    
                     break;
             }
         } 
