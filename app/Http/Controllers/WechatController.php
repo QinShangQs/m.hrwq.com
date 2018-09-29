@@ -560,6 +560,7 @@ class WechatController extends Controller {
     public function vip_listen(Request $request) {
         $user_id = $request->input('user_id');
         $order = Order::where(['user_id' => $user_id, 'pay_type' => 6])->first();
+        $this->_order_update($order);
         $this->_log_income($order);
         $result = $this->_vip_listen($request->input('user_id'), $order);
 
