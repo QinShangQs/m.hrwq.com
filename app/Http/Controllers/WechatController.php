@@ -216,12 +216,8 @@ class WechatController extends Controller {
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function notify() {
-        Log::info('pay_notify_wechat_start', [\Input::fullUrl()]);
-        Log::debug(\Input::fullUrl());
         $payment = Wechat::payment();
         $response = $payment->handleNotify(function ($notify, $successful) {
-            Log::debug($notify);
-            Log::debug("successful = ". $successful);
             if ($successful) {
                 // 你的逻辑
                 $outTradeNo = $notify->out_trade_no;
@@ -269,7 +265,7 @@ class WechatController extends Controller {
             }
             return false;
         });
-        Log::info('pay_notify_wechat_end', [json_encode($response)]);
+
         return $response;
     }
 
