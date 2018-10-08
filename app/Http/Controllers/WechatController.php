@@ -611,14 +611,14 @@ class WechatController extends Controller {
                         $amount = $order->price * $incomeScaleArr['t_scale'] / 100;
                         $sendNotice = true;
                     } else if ($lover->role == 3) {//合伙人，以提问人比例替代
+                        $incomeScale = IncomeScale::where('key', '4')->first();
+                        $incomeScaleArr = unserialize($incomeScale->value);
+                        $amount = $order->price * $incomeScaleArr['t_scale'] / 100;
+                        $sendNotice = true;
                         if ($cUser->city == $lover->city) {//同城					
-                            $incomeScale = IncomeScale::where('key', '4')->first();
-                            $incomeScaleArr = unserialize($incomeScale->value);
-                            $amount = $order->price * $incomeScaleArr['t_scale'] / 100;
-                            $sendNotice = true;
                             Log::info('lover_relation', [$lover->nickname . "与" . $cUser->nickname . "在同一城市，得收益"]);
                         } else {
-                            Log::info('lover_relation', [$lover->nickname . "与" . $cUser->nickname . "不再同一城市"]);
+                            Log::info('lover_relation', [$lover->nickname . "与" . $cUser->nickname . "不再同一城市，得收益"]);
                         }
                     }
                     //dd($incomeScale);
