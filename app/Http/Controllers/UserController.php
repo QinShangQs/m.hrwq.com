@@ -442,6 +442,8 @@ class UserController extends Controller
                     $userModel->mobile = $request->input('login_phone');
                     $userModel->province = $request->input('province');
                     $userModel->city = $request->input('city');
+                    $userModel->c_sex = $request->input('c_sex');
+                    $userModel->c_age = $request->input('c_age');
                     $userModel->register_at = date('Y-m-d H:i:s');
                 } else {
                     return response()->json(['status' => false, 'msg' => '绑定失败']);
