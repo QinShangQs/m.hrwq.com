@@ -50,7 +50,7 @@
                             </td>
                         </tr>
                         <tr style="height:2.62rem;border-bottom:1px #ddd solid">
-                            <td><img src="/images/login/login_input_bg2.png"></td>
+                            <td><img style='width: .8rem;' src="/images/login/login_sex.png"></td>
                             <td>
                                 <select name="c_sex" style="font-size: 0.75rem; color:#888;margin-left:-0.3rem">
                                     <option value="" selected >选择孩子性别</option>
@@ -60,7 +60,7 @@
                             </td>
                         </tr> 
                         <tr style="height:2.62rem;border-bottom:1px #ddd solid">
-                            <td><img src="/images/login/login_input_bg2.png"></td>
+                            <td><img style='width: .8rem;' src="/images/login/login_age.png"></td>
                             <td>
                                 <input type="text" placeholder="输入孩子年龄" maxlength="2" min="1" name="c_age" style="border: none;font-size: 0.75rem;padding: 0.5rem 0;">
                             </td>
