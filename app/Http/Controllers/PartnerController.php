@@ -506,10 +506,9 @@ class PartnerController extends Controller
         if($lover_id != 0 
             && $userInfo['vip_flg'] == 1
             && $lover_id != $userInfo['id']){
-                if($userInfo['lover_id'] == 0){//没有关联关系，建立关系
-                    User::whereOpenid($userInfo['openid'])->update(['lover_id'=>$lover_id,'lover_time' => date("Y-m-d H:i:s")]);
-                    Log::info('lover_relation', ['用户'.$userInfo['id']."与合伙人".$lover_id."建立关系"]);
-                }
+                //建立或更新关系
+                User::whereOpenid($userInfo['openid'])->update(['lover_id'=>$lover_id,'lover_time' => date("Y-m-d H:i:s")]);
+                Log::info('lover_relation', ['用户'.$userInfo['id']."与合伙人".$lover_id."建立关系"]);
         }
         
         return response()->json(['code' => 0, 'message' => '删除成功']);

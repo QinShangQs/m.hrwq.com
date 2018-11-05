@@ -61,10 +61,9 @@ class FrontWechat
                     if($lover_id != 0 
                     	&& $user_info['vip_flg'] == 1
                     	&& $lover_id != $user_info['id']){
-                    	if($user_info['lover_id'] == 0){//没有关联关系，建立关系
-                    		User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
-                    		Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
-                    	}
+                        //建立或更新关系
+                    	User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
+                    	Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
                     }
 
                     if ($request->session()->get('user_info')) {

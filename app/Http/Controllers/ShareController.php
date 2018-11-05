@@ -38,7 +38,7 @@ class ShareController extends Controller
     	$userinfo = user_info();
     	if($userinfo['vip_flg'] == 2){
     		return redirect("/vcourse");
-    	}else if($userinfo['mobile']){
+    	}else if($userinfo['mobile'] || $userinfo['vip_flg'] == 1){
     		return redirect("/article/6");
     	}else{
     		return view('share.hot',['user'=>$userinfo]);
