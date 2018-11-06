@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Log;
 
 class ShareController extends Controller
 {
@@ -30,18 +32,28 @@ class ShareController extends Controller
     }
     
     public function hot($id){    	
-    	$back = request('back');
+        $lover_id = $id;
+        $lover_time = date('Y-m-d H:i:s');
+        $user_info = user_info();
+                
+        //爱心大使ID不为0，且用户是非会员，不可关联自己
+        if($lover_id != 0 && $user_info['vip_flg'] == 1 && $lover_id != $user_info['id']) {
+            //建立或更新关系
+            User::whereOpenid($user_info['openid'])->update(['lover_id' => $lover_id, 'lover_time' => $lover_time]);
+            Log::info('lover_relation', ['用户' . $user_info['id'] . "与" . $lover_id . "建立关系"]);
+        }
+
+        $back = request('back');
     	if(!empty($back)){
     		return redirect($back);
     	}
     	
-    	$userinfo = user_info();
-    	if($userinfo['vip_flg'] == 2){
+    	if($user_info['vip_flg'] == 2){
     		return redirect("/vcourse");
-    	}else if($userinfo['mobile'] || $userinfo['vip_flg'] == 1){
+    	}else if($user_info['mobile'] || $user_info['vip_flg'] == 1){
     		return redirect("/article/6");
     	}else{
-    		return view('share.hot',['user'=>$userinfo]);
+    		return view('share.hot',['user'=>$user_info]);
     	}
     }
     

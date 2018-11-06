@@ -120,6 +120,46 @@
         	@include('element.nav', ['selected_item' => 'nav2'])
     </div>
 </div>
+    
+    <style type="text/css">
+        .win-qrcode {
+            z-index: 1000000;
+            position: fixed;
+            background-size: contain;
+            display: flex;
+            height: 100vh;
+            background-color: #333333;
+            top: 0;
+            opacity: 0.9;
+        }
+        
+        .win-qrcode .body {
+            width: 80%;
+            margin: auto;
+            position: relative
+        }
+        
+        .win-qrcode .body span{
+            width: 2rem;
+            height: 2rem;
+            right: 0;
+            top: 2rem;
+            /* background-color: #FF7800; */
+            position: absolute;
+        }
+        
+        .win-qrcode .body img{
+            width:100%;
+        }
+    </style>
+    
+<div class="win-qrcode" style="display:none;">
+    <div class="body">
+        <span onclick='$(".win-qrcode").hide()'>&nbsp;</span>
+        <img src="/images/index/tipleft0.png" onclick="location.href='/article/6'" />
+    </div>
+</div>
+    
 @endsection
 @section('script')
 <script type="text/javascript" src="/js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
@@ -133,6 +173,15 @@ Echo.init({
     offset: 0,
     throttle: 0
 });
+</script>
+<script>
+    (function(){
+        var leftday = {{get_vip_left_day_number()}};
+        if(leftday >= 1 && leftday <= 4){
+            $('.win-qrcode .body img').attr('src', '/images/index/tipleft'+(leftday-1)+'.png');
+            $('.win-qrcode').show();
+        }
+    })();
 </script>
 <script>
 	$(document).ready(function(){

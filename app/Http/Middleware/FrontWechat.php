@@ -38,7 +38,7 @@ class FrontWechat
                 $user_agent = "MicroMessenger";
                 //方便测试临时制造数据 TODO 
                 $wechatUsertemp = [
-                         'openid' => 'ot3XZt41_M-OX9ihvC0_w05DU68Q',// 
+                         'openid' => 'obpqNs_GdrHPLOGJig50qNcFZRGk',// 
                          'nickname' => '秦殇2607',
                          'sex' => '1',
                          'city' => '泰州',
@@ -57,14 +57,6 @@ class FrontWechat
                 $user_info = User::whereOpenid($wechat_user['openid'])->first();
                
                 if ($user_info && $user_info['id'] > 0 && $user_info['block']=='1') {
-                    //爱心大使ID不为0，且用户是非会员，不可关联自己
-                    if($lover_id != 0 
-                    	&& $user_info['vip_flg'] == 1
-                    	&& $lover_id != $user_info['id']){
-                        //建立或更新关系
-                    	User::whereOpenid($wechat_user['openid'])->update(['lover_id'=>$lover_id,'lover_time' => $lover_time]);
-                    	Log::info('lover_relation', ['用户'.$user_info['id']."与".$lover_id."建立关系"]);
-                    }
 
                     if ($request->session()->get('user_info')) {
                     	return $next($request);
