@@ -128,18 +128,28 @@
             background-size: contain;
             display: flex;
             height: 100vh;
+            width:100%;
             background-color: #333333;
             top: 0;
             opacity: 0.9;
         }
         
-        .win-qrcode .body {
+        .win-qrcode-body {
+            z-index: 1000001;
+            position: fixed;
+            background-size: contain;
+            display: flex;
+            top: 0;
+            height: 100vh;
+        }
+        
+        .win-qrcode-body .content{
             width: 80%;
             margin: auto;
             position: relative
         }
         
-        .win-qrcode .body span{
+        .win-qrcode-body .content span{
             width: 2rem;
             height: 2rem;
             right: 0;
@@ -148,16 +158,19 @@
             position: absolute;
         }
         
-        .win-qrcode .body img{
+        .win-qrcode-body .content img{
             width:100%;
         }
     </style>
-    
-<div class="win-qrcode" style="display:none;">
-    <div class="body">
-        <span onclick='$(".win-qrcode").hide()'>&nbsp;</span>
+
+<div class="win-qrcode-body" style="display:none;">
+    <div class="content">
+        <span onclick='$(".win-qrcode").hide();$(".win-qrcode-body").hide()'>&nbsp;</span>
         <img src="/images/index/tipleft0.png" onclick="location.href='/article/6'" />
-    </div>
+   </div>
+</div>
+<div class="win-qrcode" style="display:none;">
+    
 </div>
     
 @endsection
@@ -178,7 +191,8 @@ Echo.init({
     (function(){
         var leftday = {{get_vip_left_day_number()}};
         if(leftday >= 1 && leftday <= 4){
-            $('.win-qrcode .body img').attr('src', '/images/index/tipleft'+(leftday-1)+'.png');
+            $('.win-qrcode-body .content img').attr('src', '/images/index/tipleft'+(leftday-1)+'.png');
+            $('.win-qrcode-body').show();
             $('.win-qrcode').show();
         }
     })();
