@@ -706,7 +706,7 @@ function _in_paywhitelist($openidOrUid){
  * @return type
  */
 function _is_festival(){
-    return strtotime("2018-11-10 23:59:59") > time() && time() > strtotime("2018-11-10 07:30:00");
+    return strtotime("2018-11-11 23:59:59") > time() && time() > strtotime("2018-11-10 07:30:00");
 }
 
 function _festival_replace($old, $new){
