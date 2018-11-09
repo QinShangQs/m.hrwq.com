@@ -715,10 +715,11 @@ function _in_paywhitelist($openidOrUid){
  * @return type
  */
 function _is_festival(){
-    $userInfo = user_info();
-    if(!is_array($userInfo)){
-        $userInfo = ['openid' => ''];
-    }
+//    $userInfo = user_info();
+//    if(!is_array($userInfo)){
+//        $userInfo = ['openid' => ''];
+//    }
+    $userInfo = ['openid' => ''];
     return _is_festval_only($userInfo['openid']);
 }
 
