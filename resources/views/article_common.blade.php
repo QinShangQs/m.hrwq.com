@@ -50,6 +50,20 @@
 @if($article->type==6)
 <script>
 			$(document).ready(function () {
+                                function sendFestivalCoupon(){
+                                    $.post("{{route('user.sendCoupon')}}", {}, function (data) {
+                                        if(data.status){
+                                            Popup.init({
+                                                popHtml: '<p>优惠券领取成功！可在我的钱包中查看。</p>',
+                                                popFlash: {
+                                                    flashSwitch: true,
+                                                    flashTime: 2000,
+                                                }
+                                            });
+                                        }
+                                    }, 'json');
+                                }
+                            
 				wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"), false) ?>);
 					wx.ready(function () {
 				            wx.onMenuShareAppMessage({
@@ -62,6 +76,7 @@
 				                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 				                success: function () {
 				                    // 用户确认分享后执行的回调函数
+                                                    sendFestivalCoupon();
 				                },
 				                cancel: function () {
 				                    // 用户取消分享后执行的回调函数
@@ -73,13 +88,14 @@
 				                imgUrl: '{{url('/images/my/dis_in_love.jpg')}}', // 分享图标
 				                success: function () {
 				                    // 用户确认分享后执行的回调函数
+                                                    sendFestivalCoupon();
 				                },
 				                cancel: function () {
 				                    // 用户取消分享后执行的回调函数
 				                }
 				            });
 				        });
-				    });
+                        });
 				    $.ajaxSetup({
 				        headers: {
 				            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

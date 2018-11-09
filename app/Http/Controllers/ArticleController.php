@@ -43,6 +43,10 @@ class ArticleController extends Controller
         //和会员天数记录
         $pointVipCount = UserPointVip::where('user_id', $user_id)->count();
         
+        if($article->type == 6 && _is_festival()){
+            $article->content = str_replace('http://mcc.hrwq.com/uploads/ueimage/20171108/1510131766821394.png', '/images/other/active_11.jpg', $article->content);
+        }
+        
         return view('article_common', ['article' => $article, 'session_mobile' => $session_mobile, 
         		'requestUri' => $requestUri,'order'=>$order,'user'=>$user,'pointVipCount'=>$pointVipCount]);
     }

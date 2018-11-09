@@ -177,6 +177,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['FrontWechat']], function () 
     Route::get('/score', 'UserController@score')->name('user.score');
     //优惠券
     Route::get('/coupon', 'UserController@coupon')->name('user.coupon');
+    Route::post('/send_coupon', 'UserController@sendCoupon')->name('user.sendCoupon');
     //我的收听
     Route::get('/listen_teacher', 'UserController@listen_teacher')->name('user.listen_teacher');
     //我的提问
@@ -188,7 +189,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['FrontWechat']], function () 
     Route::get('/my_info', 'UserController@my_info')->name('user.my_info');
     Route::get('/talk', 'UserController@talk')->name('user.talk');
 
-
+    
     //申请提现
     Route::get('/cash', 'UserController@cash')->name('user.cash');
     Route::post('/cash_store', 'UserController@cash_store')->name('user.cash_store');

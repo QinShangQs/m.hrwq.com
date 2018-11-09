@@ -540,6 +540,24 @@ class UserController extends Controller
             $couponUser->save();
         }
     }
+    
+    public function sendCoupon(){
+        //双11活动使用
+        if(!_is_festival()){
+            return response()->json(['status' => false]);
+        }
+        $couponId = 18;
+        $comeFrom = 4;
+        
+        $user = user_info();
+        $oldCouponRecord = CouponUser::where('user_id', $user['id'])->where('coupon_id', $couponId)->get()->toArray();
+        if(empty($oldCouponRecord)){
+            $this->_send_coupon($couponId, $user['id'], $comeFrom);
+            return response()->json(['status' => true]);
+        }else{
+            return response()->json(['status' => false]);
+        }
+    }
 
     public function verify_code($mobile, $code)
     {

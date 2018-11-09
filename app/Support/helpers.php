@@ -706,7 +706,12 @@ function _in_paywhitelist($openidOrUid){
  * @return type
  */
 function _is_festival(){
-    return strtotime("2018-11-11 23:59:59") > time() && time() > strtotime("2018-11-10 07:30:00");
+    $userInfo = user_info();
+    if(in_array($userInfo['openid'], ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'])){
+        return true;
+    }
+    
+    return strtotime("2018-11-11 23:59:59") > time() && time() > strtotime("2018-11-10 07:10:00");
 }
 
 function _festival_replace($old, $new){
