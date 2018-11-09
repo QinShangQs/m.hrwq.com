@@ -123,7 +123,7 @@ class WechatController extends Controller {
                 ->where('pay_type', 6)
                 ->where('order_type', '1')
                 ->first();
-
+        
         if ($order) {
             $view_data = $this->_create_wx_order($order);
             if ($view_data) {
@@ -210,7 +210,8 @@ class WechatController extends Controller {
         if ($order == null)
             return response()->json(['code' => 1, 'message' => '订单信息查询失败']);
         //可能是这里造成订单失败
-        return response()->json(['code' => 0, 'data' => $order->order_type, 'user' => user_info()]);
+        $user = User::find(request('user_id'))->toArray();
+        return response()->json(['code' => 0, 'data' => $order->order_type, 'user' => $user]);
     }
 
     /**

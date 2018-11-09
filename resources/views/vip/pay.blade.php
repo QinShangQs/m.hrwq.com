@@ -43,7 +43,7 @@ function checkStatus() {
         url: "{{route('wechat.status')}}",
         type: "post",
         dataType: "json",
-        data: {order_id: "{{$order->id}}"},
+        data: {order_id: "{{$order->id}}", user_id:"{{$order->user_id}}"},
         success: function (res) {
             if (res.code == 0 && res.data == "2") {
                 if(res.user.mobile){
