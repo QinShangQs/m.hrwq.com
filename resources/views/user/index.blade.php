@@ -93,9 +93,9 @@
                         	<a href="{{route('article',['id'=>6])}}">
                         		<span> <img src="/images/public/select_right.jpg" alt=""/></span>
                         		@if(get_vip_left_day_number() > 0 && @user_info()['finish_order'])
-                                                {{_festival_replace('会员续费','国庆期间续费立赠68天')}}
+                                                {{_festival_replace('会员续费','双11期间续费立赠半年')}}
                         		@else
-                                                {{_festival_replace('开通会员','国庆期间开通立赠68天')}}
+                                                {{_festival_replace('开通会员','双11期间开通立赠半年')}}
                         		@endif
                         	</a>
                         </li>  

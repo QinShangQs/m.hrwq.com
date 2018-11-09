@@ -186,7 +186,7 @@ class OrderEventListener
                 //和会员
                 case 6:
                     //会员开通成功，给用户提示
-                    $sms_msg = _festival_replace('亲爱的家人，恭喜您成功开通和会员！成为学习型父母，构建学习型家庭，助您生活愉快！', '亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，可进入“和润好父母”公众号查看！');
+                    $sms_msg = _festival_replace('亲爱的家人，恭喜您成功开通和会员！“双十一”活动所赠天数已经直接为您添加，可进入“和润好父母”公众号查看！');
                     send_sms([$order->user->mobile], $sms_msg);
                     $notice = Wechat::notice();
                     $notice->send([
@@ -208,7 +208,7 @@ class OrderEventListener
                         try {
                             $notice = Wechat::staff();
                             $result = $notice->send(["touser" => $order->user->openid, "msgtype" => "text",
-                                "text" => ["content" => "亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，<a href='http://m.hrwq.com/vip/records'>点击此处查看</a>"]]);
+                                "text" => ["content" => "亲爱的家人，恭喜您成功开通和会员！“双十一”活动所赠天数已经直接为您添加，<a href='http://m.hrwq.com/vip/records'>点击此处查看</a>"]]);
                         } catch (\Exception $ex) {
                         }
                     }
