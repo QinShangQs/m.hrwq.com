@@ -652,7 +652,7 @@ class WechatController extends Controller {
         }
         
         //活动
-        if(_is_festival($cUser->openid)){
+        if(_is_festval_only($cUser->openid)){
             $this->_updateVipLeftDay($cUser->id, $left_days, 182, 7);
         }
     }

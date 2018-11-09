@@ -714,11 +714,15 @@ function _in_paywhitelist($openidOrUid){
  * 是否在节日期间
  * @return type
  */
-function _is_festival($openid = null){
+function _is_festival(){
+    $userInfo = user_info();
+    return _is_festval_only($userInfo['openid']);
+}
+
+function _is_festval_only($openid = ''){
     if(in_array($openid, ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'])){
         return true;
     }
-    
     return strtotime("2018-11-11 23:59:59") > time() && time() > strtotime("2018-11-10 07:10:00");
 }
 
