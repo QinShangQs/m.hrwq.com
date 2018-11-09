@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        if ($request->session()->get('user_info.mobile')) {
+        if (user_info()['mobile']) {
             return redirect('/');
         }
 
