@@ -716,6 +716,9 @@ function _in_paywhitelist($openidOrUid){
  */
 function _is_festival(){
     $userInfo = user_info();
+    if(!is_array($userInfo)){
+        $userInfo = ['openid' => ''];
+    }
     return _is_festval_only($userInfo['openid']);
 }
 
@@ -727,7 +730,7 @@ function _is_festval_only($openid = ''){
 }
 
 function _festival_replace($old, $new){
-    if(_is_festval_only('')){
+    if(_is_festival()){
         return $new;
     }
     return $old;
