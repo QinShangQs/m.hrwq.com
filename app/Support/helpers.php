@@ -727,7 +727,7 @@ function _is_festval_only($openid = ''){
 }
 
 function _festival_replace($old, $new){
-    if(_is_festival()){
+    if(_is_festval_only('')){
         return $new;
     }
     return $old;
