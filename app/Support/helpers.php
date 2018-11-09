@@ -714,9 +714,8 @@ function _in_paywhitelist($openidOrUid){
  * 是否在节日期间
  * @return type
  */
-function _is_festival(){
-    $userInfo = user_info();
-    if(in_array($userInfo['openid'], ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'])){
+function _is_festival($openid = null){
+    if(in_array($openid, ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'])){
         return true;
     }
     
