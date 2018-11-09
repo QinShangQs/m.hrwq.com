@@ -107,8 +107,8 @@
 //向ta提问
 $("#vip_open").click(function(e){
     e.preventDefault();
-    
-    @if(empty(user_info()['mobile']))
+    var mobile = '{{$user['mobile']}}';
+    @if(empty($user['mobile']))
 		Popup.init({
             popHtml:'完成注册后，才可成为和会员。',
             popFlash:{
