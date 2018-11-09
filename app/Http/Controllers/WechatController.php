@@ -209,6 +209,7 @@ class WechatController extends Controller {
         $order = Order::find(request('order_id'));
         if ($order == null)
             return response()->json(['code' => 1, 'message' => '订单信息查询失败']);
+        //可能是这里造成订单失败
         return response()->json(['code' => 0, 'data' => $order->order_type, 'user' => user_info()]);
     }
 
