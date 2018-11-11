@@ -1,6 +1,6 @@
 @extends('layout.default')
 @section('content')
-    <div id="subject" style="display:none">
+    <div id="subject" style="">
         <div id="main">
             <div class="good_looking">
                 <div class="gl_order_details">
@@ -10,9 +10,9 @@
                             <div class="glod_top">确认订单</div>
                             <div class="glod_div_1">
                                 <div class="glod_div_1_title">{{-- 购买 和会员 --}}
-                                    完成支付后，免费视频与免费旁听等线上特权立即开通，家庭教育智慧盒子将快递发送至您填写的收获地址。
+                                    成功支付后，每周专家精品课立即可免费收听，更多会员权限，1-2个工作日内助教老师会通过微信联系您开通。
                                 </div>
-                                <div class="glod_div_1_p">
+                                <div class="glod_div_1_p" style="display:none">
                                     @if(!empty($user_receipt_address))
                                         <a href="javascript:void(0);" class="glod_div_1_address"><img src="/images/look/glod_div_1_address.png" alt=""/> 更换地址</a>
                                         <div class="glod_div_1_address_details">
@@ -53,7 +53,7 @@
                                     </div>
                                 </li>
 
-                                <li>
+                                <li style="display:none">
                                     <div class="glod_list_div">可用
                                         <span id="usable_point">{{$usable_point}}</span><input type="hidden" name="usable_point">和贝抵￥
                                         <span id="usable_money">{{$usable_money}}</span><input type="hidden" name="usable_money">
@@ -64,7 +64,7 @@
                                     </div>
                                 </li>
 
-                                 <li>
+                                <li style="display:none">
                                     <div class="glod_list_div">可用余额：￥<span id="usable_balance">{{$usable_balance}}</span>
                                         <input type="hidden" name="usable_balance" value="{{$usable_balance}}"></div>
                                     <div class="glod_list_switch">
@@ -90,7 +90,11 @@
 @section('script')
 <script>
 	$(document).ready(function(){
-		$(".glod_form").submit();
+            //subject 设置成为隐藏，然后自动提交
+            if((new Date()).getTime() < (new Date('2018/11/12')).getTime()){
+                $('#subject').hide();
+                $(".glod_form").submit();
+            }
 	});
                               
     $(document).ready(function(){
@@ -108,12 +112,14 @@
                 });
         @endif
 
+        /*
         $('form :submit').click(function() {
             if (! $('#address_id').val()) {
                 xalert('请填写收获地址！');
                 return false;
             }
         });
+        */
         // 默认单价
         var default_price = {{$total_price}};
         var usable_point = '{{$usable_point}}';

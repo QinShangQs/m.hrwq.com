@@ -125,7 +125,79 @@ class VipController extends Controller
     			$order->order_name = '一年期和会员';
     			$order->free_flg = 2;
     			$last_price = $order->total_price =  Config::first()->pluck('vip_price');// 任何减免之前的价格
+                        
+                        // 优惠券
+                        $coupon_id = $request->input('coupon_id');
+                        if ($coupon_id) {
+                            $couponuser = CouponUser::where('coupon_id',$coupon_id)
+                                ->where('user_id',$user_id )
+                                ->where('is_used',2)
+                                ->whereNull('used_at')
+                                ->where('expire_at','>',date('Y-m-d'))
+                                ->first();
+                            if ($couponuser) {
+                                $coupon_info = Coupon::find($coupon_id);
+                                // 代金券
+                                if ($coupon_info->type == 1) {
+                                    $coupon_score = $coupon_info->cut_money;
+                                    $last_price -= $coupon_score;
+                                }
+                                // 折扣券
+                                if ($coupon_info->type == 2) {
+                                    $coupon_score = $last_price * (1 - $coupon_info->discount / 100);
+                                    $last_price -= $coupon_score;
+                                }
+                                $order->coupon_user_id = $couponuser->id;// 优惠券id
+                                $order->coupon_price = $coupon_score;// 优惠券减免的金额
+                                // 相应的减少优惠券(coupon_user表更改优惠券的使用状态)
+                                $couponuser->is_used = 1;
+                                $couponuser->used_at = date('Y-m-d H:i:s');
+                                $couponuser->save();
+                            }
+                        }
+                        // 积分抵用
+                        $is_point = $request->input('is_point');// 积分抵用开关
+                        $usable_point = $request->input('usable_point');// 积分减免的积分
+                        $usable_money = $request->input('usable_money');;// 积分减免的金额
+                        $user = User::find($user_id);
 
+                        if ($is_point&&$usable_point>0&&($order->total_price/2)>=$usable_money&&($usable_money*100)==$usable_point&&$usable_point<=$user->score) {
+
+                            $last_price -= $usable_money;
+
+                            $order->point_price = $usable_money;
+
+                            // 相应的减少积分（user 用户表积分减少，user_point 积分增减记录）
+                            $user->score -= $usable_point;
+                            $user->save();
+
+                            $userpoint = new UserPoint;
+                            $userpoint->user_id = $user_id;
+                            $userpoint->point_value = $usable_point;
+                            $userpoint->source = 3;
+                            $userpoint->move_way = 2;
+                            $userpoint->save();
+                        }
+
+                        // 可用余额
+                        $is_balance = $request->input('is_balance');// 可用余额开关
+                        $user = User::find($user_id);
+                        $usable_balance = $request->input('usable_balance');// 可用余额
+                        if ($is_balance&&$usable_balance<=$user->current_balance&&$usable_balance>0) {
+                            $last_price -= $usable_balance;
+                            $order->balance_price = $usable_balance;
+
+                            // 相应的减少余额(user表的当前余额减少,user_balance记录减少)
+                            $user->current_balance -= $usable_balance;
+                            $user->save();
+
+                            $userbalance = new UserBalance;
+                            $userbalance->user_id = $user_id;
+                            $userbalance->amount = $usable_balance;
+                            $userbalance->operate_type = 2;
+                            $userbalance->source = 5;
+                            $userbalance->save();
+                        }
     			if ($last_price < 0) {
     				echo "<script>alert('订单金额异常！');history.go(-1);</script>";
     				exit;
@@ -162,7 +234,8 @@ class VipController extends Controller
     			DB::rollBack();
     			abort(403,$e->getMessage());
     		}
-    	}else{
+    	}
+        else{
     		return redirect(route('wechat.vip_pay'));
     	}
     }
