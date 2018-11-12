@@ -422,7 +422,7 @@ class VipController extends Controller
             if ($value->use_scope != 1) {
                 unset($couponusers_usable[$key]);
             }
-            if ($value->available_period_type == 2 && $value->available_start_time > date('Y-m-d')) {
+            if ($value->available_period_type == 2 && $value->available_start_time < date('Y-m-d')) {
                 unset($couponusers_usable[$key]);
             }
         }
@@ -431,7 +431,7 @@ class VipController extends Controller
         $couponusers_unusable = $builder_c->where('coupon.full_money','>',$total_price)->get();
         // 将不满足适用范围的优惠券和没到使用时间的优惠券注销
         foreach ($couponusers_unusable as $key => $value) {
-            if ($value->available_period_type == 2 && $value->available_start_time > date('Y-m-d')) {
+            if ($value->available_period_type == 2 && $value->available_start_time < date('Y-m-d')) {
                 unset($couponusers_unusable[$key]);
             }
         }
