@@ -20,6 +20,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Listeners\QuestionEventListener',
     	'App\Listeners\RegisterPeopleEventListener',
     	'App\Listeners\VipLeftDayEventListener',
+        'App\Listeners\CouponsEventListener',
     	'App\Listeners\MarkReplayEventListener',
     ];
     /**

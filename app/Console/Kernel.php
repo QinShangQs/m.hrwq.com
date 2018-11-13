@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Inspire::class,
-    	Commands\SendVipLeftDayNotices::class
+    	Commands\SendVipLeftDayNotices::class,
+        Commands\SendCouponNotices::class
     ];
 
     /**
@@ -30,5 +31,9 @@ class Kernel extends ConsoleKernel
         //发送通知
         $schedule->command('notices:vipleftday')
         		->dailyAt('07:00');
+        
+        //发送通知
+        $schedule->command('notices:coupons')
+        		->dailyAt('07:30');
     }
 }
