@@ -39,7 +39,7 @@ class SendCouponNotices extends Command {
             from coupon_user as cu 
             inner join `user` as u on u.id = cu.user_id
             where cu.is_used = 2 and cu.expire_at > CURRENT_TIMESTAMP()
-            and DATEDIFF(expire_at,CURRENT_TIMESTAMP()) = 1
+            and DATEDIFF(expire_at,CURRENT_TIMESTAMP()) = 1 and cu.deleted_at is null
         ");
        	foreach ($users as $user){
             Event::fire(new Coupons($user));

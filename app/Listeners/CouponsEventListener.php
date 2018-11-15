@@ -26,8 +26,8 @@ class CouponsEventListener {
                 'topcolor' => '#f7f7f7',
                 'data' => [
                     'first' => "您有一张优惠券即将到期" . "\n",
-                    'keyword1' => $user->created_at . "\n",
-                    'keyword2' => $user->expire_at . "\n",
+                    'keyword1' => date('Y-m-d', strtotime($user->created_at))  . "\n",
+                    'keyword2' => date('Y-m-d', strtotime($user->expire_at)) . "\n",
                     'remark' => '点击立即使用优惠券'
                 ],
             ]);
