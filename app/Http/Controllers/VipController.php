@@ -422,9 +422,9 @@ class VipController extends Controller
             if ($value->use_scope != 1) {
                 unset($couponusers_usable[$key]);
             }
-            if ($value->available_period_type == 2 && $value->available_start_time < date('Y-m-d')) {
-                unset($couponusers_usable[$key]);
-            }
+//            if ($value->available_period_type == 2 && $value->available_start_time < date('Y-m-d')) {
+//                unset($couponusers_usable[$key]);
+//            }
         }
 
         // 不可用优惠券
