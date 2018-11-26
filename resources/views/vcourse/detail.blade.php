@@ -462,7 +462,7 @@ $(document).ready(function(){
         var poster = vLink + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
     @endif;
     
-    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" poster="'+poster+'"></video>');
+    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" poster="'+poster+'"></video>');
     $('#video-container').empty();
     $('#video-container').append(player);
 

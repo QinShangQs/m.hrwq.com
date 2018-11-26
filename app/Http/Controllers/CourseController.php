@@ -30,6 +30,7 @@ use App\Models\CouponRule;
 use App\Models\UserBalance;
 use App\Events\OrderPaid;
 use EasyWeChat\Foundation\Application;
+use App\Models\LoverCourse;
 
 class CourseController extends Controller
 {
@@ -193,6 +194,8 @@ class CourseController extends Controller
         $user_id='';
         //课程分享(被分享人)
         $share_user = $request->input('share_user');
+        //爱心分享人
+        $lover_id = $request->input('lover');
         if (is_wechat()) {
             $userfavor = UserFavor::where('user_id', session('user_info')['id'])->where('favor_id', $id)->where('favor_type', 1)->first();
             //是否关注过公众号
@@ -220,7 +223,23 @@ class CourseController extends Controller
             if ($share_user == session('user_info')['id']) {
                 $share_user = '';
             }
+            if ($lover_id == session('user_info')['id']) {
+                $lover_id = 0;
+            }
+            
             $user_id = session('user_info')['id'];
+        }
+        
+        if(!empty($lover_id)){
+            $loverRecord = LoverCourse::where('user_id', $user_id)->where('course_id',$id)->first();
+            if(!$loverRecord){
+                $lover = new LoverCourse();
+                $lover->lover_id = $lover_id;
+                $lover->user_id = $user_id;
+                $lover->course_id = $id;
+                $lover->status = 1;
+                $lover->save();
+            }
         }
 
         $requestUri = $request->getRequestUri();
@@ -662,10 +681,19 @@ class CourseController extends Controller
             //实际支付金额为零
             if ($last_price == 0) {
                 //通知
-                Event::fire(new OrderPaid($order));
+                if(config('app.debug') === false){
+                    Event::fire(new OrderPaid($order));
+                }
                 DB::commit();
                 return redirect(route('course.detail', ['id' => $id]));
             }
+            
+            $loverRecord = LoverCourse::where('user_id', $user_id)->where('course_id',$id)->where('status',1)->first();
+            if($loverRecord){
+                $loverRecord->order_id = $order->id;
+                $loverRecord->save();
+            }
+            
             DB::commit();
             return redirect(route('wechat.course_pay') . '?id=' . $order->id);
         } catch (\EasyWeChat\Core\Exceptions\HttpException $e) {

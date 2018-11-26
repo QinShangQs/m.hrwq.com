@@ -22,6 +22,7 @@ use App\Models\WechatPayLog;
 use App\Models\IncomeScale;
 use App\Models\UserBalance;
 use App\Models\UserPointVip;
+use App\Models\LoverCourse;
 
 class WechatController extends Controller {
 
@@ -248,6 +249,10 @@ class WechatController extends Controller {
                         if ($order->pay_type == 5) {
                             $this->_user_listen($order->pay_id);
                         }
+                        
+                        if($order->pay_type == 1){
+                            $this->_pay_haoke($order->id);
+                        }
 
                         DB::commit();
                     } catch (\Exception $e) {
@@ -269,6 +274,18 @@ class WechatController extends Controller {
         });
 
         return $response;
+    }
+    
+    private function _pay_haoke($order_id){
+        $loverCourse = LoverCourse::where('order_id', $order_id)->where('status',1)->first();
+        if($loverCourse){
+            $loverCourse->status = 2;
+            $loverCourse->save();
+            
+            //增加和会员天数
+            $cUser = User::where("id", '=', $loverCourse->lover_id)->first();
+            $this->_updateVipLeftDay($cUser->id, $cUser->vip_left_day, 30, 9);
+        }
     }
 
     public function menu() {
@@ -556,6 +573,9 @@ class WechatController extends Controller {
 
     //http://m.qs.tunnel.qydev.com/wechat/vip_listen?user_id=5
     public function vip_listen(Request $request) {
+        exit();
+        $this->_pay_haoke(35982);
+        return;
         $user_id = $request->input('user_id');
         $order = Order::where(['user_id' => $user_id, 'pay_type' => 6])->first();
         $this->_order_update($order);
