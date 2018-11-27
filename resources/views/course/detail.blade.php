@@ -195,7 +195,7 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
                     desc: '汇聚顶尖教子智慧,和润万青助您成就卓越孩子!', // 分享描述
-                    link: '{{route('course.detail',['id'=>$course->id])}}?from=singlemessage&lover={{$user_id}}', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -208,7 +208,7 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
-                    link: '{{route('course.detail',['id'=>$course->id])}}?from=singlemessage&lover={{$user_id}}', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
