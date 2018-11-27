@@ -211,7 +211,11 @@ class WechatController extends Controller {
         if ($order == null)
             return response()->json(['code' => 1, 'message' => '订单信息查询失败']);
         //可能是这里造成订单失败
-        $user = User::find(request('user_id'))->toArray();
+        $user_id = $order->user_id;
+        if(!empty(request('user_id'))){
+            $user_id = request('user_id');
+        }
+        $user = User::find($user_id)->toArray();
         return response()->json(['code' => 0, 'data' => $order->order_type, 'user' => $user]);
     }
 
@@ -285,6 +289,13 @@ class WechatController extends Controller {
             //增加和会员天数
             $cUser = User::where("id", '=', $loverCourse->lover_id)->first();
             $this->_updateVipLeftDay($cUser->id, $cUser->vip_left_day, 30, 9);
+            
+            $user = User::where("id", '=', $loverCourse->user_id)->first();
+            try {
+                Event::fire(new RegisterPeople($cUser, null, true, $user->nickname));
+            } catch (\Exception $ex) {
+                            
+            }
         }
     }
 
