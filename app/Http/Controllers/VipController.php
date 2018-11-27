@@ -484,7 +484,7 @@ class VipController extends Controller
             $user_update['vip_left_day'] = $left_days;
             
             //长期和会员
-            if(in_array($code, config('constants.forever_vip_code'))){
+            if(in_array(strtoupper($code), config('constants.forever_vip_code'))){
                 $user_update['vip_forever'] = 2;
             }
 
