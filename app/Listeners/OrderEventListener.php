@@ -77,6 +77,7 @@ class OrderEventListener
                     if ($order->course->head_flg==2) {
                         $partners = User::where('role', 3)->where('block', 1)
                         ->where('partner_city', $order->course->city)
+                        ->where('id', $order->course->promoter)
                         ->get();
                     } elseif ($order->course->head_flg==1&&$order->course->distribution_flg==1) {
                         $partners = User::where('role', 3)->where('block', 1)
