@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Wechat;
+use App\Models\User;
 
 class HomeController extends Controller {
 
@@ -32,15 +33,20 @@ class HomeController extends Controller {
     }
 
     public function test() {
-        try {
-            $notice = Wechat::staff();
-            $result = $notice->send(["touser" => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY', "msgtype" => "text",
-                "text" => ["content" => "亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，<a href='http://m.hrwq.com/vip/records'>点击此处查看</a>"]]);
-        
-            dd($result);
-        } catch (\Exception $ex) {
-            
-        }
+        $data = User::where('role', 3)->where('block', 1)
+                        ->where('partner_city', 324)
+                        ->where('id', 2607)
+                        ->get();
+                dd($data);
+//        try {
+//            $notice = Wechat::staff();
+//            $result = $notice->send(["touser" => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY', "msgtype" => "text",
+//                "text" => ["content" => "亲爱的家人，恭喜您成功开通和会员！国庆活动所赠天数已经直接为您添加，<a href='http://m.hrwq.com/vip/records'>点击此处查看</a>"]]);
+//        
+//            dd($result);
+//        } catch (\Exception $ex) {
+//            
+//        }
 
         
 //        require_once(app_path('Library/SmsClient.php'));

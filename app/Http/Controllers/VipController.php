@@ -462,6 +462,11 @@ class VipController extends Controller
             return response()->json(['code' => 4, 'message' => '卡号不能为空!']);
         }
 
+        $user = User::find(user_info('id'));
+        if($user->vip_forever == 2){
+            return response()->json(['code' => 3, 'message' => '您已是长期会员，请勿重复激活']);
+        }
+        
         $data = Vip::where('code',$code)->first();
 
         if(!$data) {
@@ -473,7 +478,8 @@ class VipController extends Controller
             $update['is_activated']  = 2;
             $update['activated_vip'] = user_info('id');
 
-            $user = User::find(user_info('id'));
+            
+            
             $days = 365;
             $left_days = get_new_vip_left_day($user->vip_left_day, $days);
             UserPointVip::add($user->id, $days, 2);
