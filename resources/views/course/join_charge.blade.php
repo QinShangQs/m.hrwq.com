@@ -26,7 +26,7 @@
                                 <ul class="glod_list_package">
                                     <li @if($package_flg !=2) class="select" @endif data-value="0"  id="single">单人</li>
                                     <input type="hidden" name="price" id="price" value="{{$course->price}}">
-                                    <li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>
+                                    @if($course->package_price > 0)<li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>@endif
                                     <input type="hidden" id="package_price" value="{{$course->package_price}}">
                                 </ul>
                                 <div class="clearboth"></div>
