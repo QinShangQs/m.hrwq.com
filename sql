@@ -1,6 +1,13 @@
 ####
 test deploy
 
+###############2018-12-31#################
+alter table course add column tuangou_days int(4) DEFAULT 0 not null COMMENT '截团天数' after package_price;
+alter table course add column tuangou_peoples int(4) unsigned DEFAULT 0 not null COMMENT '团购人数' after package_price;
+alter table course add column tuangou_price decimal(10,2) DEFAULT 0 not null COMMENT '团购价' after package_price;
+
+
+
 ###############2018-08-27#################
 CREATE TABLE `user_partner_whites` (
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
