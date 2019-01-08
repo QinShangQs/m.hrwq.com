@@ -231,6 +231,11 @@
 
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
 </div>
+    
+<!-- 图片广告 -->
+<!--    <div class="image-ad">
+        <img src="https://ykimg.alicdn.com/product/DetailImage/2019-01-02/2ab42938a138cc78b7206fa849a6c593.png"/>
+    </div>-->
 
 <form id="replay-form" style="position: fixed;bottom: 0px;
 			background-color: #fff;border-top: 1px solid #ccc;
@@ -373,61 +378,73 @@
     	border-radius: 5px; 
     	font-size: 12px;
     }
+    
+    .image-ad {
+        position: absolute;
+        top: 0;
+        margin: auto;
+        text-align: center;
+        z-index: 101;
+        width: 100%;
+    }
+    
+    .image-ad img{
+        height: 10.5rem;
+        margin-top: 1rem;
+    }
 </style>
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript">
 function replace_china_char(str){
-	return str.replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”");
+    return str.replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”");
 }
                 
 $(document).ready(function(){
     uParse('article');
     wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"),false) ?>);
-            wx.ready(function(){
-                wx.onMenuShareAppMessage({
-                    title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
-                    desc: '我看到一个很好的家长课堂，可能很适合你呦', // 分享描述
-                    //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
-                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
-                    imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
-                    type: '', // 分享类型,music、video或link，不填默认为link
-                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-                    success: function () { 
-                        // 用户确认分享后执行的回调函数
-                    },
-                    cancel: function () { 
-                        // 用户取消分享后执行的回调函数
-                    }
-                });
-                wx.onMenuShareTimeline({
-                    title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
-                    //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
-                    link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
-                    imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
-                    success: function () {
-                        // 用户确认分享后执行的回调函数
-                    },
-                    cancel: function () {
-                        // 用户取消分享后执行的回调函数
-                    }
-                });
+    wx.ready(function(){
+        wx.onMenuShareAppMessage({
+            title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
+            desc: '我看到一个很好的家长课堂，可能很适合你呦', // 分享描述
+            //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+            link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
+            imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () { 
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () { 
+                // 用户取消分享后执行的回调函数
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: replace_china_char('{{strip_tags($vcourseDetail->title)}}'), // 分享标题
+            //link: '{{route('vcourse.detail',['id'=>$vcourseDetail->id])}}?from=singlemessage', // 分享链接
+            link:"{{ route('share.hot',['id'=> $user_info['id'] ] ) }}"+"?back="+location.pathname,
+            imgUrl: '{{config('constants.admin_url').$vcourseDetail->cover}}', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
 
-            });
+    });
 
+    $('.show-mark-tip').click(function(){
+        if($('#mark-input-tip').css('display') != 'none'){
+            $(this).find('img').addClass('selected');
+        }else{
+            $(this).find('img').removeClass('selected');
+        }
+        $('#mark-input-tip').toggle();
+        $('.lcd_div_2_form').toggle();
 
-	$('.show-mark-tip').click(function(){
-		if($('#mark-input-tip').css('display') != 'none'){
-			$(this).find('img').addClass('selected');
-		}else{
-			$(this).find('img').removeClass('selected');
-		}
-		$('#mark-input-tip').toggle();
-		$('.lcd_div_2_form').toggle();
-		
-		$('.lcd_div>div').hide();
-		$('.lcd_div_2').show();
-	});
-            
+        $('.lcd_div>div').hide();
+        $('.lcd_div_2').show();
+    });
     $("#share-logo").click(function(){
     	$(".win-share").show();
     });
@@ -437,7 +454,8 @@ $(document).ready(function(){
             
     var videoHight = 360/680*$(".lcd_banner_img").width();
     $(".lcd_banner_img").height(videoHight);
-    var vLink = $(".lcd_banner_img").data('url');
+    var vLink = $(".lcd_banner_img").data('url');//"http://111.62.71.54/youku/69754C00A243771620F2F40F4/03000801005C2DDDC71823B003E88045C5C624-76FA-45F8-A912-6B2709607A53.mp4?sid=054690875922812284251_00_A2788b4a557e894c7004caf3856da202e&sign=7330b89fb0087dc3dbd5dbe6152d4bb4&ctype=50&hd=1&ali_redirect_domain=vali.cp31.ott.cibntv.net&ali_redirect_ex_ftag=d291d0cb8cce3ca12877ab0ae5c5b37e72c6923656afd68a&ali_redirect_ex_tmining_ts=1546912388&ali_redirect_ex_tmining_expire=3600&ali_redirect_ex_hot=11";
+    //var vLinkReal = $(".lcd_banner_img").data('url');
     var vType = function() {
         $.ajaxSetup({
             headers: ''
@@ -462,33 +480,37 @@ $(document).ready(function(){
         var poster = vLink + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
     @endif;
     
-    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" poster="'+poster+'"></video>');
+    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" controlsList="nodownload" poster="'+poster+'"></video>');
     $('#video-container').empty();
     $('#video-container').append(player);
 
     var videoPlay = function(){
       //增加观看次数
       if (!viewSearch.has('{{@$vcourseDetail->id}}')) {
-          $.post("{{route('vcourse.add_view_cnt')}}",{id:"{{@$vcourseDetail->id}}",_token:"{{csrf_token()}}"},function(data){
-            },'json');
+          $.post("{{route('vcourse.add_view_cnt')}}",{id:"{{@$vcourseDetail->id}}",_token:"{{csrf_token()}}"},
+          function(data){},'json');
       }
       viewSearch.init('{{@$vcourseDetail->id}}');
     };
     var videoPause = function(){
-      //$('.lcd_banner_div').show();
+        $('.lcd_banner_div').show();
     };
 
     var videoEnd = function(){
-      if ($('#video-container').data('flg')=='free') {
+// 播放着至末尾
+//        this.src({src:vLinkReal});
+//        this.play();
+//        return;
+        if ($('#video-container').data('flg')=='free') {
     	  @if(empty(@$user_info['mobile']))
-    		  Popup.init({
-                	popTitle:'试看结束',
+    		Popup.init({
+                    popTitle:'试看结束',
                     popHtml:'<p>完成注册可获得7天会员奖励，期间可收听父母学院全部完整版课程</p>',                
                     popOkButton:{
                         buttonDisplay:true,
                         buttonName:"立即注册",
                         buttonfunction:function(){
-                        	location.href="{{ route('user.login') }}";
+                            location.href="{{ route('user.login') }}";
                             return false;
                         }
                     },
@@ -498,11 +520,11 @@ $(document).ready(function(){
                         buttonfunction:function(){}
                     },
                     popFlash:{
-                        flashSwitch:false
+                       flashSwitch:false
                     }
                 });
           @elseif($vip_left_day === 0)
-          	Popup.init({
+            Popup.init({
               	popTitle:'试看结束',
                   popHtml:'<p>成为和会员可收听父母学院每周更新的完整版课程</p>',                
                   popOkButton:{
@@ -510,7 +532,7 @@ $(document).ready(function(){
                       buttonName:"立即加入",
                       buttonfunction:function(){
                       	location.href='{{ url("article/6") }}';
-                          return false;
+                        return false;
                       }
                   },
                   popCancelButton:{
@@ -523,7 +545,7 @@ $(document).ready(function(){
                   }
               });
           @else
-        	  Popup.init({
+            Popup.init({
               	popTitle:'试看结束',
                   popHtml:'<p>加入好父母学院，观看每周一期完整视频</p>',                
                   popOkButton:{
@@ -531,7 +553,7 @@ $(document).ready(function(){
                       buttonName:"我要加入",
                       buttonfunction:function(){
                       	location.href='{{ url("article/6") }}';
-                          return false;
+                        return false;
                       }
                   },
                   popCancelButton:{
@@ -552,8 +574,8 @@ $(document).ready(function(){
     //if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
     @if((count($vcourseDetail->order) > 0 && $vip_left_day > 0) 
     	    || ($vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
-        	|| ($vcourseDetail->type=='2'&& $vip_left_day === 0))
-		var waitingPub = null;
+            || ($vcourseDetail->type=='2'&& $vip_left_day === 0))
+	var waitingPub = null;
 	try{
 	    videojs('video-embed', {
 	        "width": "100%",
@@ -564,27 +586,20 @@ $(document).ready(function(){
 	        //"poster": poster
 	    }, function() {
 	    	if(browserOS() == 'pc'){
-	    		var player = videojs('video-embed');
-				player.src({
-		            type: vType(),
-		            src: vLink
-		        });
-		        player.load();
-				player.play();
-			}else{
-				document.addEventListener("WeixinJSBridgeReady", function () { 
-					var player = videojs('video-embed');
-					player.src({
-			            type: vType(),
-			            src: vLink,
-			        });
-			        
-			        console.log('browserOS is ' + browserOS());
-					if(browserOS() != 'android'){
-						player.load();
-						player.play();
+                    var player = videojs('video-embed');
+                    player.src({ type: vType(), src: vLink });
+		    player.load();
+                    player.play();
+		} else {
+                    document.addEventListener("WeixinJSBridgeReady", function () { 
+			var player = videojs('video-embed');
+                        player.src({ type: vType(), src: vLink});
+			console.log('browserOS is ' + browserOS());
+			if(browserOS() != 'android'){
+                            player.load();
+                            player.play();
 						
-						waitingPub = Popup.init({
+                            waitingPub = Popup.init({
 	                        popTitle:"",
 	                        popHtml:"正在加载，请稍后...",
 	                        popFlash:{
@@ -592,27 +607,28 @@ $(document).ready(function(){
 	                            flashTime:3000,
 	                        }
 	                    });
-					}
-				}, true);
-			}
-	    }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
+                        }
+                    }, true);
+                }
+            }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
 	}catch(exx){
 	}
-	    $('.lcd_banner_div').click(function(event) {
-	        var player = videojs('video-embed');
-	        player.load();
-	        player.play();
-	    });
+        
+	$('.lcd_banner_div').click(function(event) {
+	    var player = videojs('video-embed');
+	    player.load();
+	    player.play();
+	});
     @else
-	    $('.lcd_banner').click(function(event) {
-	        Popup.init({
-	            popHtml:'<p>参加该课程后可观看视频</p>',
-	            popFlash:{
-	                flashSwitch:true,
-	                flashTime:2000,
-	            }
-	        });
+	$('.lcd_banner').click(function(event) {
+	    Popup.init({
+	        popHtml:'<p>参加该课程后可观看视频</p>',
+	        popFlash:{
+	            flashSwitch:true,
+	            flashTime:2000,
+	        }
 	    });
+	});
     @endif
 
     var lockm = false;
