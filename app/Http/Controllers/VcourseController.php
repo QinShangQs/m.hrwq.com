@@ -69,7 +69,14 @@ class VcourseController extends Controller {
             $foreshow = '';
         }
         
-        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'telecast', 'foreshow'));
+        $year_action_left_day = ($this->getYearActionleftday());
+        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'telecast', 'foreshow','year_action_left_day'));
+    }
+    
+    private function getYearActionleftday(){
+        $today = date('Y-m-d');
+        $yearAction = '2019-01-19';
+        return intval(round((strtotime($yearAction) - strtotime($today))/3600/24)) +1;
     }
 
     /** 好看课程搜索 */

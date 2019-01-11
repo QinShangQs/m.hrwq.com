@@ -166,7 +166,7 @@
 <div class="win-qrcode-body" style="display:none;">
     <div class="content">
         <span onclick='$(".win-qrcode").hide();$(".win-qrcode-body").hide()'>&nbsp;</span>
-        <img src="/images/index/tipleft0.png" onclick="location.href='/article/6'" />
+        <img src="" onclick="location.href='/article/6'" />
    </div>
 </div>
 <div class="win-qrcode" style="display:none;">
@@ -189,11 +189,22 @@ Echo.init({
 </script>
 <script>
     (function(){
-        var leftday = {{get_vip_left_day_number()}};
-        if(leftday >= 1 && leftday <= 4){
-            $('.win-qrcode-body .content img').attr('src', '/images/index/tipleft'+(leftday-1)+'.png');
+        var year_action_left_day = {{$year_action_left_day}};
+        if(year_action_left_day > 0){
+            $('.win-qrcode-body .content img').removeAttr('onclick');
+            $('.win-qrcode-body .content img').click(function(){
+                location.href = 'http://m.hrwq.com/course/detail/20';
+            });
+            $('.win-qrcode-body .content img').attr('src', '/images/index/year_action_left_'+year_action_left_day+'.jpg');
             $('.win-qrcode-body').show();
             $('.win-qrcode').show();
+        }else{
+            var leftday = {{get_vip_left_day_number()}};
+            if(leftday >= 1 && leftday <= 4){
+                $('.win-qrcode-body .content img').attr('src', '/images/index/tipleft'+(leftday-1)+'.png');
+                $('.win-qrcode-body').show();
+                $('.win-qrcode').show();
+            }
         }
     })();
 </script>
