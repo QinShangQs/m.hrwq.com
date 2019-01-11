@@ -11,6 +11,15 @@ class Order extends Model
     protected $table = 'order';
     protected $fillable = ['order_code', 'user_id', 'pay_id', 'pay_type', 'order_type', 'order_name', 'free_flg', 'price', 'pay_time', 'pay_method', 'each_price', 'coupon_user_id', 'coupon_price', 'balance_price', 'pay_notify_flg', 'course_start_notify_flg', 'partner_flg'];
 
+    /**
+     * 团购订单
+     */
+    const IS_TEAM_YES = 1;
+    /**
+     * 非团购订单
+     */
+    const IS_TEAM_NO = 0;
+    
     public function order_course()
     {
         return $this->hasOne('App\Models\OrderCourse', 'order_id');

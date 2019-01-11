@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
+
+class OrderTeam extends Model {
+
+    protected $table = 'order_team';
+    protected $guarded = ['id'];
+
+    use SoftDeletes;
+
+    /**
+     * 发起中
+     */
+    const STATUS_INIT = 0;
+
+    /**
+     * 组团成功
+     */
+    const STATUS_SUCCESS = 1;
+
+    /**
+     * 组团失败
+     */
+    const STATUS_FAILED = 2;
+
+    public function order() {
+        return $this->belongsTo('App\Models\Order', 'order_id');
+    }
+
+    /**
+     * 参加团购
+     * @param type $team_id 0是新开团，非0加入老团
+     * @param type $order_id
+     * @param type $user_id
+     * @throws \Exception
+     */
+    public static function makeOrderTeam($team_id, $order_id, $user_id) {        
+        if(!static::judgeUserIsJoined($team_id, $user_id)){
+            throw new \Exception('您已参与该课程团购，不可重复参与。');
+        }
+        
+        if (empty($team_id)) {
+            $team = new OrderTeam();
+            $team->order_id = $order_id;
+            $team->initiator_user_id = $user_id;
+            $team->status = static::STATUS_INIT;
+            $team->save();
+
+            $teamMember = new OrderTeamMember();
+            $teamMember->order_team_id = $team->id;
+            $teamMember->user_id = $user_id;
+            $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_INITIATOR;
+            $teamMember->save();
+        } else {
+            if(!static::judgeTeamInActive($team_id)){
+                throw new \Exception('该团不存在或该团活动已结束。');
+            }
+            
+            $teamMember = new OrderTeamMember();
+            $teamMember->order_team_id = $team_id;
+            $teamMember->user_id = $user_id;
+            $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_JOINER;
+            $teamMember->save();
+        }
+    }
+
+    /**
+     * 该团是否活跃可以参加
+     */
+    public static function judgeTeamInActive($team_id){
+        $team = OrderTeam::find($team_id);
+        if(empty($team)){
+            return false;
+        }
+        
+        return $team->status == static::STATUS_INIT;
+    }
+    
+    /**
+     * 用户是否已参与该团
+     * @param type $team_id
+     * @param type $user_id
+     * @return boolean
+     */
+    public static function judgeUserIsJoined($team_id, $user_id){
+        if(empty($team_id)){
+            return true;
+        }
+        
+        $member = OrderTeamMember::where(['order_team_id' => $team_id, 'user_id' => $user_id])->first();
+        return empty($member);
+    }
+    
+    /**
+     * 获取团购成员
+     * @param type $team_id
+     * @return array
+     */
+    public static function findAllMembers($team_id){
+        $members = OrderTeamMember::where(['order_team_id' => $team_id])->get();
+        if(empty($members)){
+            return null;
+        }
+        
+        $datas = [];
+        foreach ($members as $m){
+            $user = User::find($m->user_id);
+            $datas[] = array_merge($user->toArray(), ['member_type' => $m->member_type]);
+        }
+        
+        return $datas;
+    }
+}

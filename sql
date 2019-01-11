@@ -6,7 +6,27 @@ alter table course add column tuangou_days int(4) DEFAULT 0 not null COMMENT '�
 alter table course add column tuangou_peoples int(4) unsigned DEFAULT 0 not null COMMENT '团购人数' after package_price;
 alter table course add column tuangou_price decimal(10,2) DEFAULT 0 not null COMMENT '团购价' after package_price;
 
+alter table `order` add column is_team tinyint(1) default 0 not null comment '是否团购,1是0否' after pay_method;
 
+create table order_team (
+    id int(11) unsigned not null auto_increment primary key,
+    order_id int(10) unsigned not null comment '订单id',
+    initiator_user_id int(10) unsigned not null default 0 comment '发起人用户ID',
+    status tinyint(3) unsigned not null default 0 comment '团购状态0进行中1组团成功2组团失败',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团购订单关系表';
+
+create table order_team_member (
+    id int(11) unsigned not null auto_increment primary key,
+    order_team_id int(11) unsigned not null default 0 comment '团购ID',
+    user_id int(10) unsigned not null default 0 comment '成员ID',
+    member_type tinyint(3) unsigned not null default 0 comment '成员类型0参与者，1发起人',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团购订单成员表';
 
 ###############2018-08-27#################
 CREATE TABLE `user_partner_whites` (

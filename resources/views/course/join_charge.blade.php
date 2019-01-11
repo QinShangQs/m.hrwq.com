@@ -8,6 +8,7 @@
                     {!! csrf_field() !!}
                     <input type="hidden" id="url" name="url">
                     <input type="hidden" name="id" id="id" value="{{$course->id}}">
+                    <input type="hidden" name="team_id" id="team_id" value="{{$team_id}}">
                     <div class="glod_div">
                         <div class="glod_top">确认订单</div>
                     </div>
@@ -17,8 +18,13 @@
                             <div class="glod_details_title">{{ @str_limit($course->title,20) }}</div>
                             <div class="glod_details_people" id="package_name" name="package_name">@if($package_flg ==1)单人@elseif($package_flg ==2)家庭套餐@else单人@endif</div>
                             <input type="hidden" id="package_flg" name="package_flg" value="{{$package_flg or 1}}">
-                            <div class="glod_details_price" >￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
-                                <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}"></div>
+                            <div class="glod_details_price" >
+                                @if($course->type == 3) 
+                                    团购价:
+                                @endif 
+                                ￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
+                                <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}">
+                            </div>
                         </div>
                         <ul class="glod_list">
                             <li>
@@ -56,7 +62,7 @@
                                 </div>
                             </li>
                             @endif
-                             <input type="hidden" id="coupon_id" name="coupon_id" value="{{$coupon_id}}">
+                            <input type="hidden" id="coupon_id" name="coupon_id" value="{{$coupon_id}}">
                             <input type="hidden" id="coupon_user_id" name="coupon_user_id" value="{{$coupon_user_id}}">
                             <input type="hidden" id="coupon_type" name="coupon_type" value="{{$coupon_type}}">
                             <input type="hidden" id="coupon_cutmoney" name="coupon_cutmoney" value="{{$coupon_cutmoney}}">
@@ -95,6 +101,13 @@
 
 @section('script')
     <script type="text/javascript">
+    @if($course->type == 3)
+        //团购不显示套餐类型和数量
+        $('.glod_list>li').eq(0).hide()
+        $('.glod_list>li').eq(1).hide()
+    @endif
+        
+        
     $(document).ready(function(){
         @if (count($errors) > 0)
             var str = '';

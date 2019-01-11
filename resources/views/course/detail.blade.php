@@ -29,6 +29,9 @@
                     <div class="lcd_banner_span">
                         @if($course->type == 1)
                             <span class="lcd_banner_span_1">免费</span>
+                        @elseif($course->type == 3)
+                            <span class="lcd_banner_span_1">团购价:¥{{$course->price}}</span>
+                            <span class="lcd_banner_span_2">¥{{$course->original_price}}</span>
                         @else
                             <span class="lcd_banner_span_1">¥{{$course->price}}</span> 
                             <span class="lcd_banner_span_2">¥{{$course->original_price}}</span> 
@@ -44,6 +47,22 @@
             <div class="lcd_div">
                 <div class="lcd_div_1">
                     <dl>
+                        @if($course->type == 3)
+                            @if(!empty($team_numbers))
+                            <dt>参团人</dt>
+                            <dd>
+                                @foreach($team_numbers as $member)
+                                <span>
+                                    <img src="{{$member['profileIcon']}}" style="width: 3rem; border-radius: 100%"/>
+                                </span>
+                                @endforeach
+                            </dd>
+                            @endif
+                            <dt>拼团流程</dt>
+                            <dd>
+                                选择商品->开团/拼团->邀请好友->人满成团
+                            </dd>
+                        @endif
                         @if($course->course_date) 
                         <dt>课程时间</dt>
                         <dd><p>
@@ -120,7 +139,13 @@
                 @elseif($order&&$order->order_type=='1'&&$order->pay_method=='2')
                 <div class="lcd_button1" onclick="window.location.href = '{{route('course.line_pay_static')}}';">待线下付款</div>
                 @else
-                <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
+                    @if($course->type == 2)
+                        <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
+                    @elseif($course->type == 3)
+                        <div class="lcd_button1" id="course_add">
+                            @if(empty(@team_numbers)) 我要开团 @else 立即参团 @endif
+                        </div><!--当未参加时显示此项-->
+                    @endif
                 @endif
                 <div class="lcd_button_consult">一键咨询</div>
             @endif
@@ -432,7 +457,7 @@ $(document).ready(function(){
                     //如果信息不完善执行结束
                 }else{
                     //返回成功后应跳转页面
-                    window.location.href='{{ route('course.join_charge',['id'=>$course->id]) }}';
+                    window.location.href='{{ route('course.join_charge',['id'=>$course->id,'team_id'=>$team_id]) }}';
                 }
             } 
         });
