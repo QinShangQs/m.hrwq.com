@@ -195,7 +195,7 @@ Echo.init({
             $('.win-qrcode-body .content img').click(function(){
                 location.href = 'http://m.hrwq.com/course/detail/20';
             });
-            $('.win-qrcode-body .content img').attr('src', '/images/index/year_action_left_'+year_action_left_day+'.jpg');
+            $('.win-qrcode-body .content img').attr('src', '/images/index/year_action_left_'+year_action_left_day+'.png');
             $('.win-qrcode-body').show();
             $('.win-qrcode').show();
         }else{
