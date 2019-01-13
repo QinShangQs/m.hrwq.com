@@ -20,6 +20,23 @@ class Order extends Model
      */
     const IS_TEAM_NO = 0;
     
+     /**
+     * 付款-未付款
+     */
+    const PYA_NO = 1;
+    /**
+     * 付款-已付款
+     */
+    const PYA_HAVED = 2;
+    /**
+     * 付款-已取消
+     */
+    const PYA_CANCEL = 3;
+    /**
+     * 付款-已完成
+     */
+    const PAY_FINISH = 4;
+    
     public function order_course()
     {
         return $this->hasOne('App\Models\OrderCourse', 'order_id');

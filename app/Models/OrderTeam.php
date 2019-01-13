@@ -32,16 +32,16 @@ class OrderTeam extends Model {
         return $this->belongsTo('App\Models\Order', 'order_id');
     }
 
-    public static function getTeamByOrderId($order_id){
+    public static function getTeamByOrderId($order_id) {
         $data = OrderTeam::where(['order_id' => $order_id])->first();
-        return empty($data) ? null: $data->toArray();
+        return empty($data) ? null : $data->toArray();
     }
-    
-    public static function getTeamById($id){
+
+    public static function getTeamById($id) {
         $data = OrderTeam::find($id);
-        return empty($data) ? null: $data->toArray();
+        return empty($data) ? null : $data->toArray();
     }
-    
+
     /**
      * 参加团购
      * @param type $team_id 0是新开团，非0加入老团
@@ -52,11 +52,11 @@ class OrderTeam extends Model {
      * @param integer $need_members_cnt 组团人数 新开团必填
      * @throws \Exception
      */
-    public static function makeOrderTeam($team_id, $order_id, $user_id, $price, $tuangou_days, $need_members_cnt) {        
-        if(!static::judgeUserIsJoined($team_id, $user_id)){
+    public static function makeOrderTeam($team_id, $order_id, $user_id, $price, $tuangou_days, $need_members_cnt) {
+        if (!static::judgeUserIsJoined($team_id, $user_id)) {
             throw new \Exception('您已参与该课程团购，不可重复参与。');
         }
-        
+
         if (empty($team_id)) {
             $team = new OrderTeam();
             $team->order_id = $order_id;
@@ -66,72 +66,69 @@ class OrderTeam extends Model {
             $team->need_members_cnt = $need_members_cnt;
             $team->ended_at = date('Y-m-d H:i:s', strtotime("+ {$tuangou_days} day"));
             $team->save();
-
-            $teamMember = new OrderTeamMember();
-            $teamMember->order_team_id = $team->id;
-            $teamMember->user_id = $user_id;
-            $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_INITIATOR;
-            $teamMember->save();
+            $team_id = $team->id;
         } else {
-            if(!static::judgeTeamInActive($team_id)){
+            if (!static::judgeTeamInActive($team_id)) {
                 throw new \Exception('该团不存在或该团活动已结束。');
             }
-            
-            $teamMember = new OrderTeamMember();
-            $teamMember->order_team_id = $team_id;
-            $teamMember->user_id = $user_id;
-            $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_JOINER;
-            $teamMember->save();
         }
+
+        $teamMember = new OrderTeamMember();
+        $teamMember->order_team_id = $team_id;
+        $teamMember->user_id = $user_id;
+        $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_JOINER;
+        $teamMember->order_id = $order_id;
+        $teamMember->save();
     }
 
     /**
      * 该团是否活跃可以参加
      */
-    public static function judgeTeamInActive($team_id){
+    public static function judgeTeamInActive($team_id) {
         $team = OrderTeam::find($team_id);
-        if(empty($team)){
+        if (empty($team)) {
             return false;
         }
-        
+
         return $team->status == static::STATUS_INIT;
     }
-    
+
     /**
      * 用户是否已参与该团
      * @param type $team_id
      * @param type $user_id
      * @return boolean
      */
-    public static function judgeUserIsJoined($team_id, $user_id){
-        if(empty($team_id)){
+    public static function judgeUserIsJoined($team_id, $user_id) {
+        if (empty($team_id)) {
             return true;
         }
-        
+
         $member = OrderTeamMember::where(['order_team_id' => $team_id, 'user_id' => $user_id])->first();
         return empty($member);
     }
-    
+
     /**
      * 获取团购成员
      * @param type $team_id
      * @return array
      */
-    public static function findAllMembers($team_id){
+    public static function findAllMembers($team_id) {
         $members = OrderTeamMember::where(['order_team_id' => $team_id])->get();
-        if(empty($members)){
+        if (empty($members)) {
             return null;
         }
-        
+
         $datas = [];
-        foreach ($members as $m){
+        foreach ($members as $m) {
             $user = User::find($m->user_id);
             $datas[] = array_merge($user->toArray(), [
                 'member_type' => $m->member_type,
                 'join_time' => $m->created_at
             ]);
         }
-        
+
         return $datas;
     }
+
 }

@@ -736,3 +736,7 @@ function _festival_replace($old, $new){
     }
     return $old;
 }
+
+function is_dev(){
+    return config('app.debug') === true;
+}

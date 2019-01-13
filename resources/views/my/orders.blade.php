@@ -49,7 +49,7 @@
                                                 @endif
                                             </span>
                                             @endforeach
-                                            <span > <!--点击分享-->
+                                            <span onclick="tuangouShare('{{ @str_limit(@$value->course->title,20) }}','拼团中', '{{route("course.detail")}}/{{@$value->course->id}}?team_id={{$team_id}}','{{config('constants.admin_url').@$value->course->picture}}')"> <!--点击分享-->
                                                 <img src="/images/order/plus-member.png" style="width: 1.78rem; border-radius: 100%"/>
                                             </span>
                                         </div>
@@ -168,9 +168,13 @@
         </div>
     </div>
 </div>
+
+<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;"></div>
 @endsection
 
 @section('script')
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+@include('element.share')
 <script type="text/javascript" src="{{ url('/js/tuangou.js') }}?r=1"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -261,5 +265,45 @@ $(document).ready(function(){
         window.location.href = '{{route('course.detail')}}/'+id + '?team_id='+ team_id;
     });
 });
+</script>
+
+<script type='text/javascript'>
+    var shareData = {title:'',desc:'',link:'',imgUrl:''};
+    
+    function tuangouShare(title, desc, link, imgUrl){
+        shareData.title = title;
+        shareData.desc = desc;
+        shareData.link = link;
+        shareData.imgUrl = imgUrl;
+        $('.tuangou-share').show();
+        
+        //wx.ready(function(){
+            wx.onMenuShareAppMessage({
+                title: shareData.title, // 分享标题
+                desc: shareData.desc,
+                link: shareData.link, // 分享链接
+                imgUrl: shareData.imgUrl, // 分享图标
+                success: function () { 
+                    // 用户确认分享后执行的回调函数
+                    shared();
+                },
+                cancel: function () { 
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareTimeline({
+                title: shareData.title, // 分享标题
+                link: shareData.link, // 分享链接
+                imgUrl: shareData.imgUrl, // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                    shared();
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        //});
+    }
 </script>
 @endsection

@@ -22,6 +22,7 @@ class EventServiceProvider extends ServiceProvider
     	'App\Listeners\VipLeftDayEventListener',
         'App\Listeners\CouponsEventListener',
     	'App\Listeners\MarkReplayEventListener',
+        'App\Listeners\TuangouEventListener',
     ];
     /**
      * Register any other events for your application.

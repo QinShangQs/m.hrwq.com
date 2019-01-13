@@ -73,6 +73,9 @@
                 $(document).ready(function(){
                     window.tuangouTimer.init({{strtotime($team['ended_at'])}},'#timer',1);
                 });
+                function tuangouShare(){
+                    $('.tuangou-share').show();
+                }
             </script>
             @endif
             
@@ -96,6 +99,9 @@
                                     @endif
                                 </span>
                                 @endforeach
+                                <span onclick="tuangouShare()"> <!--点击分享-->
+                                    <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
+                                </span>
                             </dd>
                             @endif
                             <dt>拼团流程</dt>
@@ -198,6 +204,8 @@
         </div>
     </div>
 </div>
+
+<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: fixed;background-size: contain;"></div>
 @endsection
 
 @section('script')
@@ -206,13 +214,11 @@
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript" src="{{ url('/js/tuangou.js') }}?r=1"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	if($("iframe").length > 0){
-		$("iframe").width('100%')
-	}
-});
-
-
+    $(document).ready(function(){
+            if($("iframe").length > 0){
+                    $("iframe").width('100%')
+            }
+    });
                 
     var subscribe = '{{$subscribe}}';
     $(document).ready(function(){
@@ -224,7 +230,7 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '分享课程有奖', // 分享标题
                     desc: '分享课程获取爱心红包', // 分享描述
-                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -238,7 +244,7 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '分享课程有奖', // 分享标题
-                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -269,10 +275,8 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
                     desc: '汇聚顶尖教子智慧,和润万青助您成就卓越孩子!', // 分享描述
-                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
-                    type: '', // 分享类型,music、video或link，不填默认为link
-                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                     success: function () { 
                         // 用户确认分享后执行的回调函数
                     },
@@ -282,7 +286,7 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
-                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数

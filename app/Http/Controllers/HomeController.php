@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Wechat;
+use Wechat, Event;
 use App\Models\User;
+use App\Models\Order;
 
 class HomeController extends Controller {
 
@@ -39,8 +40,9 @@ class HomeController extends Controller {
 //                        ->get();
 //                dd($data);
 //                
-        $result = _get_order_team_by_orderid(35988);
-        dd($result);
+//   
+//        $order = Order::find(35990);
+//        Event::fire(new \App\Events\OrderPaid($order));
 //        try {
 //            $notice = Wechat::staff();
 //            $result = $notice->send(["touser" => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY', "msgtype" => "text",

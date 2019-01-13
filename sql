@@ -16,6 +16,7 @@ create table order_team (
     status tinyint(3) unsigned not null default 0 comment '团购状态0进行中1组团成功2组团失败',
     need_members_cnt tinyint(3) unsigned not null default 0 comment '组团人数',
     `ended_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' comment '截团时间',
+    `dealed_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' comment '处理时间',
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP comment '开团时间',
     `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
     `deleted_at` timestamp NULL DEFAULT NULL
@@ -25,6 +26,7 @@ create table order_team_member (
     id int(11) unsigned not null auto_increment primary key,
     order_team_id int(11) unsigned not null default 0 comment '团购ID',
     user_id int(10) unsigned not null default 0 comment '成员ID',
+    order_id int(10) unsigned not null default 0 comment '订单id',
     member_type tinyint(3) unsigned not null default 0 comment '成员类型0参与者，1发起人',
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
