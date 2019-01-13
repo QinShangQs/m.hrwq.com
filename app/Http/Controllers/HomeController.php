@@ -33,11 +33,14 @@ class HomeController extends Controller {
     }
 
     public function test() {
-        $data = User::where('role', 3)->where('block', 1)
-                        ->where('partner_city', 324)
-                        ->where('id', 2607)
-                        ->get();
-                dd($data);
+//        $data = User::where('role', 3)->where('block', 1)
+//                        ->where('partner_city', 324)
+//                        ->where('id', 2607)
+//                        ->get();
+//                dd($data);
+//                
+        $result = _get_order_team_by_orderid(35988);
+        dd($result);
 //        try {
 //            $notice = Wechat::staff();
 //            $result = $notice->send(["touser" => 'ot3XZtyEcBJWjpXJxxyqAcpBCdGY', "msgtype" => "text",

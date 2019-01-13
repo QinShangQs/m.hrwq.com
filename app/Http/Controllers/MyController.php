@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\UserFavor;
 use App\Models\UserReceiptAddress;
-use App\Models\Vcourse;
 use App\Models\VcourseMark;
 use App\Models\UserPoint;
 use App\Models\Course;
@@ -15,8 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\Coupon;
 use App\Models\CouponUser;
 use App\Models\CouponRule;
-
-use App\Http\Requests;
+use App\Models\OrderTeam;
 use App\Http\Controllers\Controller;
 use DB;
 use Wechat;
@@ -250,6 +248,14 @@ class MyController extends Controller
         return view('my.orders',['orders'=>$orders,'order_type'=>$order_type]);
     }
 
+    /**
+     * 组团成员
+     * @param type $team_id
+     */
+    public function ordersMembers($team_id){
+        return view('my.orders_members', ['team_members' => OrderTeam::findAllMembers($team_id)]);
+    }
+    
     /**
      * @return \Illuminate\Http\JsonResponse
      *

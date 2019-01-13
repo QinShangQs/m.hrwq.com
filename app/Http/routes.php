@@ -218,6 +218,7 @@ Route::group(['prefix'=>'user', 'middleware'=>['FrontWechat']], function(){
     Route::post('/addresses/default', 'MyController@defaultAddress')->name('my.addresses.default');
     //我的订单
     Route::get('/orders', 'MyController@orders')->name('my.orders');
+    Route::get('/orders/members/{team_id}', 'MyController@ordersMembers')->name('my.orders_members');
     Route::get('/order_cancel', 'MyController@orderCancel')->name('my.orders.cancel');
     //推荐有奖
     Route::get('/invite_user', 'MyController@invite_user')->name('my.invite_user');

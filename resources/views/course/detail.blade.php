@@ -1,5 +1,20 @@
 @extends('layout.default')
 @section('content')
+<style>
+    .lcd_div_1 dt{
+        border-left: 3px solid #f39800;
+        background-image: url()
+    }
+    
+    .tuantime {
+        background: #fc6c02;
+        color: #fff;
+        width:1.2rem;
+        border-radius: .2rem;
+        display: inline-block;
+        text-align: center;
+    }
+</style>
 <div id="subject">
     <div id="main">
         @if($share_user)
@@ -39,6 +54,28 @@
                     </div>
                 </div>
             </div>
+            
+            @if($course->type == 3 && $team_id > 0)
+            <div style='padding: .375rem;font-size: .88rem'>
+                <div style='background-image: url(/images/order/tuan-liner.png);
+                     height: 1.8rem;background-repeat: round;'>
+                    <div style='display:inline-block;width:46.7%;color:#fff;line-height: 2.05;background-color: #fc6c02;text-align: center'>
+                        目前参团人数 <span style='color:#fff000;'>{{count($team_numbers)}}</span> 人
+                    </div>
+                    <div style='width: 45%;display: inline-block;background-color: #fee049;float: right;line-height: 2.05;'>
+                        剩余参团人数 <span style='color:#fc6c02;'>{{$course->tuangou_peoples - count($team_numbers)}}</span> 人
+                    </div>
+                </div>
+                <div id='timer' style='padding-top:.375rem'>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function(){
+                    window.tuangouTimer.init({{strtotime($team['ended_at'])}},'#timer',1);
+                });
+            </script>
+            @endif
+            
             <ul class="lcd_tab">
                 <li id="lcd_tab_1" class="selected">课程详情</li>
                 <li id="lcd_tab_2">评价</li>
@@ -52,15 +89,24 @@
                             <dt>参团人</dt>
                             <dd>
                                 @foreach($team_numbers as $member)
-                                <span>
+                                <span style='position: relative'>
                                     <img src="{{$member['profileIcon']}}" style="width: 3rem; border-radius: 100%"/>
+                                    @if($member['member_type'] == 1)
+                                        <img src='/images/order/king-head.png' style='position: absolute; right: -.2rem;top: -2.6rem;'/>
+                                    @endif
                                 </span>
                                 @endforeach
                             </dd>
                             @endif
                             <dt>拼团流程</dt>
-                            <dd>
-                                选择商品->开团/拼团->邀请好友->人满成团
+                            <dd style='background-color: #f0f0f0;padding: .125rem;padding-left: 1.24rem'>
+                                选择商品
+                                <span style='color: #f39800'>-></span>
+                                开团/拼团
+                                <span style='color: #f39800'>-></span>
+                                邀请好友
+                                <span style='color: #f39800'>-></span>
+                                人满成团
                             </dd>
                         @endif
                         @if($course->course_date) 
@@ -158,12 +204,15 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 @include('element.share')
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
+<script type="text/javascript" src="{{ url('/js/tuangou.js') }}?r=1"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	if($("iframe").length > 0){
 		$("iframe").width('100%')
 	}
 });
+
+
                 
     var subscribe = '{{$subscribe}}';
     $(document).ready(function(){

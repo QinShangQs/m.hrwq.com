@@ -7,6 +7,8 @@
                 <div class="mo_top">我的订单</div>
                 <ul class="mo_list">
                     @foreach($orders as $value)
+                    <?php $team = null; if($value->is_team == App\Models\Order::IS_TEAM_YES) {$team = App\Models\OrderTeam::getTeamByOrderId($value->id);} ?>
+                    <?php $team_id = empty($team) ? 0: $team['id'] ?>
                     <li>
                         <div class="mo_list_top">
                             <div class="mo_list_number">订单编号：{{$value->order_code}}
@@ -17,13 +19,89 @@
                             <div @if($value->order_type=='1') class="mo_list_state mo_list_state_orange" @else class="mo_list_state mo_list_state_green" @endif>{{$order_type[$value->order_type]}}</div><!--mo_list_state_green为绿色，mo_list_state_orange为橙色-->
                         </div>
                         @if($value->pay_type=='1')
-                        <!--好课-->
-                        <div class="mo_list_text">
-                            <div class="mo_list_img"><img src="{{config('constants.admin_url').@$value->course->picture}}" alt=""/></div>
-                            <div class="mo_list_title">{{ @str_limit(@$value->course->title,20) }}</div>
-                            <div class="mo_list_price">@if($value->free_flg=='2')￥{{$value->each_price}}@else免费@endif</div>
-                            <div class="mo_list_people">{{ $value->course->participate_num or 0}}人已参加</div>
-                        </div>
+                            <!--好课-->
+                            @if($team_id > 0)
+                                <script>
+                                        //倒计时
+                                        $(document).ready(function(){
+                                            var t1 = window.tuangouTimer;
+                                            t1.init({{strtotime($team['ended_at'])}},'#timer-{{$team_id}}',0);
+                                        });
+                               </script>
+                                <div>
+                                    <div style="background-image: url(/images/order/tuan-car.png);height: 5.6rem;background-repeat: round;
+                                         color:#fff;display: flex;flex-direction: column;justify-content: center;padding-left: 1.875rem">
+                                        <div style="font-size: 1rem">等待拼团成功</div>
+                                        <div id='timer-{{$team_id}}' style="font-size: .77rem;line-height: 2rem"></div>
+                                    </div>
+                                    <div style="padding: .775rem;padding-top: 0">
+                                        <div style="margin-bottom: .137rem">
+                                            <span style="background-color: #fc6c02;width:1px;height: 1rem;font-size:.88rem">&nbsp;</span> 
+                                            <span style="font-size: .88rem">参团详情</span>
+                                        </div>
+                                        <div>
+                                            <?php $team_numbers = App\Models\OrderTeam::findAllMembers($team_id);?>
+                                            @foreach($team_numbers as $member)
+                                            <span style='position: relative' onclick="location.href='/user/orders/members/{{$team_id}}'">
+                                                <img src="{{$member['profileIcon']}}" style="width: 1.78rem; border-radius: 100%"/>
+                                                @if($member['member_type'] == 1)
+                                                    <img src='/images/order/king-head.png' style='position: absolute; right: .1rem;top: -.75rem;width: 1rem'/>
+                                                @endif
+                                            </span>
+                                            @endforeach
+                                            <span > <!--点击分享-->
+                                                <img src="/images/order/plus-member.png" style="width: 1.78rem; border-radius: 100%"/>
+                                            </span>
+                                        </div>
+                                        <div >
+                                            <img src="{{config('constants.admin_url').@$value->course->picture}}" style="width: 100%"/>
+                                        </div>
+                                        <div style="font-size: 1rem;border-bottom: 1px solid #ececec;padding-bottom: .375rem;margin-bottom: .375rem;">
+                                            <span>
+                                                {{ @str_limit(@$value->course->title,20) }}
+                                            </span>
+                                            <span class="right" style="color:#fc6c02">
+                                                ￥{{$value->each_price}}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <table style="font-size: .75rem;color: #666;width: 100%;line-height: 1.25rem">
+                                                <tr>
+                                                    <td>下单时间</td>
+                                                    <td align="right">{{$value->created_at}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>商品原价</td>
+                                                    <td align="right">￥{{number_format($value->course->original_price,2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>商品团购价</td>
+                                                    <td align="right">￥{{number_format($value->course->tuangou_price,2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>购买数量</td>
+                                                    <td align="right">x{{$value->quantity}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>优惠金额</td>
+                                                    <td align="right">￥{{number_format($value->course->original_price - $value->course->tuangou_price,2)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>实际支付金额</td>
+                                                    <td align="right">￥{{number_format($value->price,2)}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="mo_list_text">
+                                    <div class="mo_list_img"><img src="{{config('constants.admin_url').@$value->course->picture}}" alt=""/></div>
+                                    <div class="mo_list_title">{{ @str_limit(@$value->course->title,20) }}</div>
+                                    <div class="mo_list_price">@if($value->free_flg=='2')￥{{$value->each_price}}@else免费@endif</div>
+                                    <div class="mo_list_people">{{ $value->course->participate_num or 0}}人已参加</div>
+                                </div>
+                            @endif
                         @elseif($value->pay_type=='2')
                         <!--好看-->
                         <div class="mo_list_text">
@@ -63,10 +141,10 @@
                         </div>
                         <div class="mo_list_button">
                             @if($value->pay_type=='1')
-                                <div class="mo_list_button_detail" id="course_detail"  course_id="{{ $value->pay_id }}" >课程详情</div>
-                            <div class="mo_list_button_service" data-tel="{{$value->course->tel}}" data-area="{{@$value->course->area->area_name}}">联系客服</div>
+                                <div class="mo_list_button_detail" id="course_detail" team_id="{{$team_id}}" course_id="{{ $value->pay_id }}" >课程详情</div>
+                                <div class="mo_list_button_service" data-tel="{{$value->course->tel}}" data-area="{{@$value->course->area->area_name}}">联系客服</div>
                             @elseif($value->pay_type=='3')
-                                <div class="mo_list_button_detail" id="course_detail"  course_id="{{ $value->pay_id }}" >课程详情</div>
+                                <div class="mo_list_button_detail" id="course_detail" team_id="{{$team_id}}" course_id="{{ $value->pay_id }}" >课程详情</div>
                             <div class="mo_list_button_service" data-tel="{{config('constants.opo_tel')}}"  data-area="壹家壹">联系客服</div>
                             @elseif($value->pay_type=='6')
                                 @if(isset($value->order_vip)&&($value->order_vip->delivery_flg=='2')&&!empty($value->order_vip->delivery_com)&&!empty($value->order_vip->delivery_nu))
@@ -93,6 +171,7 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="{{ url('/js/tuangou.js') }}?r=1"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".mo_list_text").click(function(){//展开订单详情
@@ -178,7 +257,8 @@ $(document).ready(function(){
     //线下支付
     $(".mo_list_button_detail").click(function(){
         var id = $(this).attr("course_id")
-        window.location.href = '{{route('course.detail')}}/'+id;
+        var team_id = $(this).attr("team_id")
+        window.location.href = '{{route('course.detail')}}/'+id + '?team_id='+ team_id;
     });
 });
 </script>

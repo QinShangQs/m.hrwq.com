@@ -11,9 +11,12 @@ alter table `order` add column is_team tinyint(1) default 0 not null comment '�
 create table order_team (
     id int(11) unsigned not null auto_increment primary key,
     order_id int(10) unsigned not null comment '订单id',
+    `price` decimal(10,2) DEFAULT 0 COMMENT '团购价',
     initiator_user_id int(10) unsigned not null default 0 comment '发起人用户ID',
     status tinyint(3) unsigned not null default 0 comment '团购状态0进行中1组团成功2组团失败',
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    need_members_cnt tinyint(3) unsigned not null default 0 comment '组团人数',
+    `ended_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' comment '截团时间',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP comment '开团时间',
     `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
     `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团购订单关系表';

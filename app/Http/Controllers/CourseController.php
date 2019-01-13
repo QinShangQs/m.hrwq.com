@@ -25,7 +25,6 @@ use App\Models\CouponRule;
 use App\Models\UserBalance;
 use App\Events\OrderPaid;
 use App\Models\OrderTeam;
-use App\Models\OrderTeamMember;
 use EasyWeChat\Foundation\Application;
 use App\Models\LoverCourse;
 
@@ -257,6 +256,7 @@ class CourseController extends Controller
             'share_user' => $share_user,
             'user_id' => $user_id,
             'team_id' => $team_id,
+            'team' => OrderTeam::getTeamById($team_id),
             'team_numbers' => OrderTeam::findAllMembers($team_id),
         ]);
     }
@@ -699,7 +699,7 @@ class CourseController extends Controller
             
             //是否组团
             if($order->is_team == Order::IS_TEAM_YES){
-                OrderTeam::makeOrderTeam($team_id, $order->id, $user_id);
+                OrderTeam::makeOrderTeam($team_id, $order->id, $user_id, $course->tuangou_price, $course->tuangou_days, $course->tuangou_peoples);
             }
                         
             DB::commit();
