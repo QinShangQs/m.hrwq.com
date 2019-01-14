@@ -45,7 +45,7 @@
                         @if($course->type == 1)
                             <span class="lcd_banner_span_1">免费</span>
                         @elseif($course->type == 3)
-                            <span class="lcd_banner_span_1">团购价:¥{{$course->price}}</span>
+                            <span class="lcd_banner_span_1">团购价:¥{{$course->tuangou_price}}</span>
                             <span class="lcd_banner_span_2">¥{{$course->original_price}}</span>
                         @else
                             <span class="lcd_banner_span_1">¥{{$course->price}}</span> 
@@ -99,9 +99,11 @@
                                     @endif
                                 </span>
                                 @endforeach
-                                <span onclick="tuangouShare()"> <!--点击分享-->
-                                    <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
-                                </span>
+                                @if($course->tuangou_peoples - count($team_numbers) > 0 && $team['status'] == 0)
+                                    <span onclick="tuangouShare()"> <!--点击分享-->
+                                        <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
+                                    </span>
+                                @endif
                             </dd>
                             @endif
                             <dt>拼团流程</dt>
@@ -195,7 +197,7 @@
                         <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
                     @elseif($course->type == 3)
                         <div class="lcd_button1" id="course_add">
-                            @if(empty(@team_numbers)) 我要开团 @else 立即参团 @endif
+                            @if(empty(@team_numbers) ) 我要开团 @else 立即参团 @endif
                         </div><!--当未参加时显示此项-->
                     @endif
                 @endif
@@ -509,6 +511,13 @@
                     return false;
                     //如果信息不完善执行结束
                 }else{
+                    @if($team_id && $team)
+                        @if($course->tuangou_peoples - count($team_numbers) == 0 || $team['status'] != 0)
+                            alert('组团人数已够或该团已结束。');
+                            return;
+                        @endif
+                    @endif
+                    
                     //返回成功后应跳转页面
                     window.location.href='{{ route('course.join_charge',['id'=>$course->id,'team_id'=>$team_id]) }}';
                 }

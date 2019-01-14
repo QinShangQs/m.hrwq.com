@@ -562,12 +562,12 @@ class CourseController extends Controller
             $order->order_name = $course->title;
             $order->is_team = $course->type == Course::TYPE_TEAM ? Order::IS_TEAM_YES : Order::IS_TEAM_NO;
 
-            //套餐价格
-            if ($request->input('package_flg') == '2') {
+            $last_price = $course->price;
+            if($course->type == Course::TYPE_TEAM){
+                $last_price = $course->tuangou_price;
+            } else if ($request->input('package_flg') == '2') {//套餐价格
                 $last_price = $course->package_price;
-            } else {
-                $last_price = $course->price;
-            }
+            } 
 
             $order->each_price = $last_price;
 
@@ -618,9 +618,7 @@ class CourseController extends Controller
             $user = User::find($user_id);
 
             if ($is_point && $usable_point > 0 && ($order->total_price / 2) >= $usable_money && ($usable_money * 100) == $usable_point && $usable_point <= $user->score) {
-
                 $last_price -= $usable_money;
-
                 $order->point_price = $usable_money;
 
                 // 相应的减少积分（user 用户表积分减少，user_point 积分增减记录）

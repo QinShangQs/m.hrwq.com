@@ -57,6 +57,7 @@ class OrderTeam extends Model {
             throw new \Exception('您已参与该课程团购，不可重复参与。');
         }
 
+        $isNewTeam = true;
         if (empty($team_id)) {
             $team = new OrderTeam();
             $team->order_id = $order_id;
@@ -68,6 +69,7 @@ class OrderTeam extends Model {
             $team->save();
             $team_id = $team->id;
         } else {
+            $isNewTeam = false;
             if (!static::judgeTeamInActive($team_id)) {
                 throw new \Exception('该团不存在或该团活动已结束。');
             }
@@ -76,7 +78,7 @@ class OrderTeam extends Model {
         $teamMember = new OrderTeamMember();
         $teamMember->order_team_id = $team_id;
         $teamMember->user_id = $user_id;
-        $teamMember->member_type = OrderTeamMember::MEMBER_TYPE_JOINER;
+        $teamMember->member_type = $isNewTeam ? OrderTeamMember::MEMBER_TYPE_INITIATOR : OrderTeamMember::MEMBER_TYPE_JOINER;
         $teamMember->order_id = $order_id;
         $teamMember->save();
     }

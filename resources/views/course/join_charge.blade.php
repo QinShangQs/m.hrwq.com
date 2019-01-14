@@ -21,19 +21,27 @@
                             <div class="glod_details_price" >
                                 @if($course->type == 3) 
                                     团购价:
+                                    ￥<span id="package_prices">{{$course->tuangou_price}}</span> 
+                                     <input type="hidden" name="package_prices" value="{{$course->tuangou_price}}">
+                                @else
+                                    ￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
+                                    <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}">
                                 @endif 
-                                ￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
-                                <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}">
                             </div>
                         </div>
                         <ul class="glod_list">
                             <li>
                                 <div class="glod_list_div">产品套餐</div>
                                 <ul class="glod_list_package">
-                                    <li @if($package_flg !=2) class="select" @endif data-value="0"  id="single">单人</li>
-                                    <input type="hidden" name="price" id="price" value="{{$course->price}}">
-                                    @if($course->package_price > 0)<li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>@endif
-                                    <input type="hidden" id="package_price" value="{{$course->package_price}}">
+                                    @if($course->type == 3) 
+                                        <li class="select" data-value="0"  id="single">组团</li>
+                                        <input type="hidden" name="price" id="price" value="{{$course->tuangou_price}}">
+                                    @else
+                                        <li @if($package_flg !=2) class="select" @endif data-value="0"  id="single">单人</li>
+                                        <input type="hidden" name="price" id="price" value="{{$course->price}}">
+                                        @if($course->package_price > 0)<li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>@endif
+                                        <input type="hidden" id="package_price" value="{{$course->package_price}}">
+                                    @endif                                    
                                 </ul>
                                 <div class="clearboth"></div>
                             </li>
@@ -88,7 +96,15 @@
                         </ul>
                     </div>
                     <div class="glod_bottom_div">
-                        <div class="glod_bottom_div_price">合计 <span>￥</span><span id="total_price">{{$total_price or $course->price}}</span></div>
+                        <div class="glod_bottom_div_price">合计 <span>￥</span>
+                                <span id="total_price">
+                                    @if($course->type == 3) 
+                                        {{$course->tuangou_price}}
+                                    @else
+                                        {{$total_price or $course->price}}
+                                    @endif
+                                    
+                                </span></div>
                         <div class="glod_bottom_div_button"><div class="glod_button">提交订单</div></div>
                     </div>
                 </form>

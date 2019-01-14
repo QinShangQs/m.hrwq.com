@@ -41,6 +41,7 @@
                                         </div>
                                         <div>
                                             <?php $team_numbers = App\Models\OrderTeam::findAllMembers($team_id);?>
+                                            <?php $team = App\Models\OrderTeam::getTeamById($team_id);?>
                                             @foreach($team_numbers as $member)
                                             <span style='position: relative' onclick="location.href='/user/orders/members/{{$team_id}}'">
                                                 <img src="{{$member['profileIcon']}}" style="width: 1.78rem; border-radius: 100%"/>
@@ -49,9 +50,11 @@
                                                 @endif
                                             </span>
                                             @endforeach
+                                            @if($value->course->tuangou_peoples - count($team_numbers) > 0 && $team['status'] == 0)
                                             <span onclick="tuangouShare('{{ @str_limit(@$value->course->title,20) }}','拼团中', '{{route("course.detail")}}/{{@$value->course->id}}?team_id={{$team_id}}','{{config('constants.admin_url').@$value->course->picture}}')"> <!--点击分享-->
                                                 <img src="/images/order/plus-member.png" style="width: 1.78rem; border-radius: 100%"/>
                                             </span>
+                                            @endif
                                         </div>
                                         <div >
                                             <img src="{{config('constants.admin_url').@$value->course->picture}}" style="width: 100%"/>
