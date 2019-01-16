@@ -459,6 +459,7 @@ class CourseController extends Controller
     public function join_charge(Request $request, $id)
     {
         $team_id = $request->input('team_id', 0);
+        $independent = $request->input('independent', 0);// 单独购买，1是，针对团购
         $coupon_user_id = $request->input('coupon_user_id');// 用户优惠券id
         $coupon_id = $request->input('coupon_id');// 优惠券id
         $coupon_type = $request->input('coupon_type');// 优惠券类型
@@ -518,7 +519,7 @@ class CourseController extends Controller
         }
         $couponusers_usable = $this->getCouponsUsable($user_id, $course);
 
-        return view('course.join_charge', compact('course','team_id', 'coupon_name', 'user_id', 'user', 'coupon_user_id', 'coupon_id', 'coupon_type', 'coupon_cutmoney', 'coupon_discount', 'package_flg', 'package_prices', 'number', 'is_point', 'usable_point', 'usable_money', 'is_balance', 'usable_balance', 'total_price', 'couponusers_usable'));
+        return view('course.join_charge', compact('course','team_id','independent', 'coupon_name', 'user_id', 'user', 'coupon_user_id', 'coupon_id', 'coupon_type', 'coupon_cutmoney', 'coupon_discount', 'package_flg', 'package_prices', 'number', 'is_point', 'usable_point', 'usable_money', 'is_balance', 'usable_balance', 'total_price', 'couponusers_usable'));
     }
 
     // 参加课程 收费
@@ -548,6 +549,7 @@ class CourseController extends Controller
         // }
         //团购ID
         $team_id = $request->input('team_id', 0);
+        $independent = $request->input('independent', 0);// 单独购买，1是，针对团购
         $user_id = session('user_info')['id'];
         DB::beginTransaction();
         try {
@@ -560,10 +562,12 @@ class CourseController extends Controller
             $order->pay_type = 1;
             $order->order_type = 1;
             $order->order_name = $course->title;
-            $order->is_team = $course->type == Course::TYPE_TEAM ? Order::IS_TEAM_YES : Order::IS_TEAM_NO;
+            $order->is_team = $independent == 1 ? Order::IS_TEAM_NO : ($course->type == Course::TYPE_TEAM ? Order::IS_TEAM_YES : Order::IS_TEAM_NO);
 
             $last_price = $course->price;
-            if($course->type == Course::TYPE_TEAM){
+            if($independent == 1){
+                $last_price = $course->price;
+            }else if($course->type == Course::TYPE_TEAM){
                 $last_price = $course->tuangou_price;
             } else if ($request->input('package_flg') == '2') {//套餐价格
                 $last_price = $course->package_price;

@@ -217,8 +217,10 @@ class OrderEventListener
                     break;
             }
             
-            
-            $this->tuangou($order);
+            //团购订单
+            if(property_exists($order, 'is_team') && $order->is_team == \App\Models\Order::IS_TEAM_YES){
+                $this->tuangou($order);
+            }
         } 
     }
     

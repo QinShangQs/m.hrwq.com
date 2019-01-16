@@ -44,12 +44,12 @@ class SendTuangouNotice extends Command {
             $hasAllPay = true;
             $members = OrderTeamMember::with(['user','order','team'])->where(['order_team_id' => $team->id])->get();
             foreach ($members as $member) {
-                if ($member->order->order_type == Order::PYA_NO) {
-                    $hasAllPay = false;
-                } else if ($member->order->order_type == Order::PYA_CANCEL) {
+                if(empty($member->order)){
                     $hasAllPay = false;
                     OrderTeamMember::destroy($member->id);
-                }
+                }else if ($member->order->order_type == Order::PYA_NO) {
+                    $hasAllPay = false;
+                } 
             }
 
             if ($hasAllPay === true && count($members) == $team->need_members_cnt) {

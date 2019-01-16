@@ -24,8 +24,9 @@
                                 <script>
                                         //倒计时
                                         $(document).ready(function(){
-                                            var t1 = window.tuangouTimer;
-                                            t1.init({{strtotime($team['ended_at'])}},'#timer-{{$team_id}}',0);
+                                            var t{{$team_id}} = {};
+                                            $.extend(t{{$team_id}},window.tuangouTimer);
+                                            t{{$team_id}}.init({{strtotime($team['ended_at'])}},'#timer-{{$team_id}}',0);
                                         });
                                </script>
                                 <div>
@@ -172,7 +173,7 @@
     </div>
 </div>
 
-<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;"></div>
+<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/order/tuan-share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: fixed;background-size: contain;background-repeat: no-repeat;background-color: gray"></div>
 @endsection
 
 @section('script')

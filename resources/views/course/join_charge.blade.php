@@ -18,8 +18,13 @@
                             <div class="glod_details_title">{{ @str_limit($course->title,20) }}</div>
                             <div class="glod_details_people" id="package_name" name="package_name">@if($package_flg ==1)单人@elseif($package_flg ==2)家庭套餐@else单人@endif</div>
                             <input type="hidden" id="package_flg" name="package_flg" value="{{$package_flg or 1}}">
+                            <input type="hidden" id="independent" name="independent" value="{{$independent}}">
                             <div class="glod_details_price" >
-                                @if($course->type == 3) 
+                                @if($independent == 1)
+                                    <!--单独购买-->
+                                    ￥<span id="package_prices">{{$course->price}}</span> 
+                                     <input type="hidden" name="package_prices" value="{{$course->price}}">
+                                @elseif($course->type == 3) 
                                     团购价:
                                     ￥<span id="package_prices">{{$course->tuangou_price}}</span> 
                                      <input type="hidden" name="package_prices" value="{{$course->tuangou_price}}">
@@ -98,7 +103,9 @@
                     <div class="glod_bottom_div">
                         <div class="glod_bottom_div_price">合计 <span>￥</span>
                                 <span id="total_price">
-                                    @if($course->type == 3) 
+                                    @if($independent == 1)
+                                        {{$total_price or $course->price}}
+                                    @elseif($course->type == 3) 
                                         {{$course->tuangou_price}}
                                     @else
                                         {{$total_price or $course->price}}

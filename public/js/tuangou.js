@@ -39,13 +39,15 @@ window.tuangouTimer = {
     },
     start: function () {
         var that = this;
-        this.timer = window.setInterval(function () {
-            that.computerLeft();
-            that.drawHtml();
-            if (that.left.value <= 0) {
-                window.clearInterval(that.timer);
-            }
-        }, 1000);
+        if(that.timer === null){
+            that.timer = window.setInterval(function () {
+                that.computerLeft();
+                if (that.left.value <= 0) {
+                    window.clearInterval(that.timer);
+                }
+                that.drawHtml();
+            }, 1000);
+        }
     }
 
 };

@@ -32,10 +32,19 @@ class OrderTeam extends Model {
         return $this->belongsTo('App\Models\Order', 'order_id');
     }
 
+//    public static function getTeamByOrderId($order_id) {
+//        $data = OrderTeam::where(['order_id' => $order_id])->first();
+//        return empty($data) ? null : $data->toArray();
+//    }
+    
     public static function getTeamByOrderId($order_id) {
-        $data = OrderTeam::where(['order_id' => $order_id])->first();
-        return empty($data) ? null : $data->toArray();
+        $member = OrderTeamMember::where(['order_id' => $order_id])->first();
+        if(empty($member)){
+            return null;
+        }
+        return self::getTeamById($member->order_team_id);
     }
+    
 
     public static function getTeamById($id) {
         $data = OrderTeam::find($id);

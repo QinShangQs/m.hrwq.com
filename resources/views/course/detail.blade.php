@@ -57,12 +57,12 @@
             
             @if($course->type == 3 && $team_id > 0)
             <div style='padding: .375rem;font-size: .88rem'>
-                <div style='background-image: url(/images/order/tuan-liner.png);
+                <div style='background-image: url(/images/order/tuan-liner.jpg);
                      height: 1.8rem;background-repeat: round;'>
-                    <div style='display:inline-block;width:46.7%;color:#fff;line-height: 2.05;background-color: #fc6c02;text-align: center'>
+                    <div style='display:inline-block;width:46.7%;color:#fff;line-height: 2.05;text-align: center'>
                         目前参团人数 <span style='color:#fff000;'>{{count($team_numbers)}}</span> 人
                     </div>
-                    <div style='width: 45%;display: inline-block;background-color: #fee049;float: right;line-height: 2.05;'>
+                    <div style='width: 45%;display: inline-block;float: right;line-height: 2.05;'>
                         剩余参团人数 <span style='color:#fc6c02;'>{{$course->tuangou_peoples - count($team_numbers)}}</span> 人
                     </div>
                 </div>
@@ -196,8 +196,11 @@
                     @if($course->type == 2)
                         <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
                     @elseif($course->type == 3)
-                        <div class="lcd_button1" id="course_add">
-                            @if(empty(@team_numbers) ) 我要开团 @else 立即参团 @endif
+                        <div class="lcd_button1" id="course_add_independent" style='width:30%;right:30%;background-color: #ffb98d'>
+                            单独购买
+                        </div>
+                        <div class="lcd_button1" id="course_add" style='width:30%'>
+                            @if(empty($team_numbers) ) 我要开团 @else 立即参团 @endif
                         </div><!--当未参加时显示此项-->
                     @endif
                 @endif
@@ -207,7 +210,8 @@
     </div>
 </div>
 
-<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: fixed;background-size: contain;"></div>
+<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/order/tuan-share-shadow.jpg);top:0px;opacity: 0.9;z-index:10000;width:100%;height:100%;position: fixed;background-size: contain;background-repeat: no-repeat;
+    background-color: gray;"></div>
 @endsection
 
 @section('script')
@@ -478,9 +482,8 @@
                 }
             }
         });
-
-        //点击参加该课程（收费）
-        $("#course_add").click(function(){
+        
+        function checkIsRegist(callback){
             if ( subscribe == '0') {
                 window.location.href = '{{route('wechat.qrcode')}}';
             } else {
@@ -511,17 +514,29 @@
                     return false;
                     //如果信息不完善执行结束
                 }else{
-                    @if($team_id && $team)
-                        @if($course->tuangou_peoples - count($team_numbers) == 0 || $team['status'] != 0)
-                            alert('组团人数已够或该团已结束。');
-                            return;
-                        @endif
-                    @endif
-                    
-                    //返回成功后应跳转页面
-                    window.location.href='{{ route('course.join_charge',['id'=>$course->id,'team_id'=>$team_id]) }}';
+                    callback();
                 }
             } 
+        }
+        
+        //单独购买
+        $('#course_add_independent').click(function(){
+            window.location.href="{{ route('course.join_charge',['id'=>$course->id,'independent'=>1]) }}";
+        });
+
+        //点击参加该课程（收费）
+        $("#course_add").click(function(){
+            checkIsRegist(function(){
+                @if($team_id && $team)
+                    @if($course->tuangou_peoples - count($team_numbers) == 0 || $team['status'] != 0)
+                        alert('组团人数已够或该团已结束。');
+                        return;
+                    @endif
+                @endif
+                    
+                //返回成功后应跳转页面
+                window.location.href='{{ route('course.join_charge',['id'=>$course->id,'team_id'=>$team_id]) }}';
+            });
         });
 
         //tab切换
