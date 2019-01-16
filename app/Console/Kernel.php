@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
         
         //测试
         //发送通知
-        $schedule->command('notices:tuangou')->dailyAt("20:23");
+        //$schedule->command('notices:tuangou')->dailyAt("20:23");
 //        
         
 
