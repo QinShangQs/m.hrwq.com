@@ -9,7 +9,7 @@ use App\Models\User;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Text;
 use QrCode, Wechat;
-
+use Log;
 class OrderEventListener
 {
     public function subscribe($events)
@@ -216,6 +216,59 @@ class OrderEventListener
                     
                     break;
             }
+            
+            //团购订单
+            if(property_exists($order, 'is_team') && $order->is_team == \App\Models\Order::IS_TEAM_YES){
+                $this->tuangou($order);
+            }
         } 
+    }
+    
+    /**
+     * 团购通知
+     * @param \stdClass $order
+     */
+    public function tuangou($order){
+        $member = \App\Models\OrderTeamMember::with(['user','order','team'])->
+                where(['order_id' => $order->id, 'user_id' => $order->user_id])->first();
+        if(empty($member)){
+            return;
+        }
+        try{
+            $notice = Wechat::notice();
+            if($member->member_type === \App\Models\OrderTeamMember::MEMBER_TYPE_INITIATOR){
+                $notice->send([
+                    'touser' => $member->user->openid,
+                    'template_id' => is_dev() ? "WqoyXK8WYNbOnoqLrehHa8DphcIOtb71BeSwq5fPaVY":"RwNIylS6uopN0Hlglr4j9MPPXL3ftvUfv9GrwykXDdI",
+                    'url' => route('my.orders'),
+                    'topcolor' => '#f7f7f7',
+                    'data' => [
+                        'first' => '恭喜您开团成功',
+                        'keyword1'=> $member->order->course->title,
+                        'keyword2'=> $member->user->need_members_cnt,
+                        'keyword3'=> $member->team->price,
+                        'keyword4'=> $member->team->ended_at,
+                        'remark'=> ''
+                    ],
+                ]);
+            }else{
+                $notice->send([
+                    'touser' => $member->user->openid,
+                    'template_id' => is_dev() ? "7-SxiQcGCkUf8fbzmTFEUqSlcSZNKZQnP-7ZapO_VHQ":"oCoHJtp9VCKNlT7ykJ6Vq6iCczDmuY_bEljJdqeIMA4",
+                    'url' => route('my.orders'),
+                    'topcolor' => '#f7f7f7',
+                    'data' => [
+                        'first' => '恭喜您参团成功',
+                        'keyword1'=> $member->order->course->title,
+                        'keyword2'=> $member->user->nickname,
+                        'keyword3'=> $member->team->price,
+                        'keyword4'=> $member->team->ended_at,
+                        'remark'=> ''
+                    ],
+                ]);
+            }
+        }catch(\Exception $ex){
+            Log::error($ex->getMessage());
+        }
     }
 }

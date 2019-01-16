@@ -1,5 +1,20 @@
 @extends('layout.default')
 @section('content')
+<style>
+    .lcd_div_1 dt{
+        border-left: 3px solid #f39800;
+        background-image: url()
+    }
+    
+    .tuantime {
+        background: #fc6c02;
+        color: #fff;
+        width:1.2rem;
+        border-radius: .2rem;
+        display: inline-block;
+        text-align: center;
+    }
+</style>
 <div id="subject">
     <div id="main">
         @if($share_user)
@@ -29,6 +44,9 @@
                     <div class="lcd_banner_span">
                         @if($course->type == 1)
                             <span class="lcd_banner_span_1">免费</span>
+                        @elseif($course->type == 3)
+                            <span class="lcd_banner_span_1">团购价:¥{{$course->tuangou_price}}</span>
+                            <span class="lcd_banner_span_2">¥{{$course->original_price}}</span>
                         @else
                             <span class="lcd_banner_span_1">¥{{$course->price}}</span> 
                             <span class="lcd_banner_span_2">¥{{$course->original_price}}</span> 
@@ -36,6 +54,31 @@
                     </div>
                 </div>
             </div>
+            
+            @if($course->type == 3 && $team_id > 0)
+            <div style='padding: .375rem;font-size: .88rem'>
+                <div style='background-image: url(/images/order/tuan-liner.jpg);
+                     height: 1.8rem;background-repeat: round;'>
+                    <div style='display:inline-block;width:46.7%;color:#fff;line-height: 2.05;text-align: center'>
+                        目前参团人数 <span style='color:#fff000;'>{{count($team_numbers)}}</span> 人
+                    </div>
+                    <div style='width: 45%;display: inline-block;float: right;line-height: 2.05;'>
+                        剩余参团人数 <span style='color:#fc6c02;'>{{$course->tuangou_peoples - count($team_numbers)}}</span> 人
+                    </div>
+                </div>
+                <div id='timer' style='padding-top:.375rem'>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function(){
+                    window.tuangouTimer.init({{strtotime($team['ended_at'])}},'#timer',1);
+                });
+                function tuangouShare(){
+                    $('.tuangou-share').show();
+                }
+            </script>
+            @endif
+            
             <ul class="lcd_tab">
                 <li id="lcd_tab_1" class="selected">课程详情</li>
                 <li id="lcd_tab_2">评价</li>
@@ -44,6 +87,36 @@
             <div class="lcd_div">
                 <div class="lcd_div_1">
                     <dl>
+                        @if($course->type == 3)
+                            @if(!empty($team_numbers))
+                            <dt>参团人</dt>
+                            <dd>
+                                @foreach($team_numbers as $member)
+                                <span style='position: relative'>
+                                    <img src="{{$member['profileIcon']}}" style="width: 3rem; border-radius: 100%"/>
+                                    @if($member['member_type'] == 1)
+                                        <img src='/images/order/king-head.png' style='position: absolute; right: -.2rem;top: -2.6rem;'/>
+                                    @endif
+                                </span>
+                                @endforeach
+                                @if($course->tuangou_peoples - count($team_numbers) > 0 && $team['status'] == 0)
+                                    <span onclick="tuangouShare()"> <!--点击分享-->
+                                        <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
+                                    </span>
+                                @endif
+                            </dd>
+                            @endif
+                            <dt>拼团流程</dt>
+                            <dd style='background-color: #f0f0f0;padding: .125rem;padding-left: 1.24rem'>
+                                选择商品
+                                <span style='color: #f39800'>-></span>
+                                开团/拼团
+                                <span style='color: #f39800'>-></span>
+                                邀请好友
+                                <span style='color: #f39800'>-></span>
+                                人满成团
+                            </dd>
+                        @endif
                         @if($course->course_date) 
                         <dt>课程时间</dt>
                         <dd><p>
@@ -120,25 +193,38 @@
                 @elseif($order&&$order->order_type=='1'&&$order->pay_method=='2')
                 <div class="lcd_button1" onclick="window.location.href = '{{route('course.line_pay_static')}}';">待线下付款</div>
                 @else
-                <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
+                    @if($course->type == 2)
+                        <div class="lcd_button1" id="course_add">参加该课程</div><!--当未参加时显示此项-->
+                    @elseif($course->type == 3)
+                        <div class="lcd_button1" id="course_add_independent" style='width:30%;right:30%;background-color: #ffb98d'>
+                            单独购买
+                        </div>
+                        <div class="lcd_button1" id="course_add" style='width:30%'>
+                            @if(empty($team_numbers) ) 我要开团 @else 立即参团 @endif
+                        </div><!--当未参加时显示此项-->
+                    @endif
                 @endif
                 <div class="lcd_button_consult">一键咨询</div>
             @endif
         </div>
     </div>
 </div>
+
+<div class="tuangou-share" onclick='$(this).hide()' style="display: none;background:url(/images/order/tuan-share-shadow.jpg);top:0px;opacity: 0.9;z-index:10000;width:100%;height:100%;position: fixed;background-size: contain;background-repeat: no-repeat;
+    background-color: gray;"></div>
 @endsection
 
 @section('script')
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 @include('element.share')
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
+<script type="text/javascript" src="{{ url('/js/tuangou.js') }}?r=1"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	if($("iframe").length > 0){
-		$("iframe").width('100%')
-	}
-});
+    $(document).ready(function(){
+            if($("iframe").length > 0){
+                    $("iframe").width('100%')
+            }
+    });
                 
     var subscribe = '{{$subscribe}}';
     $(document).ready(function(){
@@ -150,7 +236,7 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '分享课程有奖', // 分享标题
                     desc: '分享课程获取爱心红包', // 分享描述
-                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     type: '', // 分享类型,music、video或link，不填默认为link
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -164,7 +250,7 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '分享课程有奖', // 分享标题
-                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}'+'?share_user={{$user_id}}&lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -195,10 +281,8 @@ $(document).ready(function(){
                 wx.onMenuShareAppMessage({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
                     desc: '汇聚顶尖教子智慧,和润万青助您成就卓越孩子!', // 分享描述
-                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
-                    type: '', // 分享类型,music、video或link，不填默认为link
-                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                     success: function () { 
                         // 用户确认分享后执行的回调函数
                     },
@@ -208,7 +292,7 @@ $(document).ready(function(){
                 });
                 wx.onMenuShareTimeline({
                     title: '{!! strip_tags($course->title)!!}', // 分享标题
-                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&from=singlemessage', // 分享链接
+                    link: '{{route('course.detail',['id'=>$course->id])}}?lover={{$user_id}}&team_id={{$team_id}}&from=singlemessage', // 分享链接
                     imgUrl: '{{url($course->picture)}}', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -398,9 +482,8 @@ $(document).ready(function(){
                 }
             }
         });
-
-        //点击参加该课程（收费）
-        $("#course_add").click(function(){
+        
+        function checkIsRegist(callback){
             if ( subscribe == '0') {
                 window.location.href = '{{route('wechat.qrcode')}}';
             } else {
@@ -431,10 +514,29 @@ $(document).ready(function(){
                     return false;
                     //如果信息不完善执行结束
                 }else{
-                    //返回成功后应跳转页面
-                    window.location.href='{{ route('course.join_charge',['id'=>$course->id]) }}';
+                    callback();
                 }
             } 
+        }
+        
+        //单独购买
+        $('#course_add_independent').click(function(){
+            window.location.href="{{ route('course.join_charge',['id'=>$course->id,'independent'=>1]) }}";
+        });
+
+        //点击参加该课程（收费）
+        $("#course_add").click(function(){
+            checkIsRegist(function(){
+                @if($team_id && $team)
+                    @if($course->tuangou_peoples - count($team_numbers) == 0 || $team['status'] != 0)
+                        alert('组团人数已够或该团已结束。');
+                        return;
+                    @endif
+                @endif
+                    
+                //返回成功后应跳转页面
+                window.location.href='{{ route('course.join_charge',['id'=>$course->id,'team_id'=>$team_id]) }}';
+            });
         });
 
         //tab切换

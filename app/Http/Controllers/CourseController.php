@@ -5,12 +5,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\LikeRecord;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use DB, QrCode, Log, Event, Wechat;
 use App\Models\Carousel;
 use App\Models\Course;
@@ -23,12 +19,12 @@ use App\Models\Order;
 use App\Models\OrderCourse;
 use App\Models\UserFavor;
 use App\Models\User;
-use App\Models\UserReceiptAddress;
 use App\Models\Coupon;
 use App\Models\CouponUser;
 use App\Models\CouponRule;
 use App\Models\UserBalance;
 use App\Events\OrderPaid;
+use App\Models\OrderTeam;
 use EasyWeChat\Foundation\Application;
 use App\Models\LoverCourse;
 
@@ -150,6 +146,8 @@ class CourseController extends Controller
     public function detail(Request $request, $id)
     {
         $id = intval($id);
+        $team_id = $request->input('team_id', 0);
+        
         $course = Course::where('status', 2)->find($id);
         if ($course == null) {
             echo "<script>alert('不存在该课程！');history.go(-1);</script>";
@@ -257,6 +255,9 @@ class CourseController extends Controller
             'wx_js' => Wechat::js(),
             'share_user' => $share_user,
             'user_id' => $user_id,
+            'team_id' => $team_id,
+            'team' => OrderTeam::getTeamById($team_id),
+            'team_numbers' => OrderTeam::findAllMembers($team_id),
         ]);
     }
 
@@ -457,6 +458,8 @@ class CourseController extends Controller
     // 参加课程 收费  页面
     public function join_charge(Request $request, $id)
     {
+        $team_id = $request->input('team_id', 0);
+        $independent = $request->input('independent', 0);// 单独购买，1是，针对团购
         $coupon_user_id = $request->input('coupon_user_id');// 用户优惠券id
         $coupon_id = $request->input('coupon_id');// 优惠券id
         $coupon_type = $request->input('coupon_type');// 优惠券类型
@@ -516,7 +519,7 @@ class CourseController extends Controller
         }
         $couponusers_usable = $this->getCouponsUsable($user_id, $course);
 
-        return view('course.join_charge', compact('course', 'coupon_name', 'user_id', 'user', 'coupon_user_id', 'coupon_id', 'coupon_type', 'coupon_cutmoney', 'coupon_discount', 'package_flg', 'package_prices', 'number', 'is_point', 'usable_point', 'usable_money', 'is_balance', 'usable_balance', 'total_price', 'couponusers_usable'));
+        return view('course.join_charge', compact('course','team_id','independent', 'coupon_name', 'user_id', 'user', 'coupon_user_id', 'coupon_id', 'coupon_type', 'coupon_cutmoney', 'coupon_discount', 'package_flg', 'package_prices', 'number', 'is_point', 'usable_point', 'usable_money', 'is_balance', 'usable_balance', 'total_price', 'couponusers_usable'));
     }
 
     // 参加课程 收费
@@ -533,7 +536,7 @@ class CourseController extends Controller
             echo "<script>alert('不存在该课程！');history.go(-1);</script>";
             exit;
         }
-    	if(intval($course->participate_num)>=intval($course->allow_num)){
+    	if($course->type != 3 && intval($course->participate_num)>=intval($course->allow_num)){
             echo "<script>alert('参与人数已经达到上限，请参加其他课程！');history.go(-1);</script>";
             exit;
         }
@@ -544,7 +547,9 @@ class CourseController extends Controller
         //     echo "<script>alert('您已经参加该课程！');history.go(-1);</script>";
         //     exit;
         // }
-
+        //团购ID
+        $team_id = $request->input('team_id', 0);
+        $independent = $request->input('independent', 0);// 单独购买，1是，针对团购
         $user_id = session('user_info')['id'];
         DB::beginTransaction();
         try {
@@ -557,13 +562,16 @@ class CourseController extends Controller
             $order->pay_type = 1;
             $order->order_type = 1;
             $order->order_name = $course->title;
+            $order->is_team = $independent == 1 ? Order::IS_TEAM_NO : ($course->type == Course::TYPE_TEAM ? Order::IS_TEAM_YES : Order::IS_TEAM_NO);
 
-            //套餐价格
-            if ($request->input('package_flg') == '2') {
-                $last_price = $course->package_price;
-            } else {
+            $last_price = $course->price;
+            if($independent == 1){
                 $last_price = $course->price;
-            }
+            }else if($course->type == Course::TYPE_TEAM){
+                $last_price = $course->tuangou_price;
+            } else if ($request->input('package_flg') == '2') {//套餐价格
+                $last_price = $course->package_price;
+            } 
 
             $order->each_price = $last_price;
 
@@ -574,7 +582,6 @@ class CourseController extends Controller
             }
             $order->quantity = $number;
             $order->total_price = $last_price;// 任何减免之前的价格
-
 
             // 优惠券
             $coupon_id = $request->input('coupon_id');
@@ -615,9 +622,7 @@ class CourseController extends Controller
             $user = User::find($user_id);
 
             if ($is_point && $usable_point > 0 && ($order->total_price / 2) >= $usable_money && ($usable_money * 100) == $usable_point && $usable_point <= $user->score) {
-
                 $last_price -= $usable_money;
-
                 $order->point_price = $usable_money;
 
                 // 相应的减少积分（user 用户表积分减少，user_point 积分增减记录）
@@ -631,7 +636,6 @@ class CourseController extends Controller
                 $userpoint->move_way = 2;
                 $userpoint->save();
             }
-
 
             // 可用余额
             $is_balance = $request->input('is_balance');// 可用余额开关
@@ -688,12 +692,18 @@ class CourseController extends Controller
                 return redirect(route('course.detail', ['id' => $id]));
             }
             
+            //爱心大使关联
             $loverRecord = LoverCourse::where('user_id', $user_id)->where('course_id',$id)->where('status',1)->first();
             if($loverRecord){
                 $loverRecord->order_id = $order->id;
                 $loverRecord->save();
             }
             
+            //是否组团
+            if($order->is_team == Order::IS_TEAM_YES){
+                OrderTeam::makeOrderTeam($team_id, $order->id, $user_id, $course->tuangou_price, $course->tuangou_days, $course->tuangou_peoples);
+            }
+                        
             DB::commit();
             return redirect(route('wechat.course_pay') . '?id=' . $order->id);
         } catch (\EasyWeChat\Core\Exceptions\HttpException $e) {

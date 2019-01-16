@@ -8,6 +8,7 @@
                     {!! csrf_field() !!}
                     <input type="hidden" id="url" name="url">
                     <input type="hidden" name="id" id="id" value="{{$course->id}}">
+                    <input type="hidden" name="team_id" id="team_id" value="{{$team_id}}">
                     <div class="glod_div">
                         <div class="glod_top">确认订单</div>
                     </div>
@@ -17,17 +18,35 @@
                             <div class="glod_details_title">{{ @str_limit($course->title,20) }}</div>
                             <div class="glod_details_people" id="package_name" name="package_name">@if($package_flg ==1)单人@elseif($package_flg ==2)家庭套餐@else单人@endif</div>
                             <input type="hidden" id="package_flg" name="package_flg" value="{{$package_flg or 1}}">
-                            <div class="glod_details_price" >￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
-                                <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}"></div>
+                            <input type="hidden" id="independent" name="independent" value="{{$independent}}">
+                            <div class="glod_details_price" >
+                                @if($independent == 1)
+                                    <!--单独购买-->
+                                    ￥<span id="package_prices">{{$course->price}}</span> 
+                                     <input type="hidden" name="package_prices" value="{{$course->price}}">
+                                @elseif($course->type == 3) 
+                                    团购价:
+                                    ￥<span id="package_prices">{{$course->tuangou_price}}</span> 
+                                     <input type="hidden" name="package_prices" value="{{$course->tuangou_price}}">
+                                @else
+                                    ￥<span id="package_prices">{{$package_prices or $course->price}}</span> 
+                                    <input type="hidden" name="package_prices" value="{{$package_prices or $course->price}}">
+                                @endif 
+                            </div>
                         </div>
                         <ul class="glod_list">
                             <li>
                                 <div class="glod_list_div">产品套餐</div>
                                 <ul class="glod_list_package">
-                                    <li @if($package_flg !=2) class="select" @endif data-value="0"  id="single">单人</li>
-                                    <input type="hidden" name="price" id="price" value="{{$course->price}}">
-                                    @if($course->package_price > 0)<li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>@endif
-                                    <input type="hidden" id="package_price" value="{{$course->package_price}}">
+                                    @if($course->type == 3) 
+                                        <li class="select" data-value="0"  id="single">组团</li>
+                                        <input type="hidden" name="price" id="price" value="{{$course->tuangou_price}}">
+                                    @else
+                                        <li @if($package_flg !=2) class="select" @endif data-value="0"  id="single">单人</li>
+                                        <input type="hidden" name="price" id="price" value="{{$course->price}}">
+                                        @if($course->package_price > 0)<li  @if($package_flg ==2) class="select" @endif data-value="1" id="home">家庭套餐</li>@endif
+                                        <input type="hidden" id="package_price" value="{{$course->package_price}}">
+                                    @endif                                    
                                 </ul>
                                 <div class="clearboth"></div>
                             </li>
@@ -56,7 +75,7 @@
                                 </div>
                             </li>
                             @endif
-                             <input type="hidden" id="coupon_id" name="coupon_id" value="{{$coupon_id}}">
+                            <input type="hidden" id="coupon_id" name="coupon_id" value="{{$coupon_id}}">
                             <input type="hidden" id="coupon_user_id" name="coupon_user_id" value="{{$coupon_user_id}}">
                             <input type="hidden" id="coupon_type" name="coupon_type" value="{{$coupon_type}}">
                             <input type="hidden" id="coupon_cutmoney" name="coupon_cutmoney" value="{{$coupon_cutmoney}}">
@@ -82,7 +101,17 @@
                         </ul>
                     </div>
                     <div class="glod_bottom_div">
-                        <div class="glod_bottom_div_price">合计 <span>￥</span><span id="total_price">{{$total_price or $course->price}}</span></div>
+                        <div class="glod_bottom_div_price">合计 <span>￥</span>
+                                <span id="total_price">
+                                    @if($independent == 1)
+                                        {{$total_price or $course->price}}
+                                    @elseif($course->type == 3) 
+                                        {{$course->tuangou_price}}
+                                    @else
+                                        {{$total_price or $course->price}}
+                                    @endif
+                                    
+                                </span></div>
                         <div class="glod_bottom_div_button"><div class="glod_button">提交订单</div></div>
                     </div>
                 </form>
@@ -95,6 +124,13 @@
 
 @section('script')
     <script type="text/javascript">
+    @if($course->type == 3)
+        //团购不显示套餐类型和数量
+        $('.glod_list>li').eq(0).hide()
+        $('.glod_list>li').eq(1).hide()
+    @endif
+        
+        
     $(document).ready(function(){
         @if (count($errors) > 0)
             var str = '';

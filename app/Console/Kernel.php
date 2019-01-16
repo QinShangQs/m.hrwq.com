@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
     	Commands\SendVipLeftDayNotices::class,
-        Commands\SendCouponNotices::class
+        Commands\SendCouponNotices::class,
+        Commands\SendTuangouNotice::class,
     ];
 
     /**
@@ -29,11 +30,19 @@ class Kernel extends ConsoleKernel
         $schedule->command('inspire')
                  ->hourly();
         //发送通知
-        $schedule->command('notices:vipleftday')
-        		->dailyAt('07:00');
+        $schedule->command('notices:vipleftday')->dailyAt('07:00');
         
         //发送通知
-        $schedule->command('notices:coupons')
-        		->dailyAt('07:30');
+        $schedule->command('notices:coupons')->dailyAt('07:30');
+        
+        //团购
+        $schedule->command('notices:tuangou')->everyThirtyMinutes();
+        
+        //测试
+        //发送通知
+        $schedule->command('notices:tuangou')->dailyAt("20:23");
+//        
+        
+
     }
 }

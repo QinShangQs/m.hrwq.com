@@ -12,6 +12,19 @@ class Course extends Model {
 
     use SoftDeletes;
 
+    /**
+     * 收费类型-团购
+     */
+    const TYPE_TEAM = 3;
+    /**
+     * 收费类型-付费
+     */
+    const TYPE_NEEDPAY = 2;
+    /**
+     * 收费类型-免费
+     */
+    const TYPE_FREE = 1;
+    
     public function user() {
         return $this->belongsTo('App\Models\User', 'promoter');
     }
