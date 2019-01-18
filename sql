@@ -1,6 +1,21 @@
 ####
 test deploy
 
+###############2019-01-18#################
+CREATE TABLE `ad` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_type` tinyint(4) NOT NULL default 0 COMMENT '广告类型 1图片 2视频',
+  `show_type` tinyint(4) NOT NULL default 0 COMMENT '是否显示 1显示 2不现实',
+  `display_url` varchar(191) NOT NULL default '' COMMENT '图片地址或视频转码后地址',
+  `video_original` varchar(191) DEFAULT NULL COMMENT '原视频地址',
+  `redirect_url` varchar(191) DEFAULT '' COMMENT '跳转地址',
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='广告表';
+
 ###############2018-12-31#################
 alter table course add column tuangou_days int(4) DEFAULT 0 not null COMMENT '截团天数' after package_price;
 alter table course add column tuangou_peoples int(4) unsigned DEFAULT 0 not null COMMENT '团购人数' after package_price;

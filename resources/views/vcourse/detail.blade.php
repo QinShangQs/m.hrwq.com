@@ -32,7 +32,92 @@
 	    -webkit-transform: rotate(0deg);
     	transform: rotate(0deg);
     }
+    .image-ad {
+        position: absolute;
+        top: 0;
+        margin: auto;
+        text-align: center;
+        z-index: 101;
+        width: 100%;
+    }
+    .image-ad .image-ad-body{
+        position: relative;
+        margin: auto;
+        width: fit-content;
+    }
+    .image-ad .image-ad-body img{
+        height: 8.5rem;
+        margin-top: 1rem;
+    }
+    .image-ad .image-ad-body .close{
+        position: absolute;
+        top:1rem;
+        right: 0;
+    }
+    .image-ad .image-ad-body .close img{
+         width: 1.5rem;
+        height: 1.5rem;
+        margin-top: .2rem;
+    }
+    
+    .video-ad-timer {
+	position: absolute;
+        background: #666;
+        opacity: .8;
+        top: .1rem;
+        right: .1rem;
+        z-index: 100;
+        font-size: 0.66rem;
+        color: white;
+        display: flex;
+    	align-items: center;
+        justify-content: center;
+        padding: .1rem .2rem;
+    }            
+    .video-ad-timer .seconds {
+    	color: #fc6c02;
+        padding: 0 .3rem;
+    }
+    
+    .video-ad-timer .close{
+        box-sizing: border-box;
+        padding-left: .3rem;
+        color:#fff;
+        border-left: 1px solid #fff;
+    }
+    
+    .video-ad-detail {
+    	position: absolute;
+        background: #e65800;
+        opacity: .8;
+        top: 8.5rem;
+        right: .1rem;
+        z-index: 100;
+        font-size: 0.66rem;
+        color: white;
+        display: flex;
+    	align-items: center;
+        justify-content: center;
+        padding: .1rem .2rem;
+    }
 </style>
+<!--视频广告-->
+<div class="video-ad-timer" style="display:none">
+    <span class="seconds"></span>
+    <span class="close">关闭广告&nbsp;X</span>
+</div>
+<div class="video-ad-detail" style="display:none">了解详情 ></div>
+
+<!--图片广告--> 
+<div class="image-ad" style='display:none'>
+    <div class="image-ad-body" onclick='window.hrwqAd.toImageLink()'>
+        <img id="ad-image" src=""/>
+        <div class='close' onclick="window.hrwqAd.hideImageAd()">
+            <img src='/images/public/public_search_form_input_delete.png'/>
+        </div>
+    </div>
+</div>
+
 <script src="/qiniu/js/videojs/video.min.js"></script>
 <div id="subject">
     <div id="main">
@@ -68,7 +153,7 @@
             </div>
             
             @if($vcourseDetail->type=='2')
-        	<div class="vip-status-show">
+        	<div class="vip-status-show" style="display:none">
         	 @if($vip_left_day === 0)
         		<span></span>试看版
         	 @else
@@ -231,11 +316,7 @@
 
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;position: absolute;background-size: contain;">
 </div>
-    
-<!-- 图片广告 -->
-<!--    <div class="image-ad">
-        <img src="https://ykimg.alicdn.com/product/DetailImage/2019-01-02/2ab42938a138cc78b7206fa849a6c593.png"/>
-    </div>-->
+
 
 <form id="replay-form" style="position: fixed;bottom: 0px;
 			background-color: #fff;border-top: 1px solid #ccc;
@@ -378,22 +459,10 @@
     	border-radius: 5px; 
     	font-size: 12px;
     }
-    
-    .image-ad {
-        position: absolute;
-        top: 0;
-        margin: auto;
-        text-align: center;
-        z-index: 101;
-        width: 100%;
-    }
-    
-    .image-ad img{
-        height: 10.5rem;
-        margin-top: 1rem;
-    }
+       
 </style>
 <script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
+<script type="text/javascript" src="{{ url('/js/ad.js') }}?r=1"></script>
 <script type="text/javascript">
 function replace_china_char(str){
     return str.replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”");
@@ -450,37 +519,43 @@ $(document).ready(function(){
     });
     $(".win-share").click(function(){
     	$(".win-share").hide();
-     });
-            
+    });
+    
+    //初始化广告和视频
+    window.hrwqAd.init(
+        $(".lcd_banner_img").data('url'), 
+        @if($adImage) 
+            '{{ config('constants.admin_url').$adImage->display_url}}'
+        @else 
+            null 
+        @endif,
+        @if($adImage) 
+            '{{$adImage->redirect_url}}' 
+        @else 
+            null 
+        @endif,
+        @if($adVideo) 
+            '{{config('qiniu.DOMAIN').$adVideo->display_url}}' 
+        @else 
+            null 
+        @endif,
+        @if($adVideo) 
+            '{{$adVideo->redirect_url}}' 
+        @else 
+            null 
+        @endif
+    );
+    
     var videoHight = 360/680*$(".lcd_banner_img").width();
     $(".lcd_banner_img").height(videoHight);
-    var vLink = $(".lcd_banner_img").data('url');//"http://111.62.71.54/youku/69754C00A243771620F2F40F4/03000801005C2DDDC71823B003E88045C5C624-76FA-45F8-A912-6B2709607A53.mp4?sid=054690875922812284251_00_A2788b4a557e894c7004caf3856da202e&sign=7330b89fb0087dc3dbd5dbe6152d4bb4&ctype=50&hd=1&ali_redirect_domain=vali.cp31.ott.cibntv.net&ali_redirect_ex_ftag=d291d0cb8cce3ca12877ab0ae5c5b37e72c6923656afd68a&ali_redirect_ex_tmining_ts=1546912388&ali_redirect_ex_tmining_expire=3600&ali_redirect_ex_hot=11";
-    //var vLinkReal = $(".lcd_banner_img").data('url');
-    var vType = function() {
-        $.ajaxSetup({
-            headers: ''
-        });
-        var type = '';
-        $.ajax({
-            url: vLink + "?stat",
-            async: false
-        }).done(function(info) {
-            type = info.mimeType;
-            if (type == 'application/x-mpegurl') {
-                type = 'application/x-mpegURL';
-            }
-        });
-
-        return type;
-    };
-
+    
     @if($vcourseDetail->cover)
         var poster = '{{ config('constants.admin_url').$vcourseDetail->cover}}';
     @else
-        var poster = vLink + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
+        var poster = window.hrwqAd.old_video_url + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
     @endif;
     
-    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" controlsList="nodownload" poster="'+poster+'"></video>');
+    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" controls="false" controlsList="nodownload" poster="'+poster+'"></video>');
     $('#video-container').empty();
     $('#video-container').append(player);
 
@@ -491,16 +566,18 @@ $(document).ready(function(){
           function(data){},'json');
       }
       viewSearch.init('{{@$vcourseDetail->id}}');
+      window.hrwqAd.videoPlayEvent();
     };
     var videoPause = function(){
         $('.lcd_banner_div').show();
+        window.hrwqAd.videoPauseEvent();
     };
 
     var videoEnd = function(){
-// 播放着至末尾
-//        this.src({src:vLinkReal});
-//        this.play();
-//        return;
+        if(window.hrwqAd.videoEndedEvent() == true){
+            return;
+        }
+            
         if ($('#video-container').data('flg')=='free') {
     	  @if(empty(@$user_info['mobile']))
     		Popup.init({
@@ -585,31 +662,7 @@ $(document).ready(function(){
 	        "preload": "auto",
 	        //"poster": poster
 	    }, function() {
-	    	if(browserOS() == 'pc'){
-                    var player = videojs('video-embed');
-                    player.src({ type: vType(), src: vLink });
-		    player.load();
-                    player.play();
-		} else {
-                    document.addEventListener("WeixinJSBridgeReady", function () { 
-			var player = videojs('video-embed');
-                        player.src({ type: vType(), src: vLink});
-			console.log('browserOS is ' + browserOS());
-			if(browserOS() != 'android'){
-                            player.load();
-                            player.play();
-						
-                            waitingPub = Popup.init({
-	                        popTitle:"",
-	                        popHtml:"正在加载，请稍后...",
-	                        popFlash:{
-	                            flashSwitch:true,
-	                            flashTime:3000,
-	                        }
-	                    });
-                        }
-                    }, true);
-                }
+	    	window.hrwqAd.playVideo();
             }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
 	}catch(exx){
 	}

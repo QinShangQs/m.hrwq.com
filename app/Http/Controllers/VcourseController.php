@@ -15,6 +15,7 @@ use App\Models\UserPoint;
 use App\Models\User;
 use App\Models\Coupon;
 use App\Models\CouponUser;
+use App\Models\Ad;
 use App\Models\UserBalance;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -168,7 +169,10 @@ class VcourseController extends Controller {
         $wx_js = Wechat::js();
 
         $vip_left_day = get_vip_left_day_number();
-        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js', 'vip_left_day'));
+        $adImage = Ad::getRandomOne(Ad::AD_TYPE_IMAGE);
+        $adVideo = Ad::getRandomOne(Ad::AD_THYP_VIDEO);
+        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 
+                'wx_js', 'vip_left_day','adImage','adVideo'));
     }
 
     private function get_mark_lists($user_info, $vcourseId, $visible = -1, $user_id_equal = '=') {
