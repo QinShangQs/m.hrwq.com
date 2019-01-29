@@ -582,18 +582,18 @@ class WechatController extends Controller {
         $wechatPayLog->save();
     }
 
-    //http://m.qs.tunnel.qydev.com/wechat/vip_listen?user_id=5
+    //http://dev.m.hrwq.com/wechat/vip_listen?order_id=36000
     public function vip_listen(Request $request) {
-        exit();
-        $this->_pay_haoke(35982);
-        return;
-        $user_id = $request->input('user_id');
-        $order = Order::where(['user_id' => $user_id, 'pay_type' => 6])->first();
-        $this->_order_update($order);
-        $this->_log_income($order);
-        $result = $this->_vip_listen($request->input('user_id'), $order);
-
-        dd($result);
+//        exit();
+//        $this->_pay_haoke(35982);
+//        return;
+        $order_id = $request->input('order_id');
+        $order = Order::find($order_id);
+//        $this->_order_update($order);
+//        $this->_log_income($order);
+//        $result = $this->_vip_listen($order->user_id, $order);
+        Event::fire(new OrderPaid($order));
+        //dd($result);
     }
 
     /**

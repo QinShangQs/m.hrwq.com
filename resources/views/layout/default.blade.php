@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="format-detection" content="telephone=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="/css/style.css?20180905">
+    <link rel="stylesheet" href="/css/style.css?20190129">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/public.js?20180708"></script>
+    <script type="text/javascript" src="/js/public.js?20190129"></script>
     @yield("style")
     
     <script>

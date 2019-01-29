@@ -46,10 +46,8 @@
                             <span class="lcd_banner_span_1">免费</span>
                         @elseif($course->type == 3)
                             <span class="lcd_banner_span_1">团购价:¥{{$course->tuangou_price}}</span>
-                            <span class="lcd_banner_span_2">¥{{$course->original_price}}</span>
                         @else
                             <span class="lcd_banner_span_1">¥{{$course->price}}</span> 
-                            <span class="lcd_banner_span_2">¥{{$course->original_price}}</span> 
                         @endif
                     </div>
                 </div>
@@ -99,11 +97,10 @@
                                     @endif
                                 </span>
                                 @endforeach
-                                @if($course->tuangou_peoples - count($team_numbers) > 0 && $team['status'] == 0)
-                                    <span onclick="tuangouShare()"> <!--点击分享-->
-                                        <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
-                                    </span>
-                                @endif
+                                
+                                <span onclick="location.href='/user/orders/members/{{$team_id}}'"> <!--点击分享 onclick="tuangouShare()"-->
+                                    <img src="/images/order/plus-member.png" style="width: 3rem; border-radius: 100%"/>
+                                </span>
                             </dd>
                             @endif
                             <dt>拼团流程</dt>
@@ -120,12 +117,18 @@
                         @if($course->course_date) 
                         <dt>课程时间</dt>
                         <dd><p>
-                            {{$course->course_date}}</p></dd>
-                         @endif
+                            {{$course->course_date}}</p>
+                        </dd>
+                        @endif
+                        @if($course->course_addr)
                         <dt>具体地址</dt>
                         <dd><p>@if($course->course_addr){{$course->course_addr}}@else 未填写 @endif</p></dd>
+                        @endif
+                        @if($course->suitable)
                         <dt>适合对象</dt>
                         <dd><p>@if($course->suitable){!! nl2br($course->suitable) !!}@else 未填写 @endif</p></dd>
+                        @endif
+                        @if($course->teacher_intr)
                         <dt>老师介绍</dt>
                         <dd>
                             @if($course->teacher_intr)
@@ -134,6 +137,8 @@
                             <p>未填写</p>
                             @endif
                         </dd>
+                        @endif
+                        @if($course->course_arrange)
                         <dt>课程安排</dt>
                         <dd>
                             @if($course->course_arrange)
@@ -142,6 +147,7 @@
                             <p>未填写</p>
                             @endif
                         </dd>
+                        @endif
                     </dl>
                 </div>
                 <div class="lcd_div_2" style="display:none;">
@@ -200,7 +206,15 @@
                             单独购买
                         </div>
                         <div class="lcd_button1" id="course_add" style='width:30%'>
-                            @if(empty($team_numbers) ) 我要开团 @else 立即参团 @endif
+                            @if(empty($team_numbers) ) 
+                                我要开团 
+                            @else 
+                                @if($orderPaid)
+                                    邀请好友参团
+                                @else
+                                    立即参团 
+                                @endif
+                            @endif
                         </div><!--当未参加时显示此项-->
                     @endif
                 @endif
@@ -530,6 +544,9 @@
                 @if($team_id && $team)
                     @if($course->tuangou_peoples - count($team_numbers) == 0 || $team['status'] != 0)
                         alert('组团人数已够或该团已结束。');
+                        return;
+                    @elseif($orderPaid)
+                        tuangouShare();
                         return;
                     @endif
                 @endif

@@ -13,7 +13,7 @@
                     <div class="glps_div">
                         <ul class="glps_list1">
                             <li><label for="glps_radio_1"><span><input name="glps_radio" value="1" type="radio" id="glps_radio_1" checked></span>微信支付</label></li>
-                            <li><label for="glps_radio_2"><span><input type="radio" value="2" name="glps_radio" id="glps_radio_2"></span>线下支付</label></li>
+                            <li id='xianxia'><label for="glps_radio_2"><span><input type="radio" value="2" name="glps_radio" id="glps_radio_2"></span>线下支付</label></li>
                         </ul>
                     </div>
                     <div class="glps_div">
@@ -52,8 +52,11 @@ $(document).ready(function(){
         if (way == 2) {
             window.location.href = "{{ route('course.line_pay',['id'=>$order->id]) }}";
         }
-
     });
+    
+    @if($order->is_team == 1)
+        $('#xianxia').hide();
+    @endif
 });
 
 function checkStatus() {

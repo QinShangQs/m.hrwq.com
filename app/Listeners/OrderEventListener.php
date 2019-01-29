@@ -217,9 +217,13 @@ class OrderEventListener
                     break;
             }
             
-            //团购订单
-            if(property_exists($order, 'is_team') && $order->is_team == \App\Models\Order::IS_TEAM_YES){
-                $this->tuangou($order);
+            try{
+                //团购订单
+                if($order->is_team == \App\Models\Order::IS_TEAM_YES){
+                    $this->tuangou($order);
+                }
+            }catch(\Exception $exx){
+                Log::error("团购订单微信消息异常：".$exx->getMessage());
             }
         } 
     }
@@ -268,7 +272,7 @@ class OrderEventListener
                 ]);
             }
         }catch(\Exception $ex){
-            Log::error($ex->getMessage());
+            Log::error("团购订单微信消息异常：".$ex->getMessage());
         }
     }
 }

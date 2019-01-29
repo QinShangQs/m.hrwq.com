@@ -91,11 +91,11 @@ div.flicking_con a.on{ background:url(../images/temporary/index_banner_bg1.png) 
 /*----------和润万青 -课程详情tab----------*/
 .look_charge_details { width:100%;}
 .lcd_banner { width:100%; overflow:hidden; position:relative;}
-.lcd_banner_img { width:100%; line-height:0px;}
-.lcd_banner_img img { width:100%; display:block;}
-.lcd_banner_div { background:url(../images/look/look_charge_details_banner_bg.png) left top repeat; position:absolute; left:38px; top:50%; width:80%; padding:16px 0; height:58px; overflow:hidden; margin-top:-45px;}
-.lcd_banner_title { text-align:center; color:#323232; font-size:20px; line-height:30px;}
-.lcd_banner_span { line-height:28px; text-align:center; font-size:16px; color:#323232;}
+.lcd_banner_img { width:100%; line-height:0px;text-align: center}
+.lcd_banner_img img { width:98%; margin-top:1%;margin-bottom: 1% }
+.lcd_banner_div { background:url(../images/look/look_charge_details_banner_bg.png) left top repeat;  width:100%; padding:1px 0; overflow:hidden;padding: 0 1%;box-sizing: border-box;}
+.lcd_banner_title { float:left; text-align:center; color:#323232; font-size:1rem; line-height:30px;}
+.lcd_banner_span { float:right;line-height:28px; text-align:center; font-size:16px; color:#323232;}
 .lcd_banner_span_1 { color:#ed6d11;}
 .lcd_banner_span_2 { color:#666666; font-size:14px; text-decoration:line-through;}
 .lcd_banner_span_3 span {}
