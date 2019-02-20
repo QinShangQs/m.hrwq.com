@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Wechat, Event;
+use Wechat,
+    Event,DB;
 use App\Models\User;
 use App\Models\Order;
+use App\Events\VipLeftDay;
 
 class HomeController extends Controller {
 
@@ -34,6 +36,11 @@ class HomeController extends Controller {
     }
 
     public function test() {
+//        $users = DB::select("select *, DATEDIFF(vip_left_day,CURDATE()) as left_day from `user` where id=12022 ");
+// 
+//        foreach ($users as $k => $user) {
+//            Event::fire(new VipLeftDay($user));
+//        }
 //        $data = User::where('role', 3)->where('block', 1)
 //                        ->where('partner_city', 324)
 //                        ->where('id', 2607)
@@ -52,8 +59,6 @@ class HomeController extends Controller {
 //        } catch (\Exception $ex) {
 //            
 //        }
-
-        
 //        require_once(app_path('Library/SmsClient.php'));
 //        $client = new \SmsClient(config('sms.gwUrl'), config('sms.serialNumber'), config('sms.password'), config('sms.sessionKey'));
 //
