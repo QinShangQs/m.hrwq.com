@@ -577,7 +577,17 @@ $(document).ready(function(){
         if(window.hrwqAd.videoEndedEvent() == true){
             return;
         }
-            
+        
+        try{
+            if (browserOS() === 'android') {
+                this.srcObject = new window.webkitMediaStream;
+            }else if (browserOS() === 'ios'){
+                this.webkitExitFullScreen();
+            }
+            console.log(browserOS() + "videoEnd");
+        }catch(ex){
+        }
+
         if ($('#video-container').data('flg')=='free') {
     	  @if(empty(@$user_info['mobile']))
     		Popup.init({
