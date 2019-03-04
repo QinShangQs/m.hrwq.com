@@ -555,7 +555,8 @@ $(document).ready(function(){
         var poster = window.hrwqAd.old_video_url + '?vframe/jpg/offset/{{ config('qiniu.COVER_TIME')}}';
     @endif;
     
-    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" x5-video-player-type="h5" controls="false" controlsList="nodownload" poster="'+poster+'"></video>');
+    var playerAttr = 'x5-playsinline="" playsinline="" webkit-playsinline=""';//x5-video-player-type="h5"
+    var player = $('<video id="video-embed" class="video-js vjs-default-skin vjs-big-play-centered" style="width: 100%;" '+playerAttr+'  controls="false" controlsList="nodownload" poster="'+poster+'"></video>');
     $('#video-container').empty();
     $('#video-container').append(player);
 
