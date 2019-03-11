@@ -674,7 +674,15 @@ $(document).ready(function(){
 	        //"poster": poster
 	    }, function() {
 	    	window.hrwqAd.playVideo();
-            }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd);
+            }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd).on("timeupdate",function(){
+                @if($vcourseDetail->type=='2' && $vip_left_day === 0)
+                    var player = videojs('video-embed');
+                    if(player.currentTime() > 302){
+                        player.pause();
+                        videoEnd();
+                    }
+                @endif
+            });
 	}catch(exx){
 	}
         
