@@ -8,13 +8,13 @@
 ::-webkit-scrollbar-corner {background:;transparent}-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 </style>
 
-<div id="qrcode" style="display:none;margin-top:15px;"></div>
 <canvas id="namevas" width="200px" height="15px" style="display:none">
-您的浏览器不支持canvas标签。
+    您的浏览器不支持canvas标签。
 </canvas>
 <img id="vasimg" style="display:none" />
-
 <img id="lovebg" style="display:none" src="{{$lovebg64}}" >
+<img id='qrcode64' style='display:none' src='{{$qrcode64}}' />
+
 <div id="subject">
     <div id="main">
         <div class="share-love">
@@ -54,11 +54,6 @@
 	<script type="text/javascript" src="/js/qrcode.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		var qrcode = new QRCode(document.getElementById("qrcode"), {
-			text: "{{ route('share.hot',['id'=> $data['id'] ] ) }}",
-			width : 155,
-			height : 155
-		});
 
 		(function(){
 			var canvas = document.getElementById("namevas");
@@ -85,7 +80,7 @@
 			img.src = $('#lovebg').attr('src');
 			ctx.drawImage(img,0,0,c.width,c.height);
 			var img2 = new Image();
-			img2.src = $("#qrcode img").eq(0).attr('src');
+			img2.src = $('#qrcode64').attr('src');
 			ctx.drawImage(img2,295,855,155,155);
 			var img3 = new Image();
 			img3.src = $("#vasimg").attr('src');
@@ -93,7 +88,7 @@
 
 			var finalSrc = c.toDataURL("image/jpeg");
 			$("#banner").attr('src', finalSrc) ;
-		},1000);
+		},500);
 	});
 	</script>
    	<script type="text/javascript">

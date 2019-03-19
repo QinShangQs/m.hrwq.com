@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Log;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ShareController extends Controller
 {
@@ -21,14 +22,17 @@ class ShareController extends Controller
         $lovebg64 = '';
         $name_color = '';
         $instance = \App\Models\Tooler::getByType(\App\Models\Tooler::TYPE_LOVE_BG);
-
+        $user = user_info();
         if(!empty($instance['content']['base64'])){
             $lovebg64 = $instance['content']['base64'];
             $name_color = $instance['content']['name_color'];
         }else{
             $lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg')) ;
         }
-    	return view('share.love_angle', ['data' => user_info(),'lovebg64'=>$lovebg64,'name_color'=>$name_color]);
+        $qrcode64 = "data:image/png;base64," . base64_encode(QrCode::format('png')->size(1500)->margin(0)
+                ->merge('/public/images/my/my_about_us_img.png',.15)
+                ->generate(route('share.hot', ['id' => $user['id']])));
+    	return view('share.love_angle', ['data' => $user,'qrcode64' => $qrcode64,'lovebg64'=>$lovebg64,'name_color'=>$name_color]);
     }
     
     public function hot($id){    	
