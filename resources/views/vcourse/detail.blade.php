@@ -124,7 +124,7 @@
         <div class="look_charge_details">
         	
             <div class="lcd_banner">
-                @if(count($vcourseDetail->order)>0 && $vip_left_day > 0)
+                @if($vip_left_day > 0 || $vcourseDetail->type == '1')
                     <div class="lcd_banner_img" order="gt_0" id="video-container" data-flg="tran" data-url="{{config('qiniu.DOMAIN').$vcourseDetail->video_tran}}"></div>
                 @elseif($vcourseDetail->type=='2' && $vip_left_day === 0)
                     <div class="lcd_banner_img" order="type_2_vip_1" id="video-container" data-flg="free" data-url="{{config('qiniu.DOMAIN').$vcourseDetail->video_free}}"></div>
@@ -295,17 +295,6 @@
                 </div>
             </div>
             
-            @if(!count($vcourseDetail->order)>0)
-                @if(@$user_info['vip_flg']=='2')
-                    <div class="lcd_button" id="vcourse_add" style="display:none">参加该课程(和会员免费)</div>
-                @else
-                    <div class="lcd_button" id="vcourse_add" style="display:none">参加该课程</div>
-                @endif
-            @else
-                @if($vcourseDetail->order[0]->order_type=='1')
-                <div class="lcd_button" onclick="location.href = '{{route('wechat.vcourse_pay')}}?id={{$vcourseDetail->order[0]->id}}';">去付款</div>
-                @endif
-            @endif
         </div>
     </div>
 </div>
@@ -346,7 +335,7 @@
         	</div>
 </form>
 
-@if(count($vcourseDetail->order)>0)
+@if($vip_left_day > 0)
 		<form id="mark-form" style="position: fixed;bottom: 0px;
 			background-color: #fff;border-top: 1px solid #ccc;
 			width: 100%;box-sizing: border-box; ">
@@ -659,49 +648,34 @@ $(document).ready(function(){
     
     //alert('{{$vip_left_day}}');
     //已经参加课程或收费课程试看或vip
-    //if(count($vcourseDetail->order)>0||$vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
-    @if((count($vcourseDetail->order) > 0 && $vip_left_day > 0) 
-    	    || ($vcourseDetail->type=='2'&&@$user_info['vip_flg']=='1')
-            || ($vcourseDetail->type=='2'&& $vip_left_day === 0))
-	var waitingPub = null;
-	try{
-	    videojs('video-embed', {
-	        "width": "100%",
-	        "height": videoHight,
-	        "controls": true,
-	        "autoplay": false,
-	        "preload": "auto",
-	        //"poster": poster
-	    }, function() {
-	    	window.hrwqAd.playVideo();
-            }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd).on("timeupdate",function(){
-                @if($vcourseDetail->type=='2' && $vip_left_day === 0)
-                    var player = videojs('video-embed');
-                    if(player.currentTime() > 302){
-                        player.pause();
-                        videoEnd();
-                    }
-                @endif
-            });
-	}catch(exx){
-	}
-        
-	$('.lcd_banner_div').click(function(event) {
-	    var player = videojs('video-embed');
-	    player.load();
-	    player.play();
-	});
-    @else
-	$('.lcd_banner').click(function(event) {
-	    Popup.init({
-	        popHtml:'<p>参加该课程后可观看视频</p>',
-	        popFlash:{
-	            flashSwitch:true,
-	            flashTime:2000,
-	        }
-	    });
-	});
-    @endif
+    var waitingPub = null;
+    try{
+        videojs('video-embed', {
+            "width": "100%",
+            "height": videoHight,
+            "controls": true,
+            "autoplay": false,
+            "preload": "auto",
+            //"poster": poster
+        }, function() {
+            window.hrwqAd.playVideo();
+        }).on("play", videoPlay).on("pause", videoPause).on("ended", videoEnd).on("timeupdate",function(){
+            @if($vcourseDetail->type=='2' && $vip_left_day === 0)
+                var player = videojs('video-embed');
+                if(player.currentTime() > 302){
+                    player.pause();
+                    videoEnd();
+                }
+            @endif
+        });
+    }catch(exx){
+    }
+
+    $('.lcd_banner_div').click(function(event) {
+        var player = videojs('video-embed');
+        player.load();
+        player.play();
+    });
 
     var lockm = false;
     $(".lcd_div_2_form_button input").click(function(){//提交作业笔记表单
@@ -823,61 +797,6 @@ $(document).ready(function(){
         }
     });
     $('#lcd_div_2_form_select1').trigger('change');//触发一次lcd_div_2_form_select1
-    
-    //点击参加课程
-    var lockp = false;
-    $("#vcourse_add").click(function(){
-        @if(!session('wechat_user'))
-            window.location.href = '{{route('wechat.qrcode')}}';return;
-        @endif
-        if (lockp) {return;}
-        //未登录
-        @if(empty(@$user_info['mobile']))
-            //您尚未注册，请先完成注册
-        @endif
-        //免费
-        @if($vcourseDetail->type=='1'||@$vip_left_day > 0)
-            lockp = true;
-            $.post("{{route('vcourse.order_free')}}", { vcourse_id:{{ $vcourseDetail->id }} },function(data){
-                if(data.status){
-                   location.reload();
-                   lockp = false;
-                }else{
-                   Popup.init({
-                            popTitle:'失败',
-                            popHtml:'<p>'+data.msg+'</p>',
-                            popFlash:{
-                                flashSwitch:true,
-                                flashTime:2000,
-                            }
-                        });
-                   lockp = false;
-                }
-            },'json')
-            .fail( function( jqXHR ) {
-                if (jqXHR.status == 422){
-                    var str = '';
-                    $.each($.parseJSON(jqXHR.responseText), function (key, value) {
-                        str += value+'<br>';
-                    });
-                    Popup.init({
-                            popTitle:'失败',
-                            popHtml:'<p>'+str+'</p>',
-                            popFlash:{
-                                flashSwitch:true,
-                                flashTime:2000,
-                            }
-                        });
-                    lockp = false;
-                }
-            });
-        @else
-        //收费
-        //location.href = '{{route('vcourse.order',['id'=>$vcourseDetail->id])}}';
-        @endif
-        return false;
-    });
-    $("#vcourse_add").click();//自动参加课程
     
     $(".lcd_tab li").click(function(){//tab切换
         if($(this).attr("class")!="selected"){

@@ -139,21 +139,18 @@ class VcourseController extends Controller {
         if (session('user_info')['id']) {
             $user_info = User::where('id', session('user_info')['id'])->first()->toArray();
         }
-
+        
         //课程详情  
         $vcourseDetail = Vcourse::whereStatus('2')
-                ->with(['order' => function ($query) use ($user_info) {
-                        $query->where('pay_type', '2');
-                        $query->where('user_id', @$user_info['id']);
-                        $query->whereIn('order_type', ['1', '2', '4']);
-                    }])
                 ->whereNotNull('vcourse.video_tran')
                 ->whereNotNull('vcourse.video_free')
                 ->whereNotNull('vcourse.bucket')
                 ->whereId($id)
                 ->first();
-        if (!$vcourseDetail)
+                    
+        if (!$vcourseDetail){
             abort(404, '课程查找失败！');
+        }
         //收藏情况
         $userFavor = UserFavor::whereUserId(@$user_info['id'])->whereFavorId($id)->whereFavorType('2')->first();
         //作业&笔记
