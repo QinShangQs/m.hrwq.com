@@ -478,14 +478,12 @@ class VipController extends Controller
             $update['is_activated']  = 2;
             $update['activated_vip'] = user_info('id');
 
-            
-            
             $days = 365;
             $left_days = get_new_vip_left_day($user->vip_left_day, $days);
             UserPointVip::add($user->id, $days, 2);
  
             $user_update = [];
-            $user_update['vip_flg'] = 2;
+            $user_update['vip_flg'] = 1;
             $user_update['vip_code'] = $code;
             $user_update['vip_left_day'] = $left_days;
             
