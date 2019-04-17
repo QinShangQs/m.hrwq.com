@@ -48,7 +48,7 @@ class VcourseController extends Controller {
             if (($search_key = $request->input('search_key'))) {
                 $builder->where('title', 'like', '%' . $search_key . '%');
             }
-            $vcourseList = $builder->take(100)->orderBy('vcourse.' . $sortField, 'desc')->get();
+            $vcourseList = $builder->take(1000)->orderBy('vcourse.' . $sortField, 'desc')->get();
         }
 
         if ($userid = session('user_info')['id']) {
@@ -58,20 +58,8 @@ class VcourseController extends Controller {
         }
 
         $wx_js = Wechat::js();
-        if (preg_match('/^win/i', PHP_OS)) {
-            $data = file_get_contents('E:/sug_link.log');
-        } else {
-            $data = file_get_contents('/mnt/sug_link.log');
-        }
-        if (!empty($data)) {
-            list($telecast, $foreshow) = explode("\n", $data);
-        } else {
-            $telecast = '';
-            $foreshow = '';
-        }
-        
         $year_action_left_day = ($this->getYearActionleftday());
-        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'telecast', 'foreshow','year_action_left_day'));
+        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'year_action_left_day'));
     }
     
     private function getYearActionleftday(){
