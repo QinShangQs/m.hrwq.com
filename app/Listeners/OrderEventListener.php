@@ -201,7 +201,10 @@ class OrderEventListener
                             'keyword1'=>'和会员',
                             'keyword2'=> (string)$order->pay_time,
                             'keyword3'=> '恭喜你成功加入和润万青父母学院',
-                            'remark'=> '点击此处立即领取一年直播课程收听资格，享受完整会员权益。'
+                            'remark'=> [
+                                'value' => "\n".'点击此处立即领取一年直播课程收听资格，享受完整会员权益。',
+                                'color' => '#C80000'
+                            ]
                         ],
                     ]);
                     
