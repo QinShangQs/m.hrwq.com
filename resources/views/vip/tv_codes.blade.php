@@ -7,13 +7,13 @@
             		会员动态
             	</div>
             	<div class="my-records-list">
-            		@foreach($tvcodes as $item)
+            		@foreach($data->user_point_vip as $item)
             		<div class="item" >
             			<table width="100%">
-                                    <tr onclick="location.href='{{$item->code}}'">
-            					<td>赠送直播码</td>
-            					<td>{{date('Y-m-d',strtotime($item->updated_at))}}</td>
-            					<td>+ 365天</td>
+            				<tr>
+            					<td>{{config('constants.vip_point_source')[$item->source]}}</td>
+            					<td>{{date('Y-m-d',strtotime($item->created_at))}}</td>
+            					<td>+ {{$item->point_value}}天</td>
             				</tr>
             			</table>
             		</div>

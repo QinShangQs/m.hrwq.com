@@ -532,6 +532,10 @@ class VipController extends Controller
             abort('403','当前已是和会员身份');
         }
     }
+    
+    public function tvcodes(){
+        return view('vip.records', ['tvcodes' => \App\Models\VipTv::findAll(user_info('id'))]);
+    }
    
 
 }

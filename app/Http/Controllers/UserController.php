@@ -62,7 +62,8 @@ class UserController extends Controller
             'myWalletCount' => $myWalletCount,
             'partnerNewOrderCount'=>$partnerNewOrderCount,
             'unreadTalkCommentCount' => $unreadTalkCommentCount,
-            'show_card' => _validateCard(false)
+            'show_card' => _validateCard(false),
+            'tv_code_url' => \App\Models\VipTv::getCodeUrl(user_info('id'))
         ]);
     }
 
@@ -977,5 +978,5 @@ class UserController extends Controller
         }
     }
 
-
+    
 }

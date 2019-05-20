@@ -100,7 +100,11 @@
                         	</a>
                         </li>  
                         @endif
-                       <li><a href="{{route('leaveword')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
+                        
+                        @if($tv_code_url)
+                        <li><a href="{{route('vip.tvcodes')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>直播码</a></li>
+                        @endif
+                        <li><a href="{{route('leaveword')}}"><span><img src="/images/public/select_right.jpg" alt=""/></span>建议留言</a></li>
                         
                         
                         @if($data['role'] == 2)

@@ -35,4 +35,13 @@ class VipTv extends Model {
         $viptv->save();
         return $viptv->code;
     }
+    
+    public static function getCodeUrl($user_id){
+        $viptv = VipTv::where(['is_activated' => static::ACTIVATED_YES,'activated_vip' => $user_id])->orderBy('id', 'desc')->first();
+        return empty($viptv) ? null : $viptv->code;
+    }
+    
+    public static function findAll($user_id){
+        return VipTv::where(['is_activated' => static::ACTIVATED_YES,'activated_vip' => $user_id])->orderBy('id', 'desc')->get();
+    }
 }
