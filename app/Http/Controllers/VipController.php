@@ -534,7 +534,7 @@ class VipController extends Controller
     }
     
     public function tvcodes(){
-        return view('vip.records', ['tvcodes' => \App\Models\VipTv::findAll(user_info('id'))]);
+        return view('vip.tv_codes', ['tvcodes' => \App\Models\VipTv::findAll(user_info('id'))]);
     }
    
 
