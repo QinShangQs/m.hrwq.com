@@ -500,6 +500,17 @@ class VipController extends Controller
                 $user->update($user_update);
 
                 DB::commit();
+                
+                //发送通知
+                $order = new Order();
+                $order->order_id = 0;
+                $order->user_id = $user->id;
+                $order->user = $user;
+                $order->pay_type = 6;
+                $order->pay_time = date("Y-m-d H:i:s");
+                $order->is_team = Order::IS_TEAM_NO;
+                Event::fire(new OrderPaid($order));
+                
                 return response()->json(['code' => 0, 'message' => '激活成功!','mobile'=>$user['mobile']]);
             } catch (\Exception $e) {
                 DB::rollBack();
