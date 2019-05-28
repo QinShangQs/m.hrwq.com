@@ -27,9 +27,10 @@ class ShareController extends Controller {
         } else {
             $lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg'));
         }
+        $profileIcon = ltrim($user['profileIcon'],'/');
         QrCode::errorCorrection('H');
         $qrcode64 = "data:image/png;base64," . base64_encode(QrCode::format('png')->size(1500)->margin(0)
-                                ->merge("/public".$user['profileIcon'], .2)
+                                ->merge("/public/".$profileIcon, .2)
                                 ->generate(route('share.hot', ['id' => $user['id']])));
         return view('share.love_angle', ['data' => $user, 'qrcode64' => $qrcode64, 'lovebg64' => $lovebg64, 'name_color' => $name_color]);
     }
