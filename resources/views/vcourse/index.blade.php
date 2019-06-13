@@ -185,7 +185,7 @@
 <script type="text/javascript" src="/js/jquery.event.drag-1.5.min.js"></script><!--幻灯效果-->
 <script type="text/javascript" src="/js/jquery.touchSlider.js"></script><!--幻灯效果-->
 <script type="text/javascript" src="/js/echo.min.js"></script>
-<script type="text/javascript" src="/js/history_search.js"></script>
+<script type="text/javascript" src="/js/history_search.js?20190613"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script>
 //懒加载图片
