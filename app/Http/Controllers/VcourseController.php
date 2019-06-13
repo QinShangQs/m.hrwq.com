@@ -40,14 +40,15 @@ class VcourseController extends Controller {
 
         $sortField = $request->input('ob', 'created_at');
         $request['ob'] = $sortField;
+        $search_key = "";
+        if (($search_key = $request->input('search_key'))) {
+            $builder->where('title', 'like', '%' . $search_key . '%');
+        }
 
         if ($sortField == 'biting') {
             //推荐课程
             $vcourseList = $builder->whereRecommend('2')->orderBy('vcourse.sort', 'desc')->get();
         } else {
-            if (($search_key = $request->input('search_key'))) {
-                $builder->where('title', 'like', '%' . $search_key . '%');
-            }
             $vcourseList = $builder->take(1000)->orderBy('vcourse.' . $sortField, 'desc')->get();
         }
 
@@ -59,13 +60,13 @@ class VcourseController extends Controller {
 
         $wx_js = Wechat::js();
         $year_action_left_day = ($this->getYearActionleftday());
-        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'year_action_left_day'));
+        return view('vcourse.index', compact('carouselList', 'vcourseList', 'wx_js', 'year_action_left_day','search_key'));
     }
-    
-    private function getYearActionleftday(){
+
+    private function getYearActionleftday() {
         $today = date('Y-m-d');
         $yearAction = '2019-01-19';
-        return intval(round((strtotime($yearAction) - strtotime($today))/3600/24)) +1;
+        return intval(round((strtotime($yearAction) - strtotime($today)) / 3600 / 24)) + 1;
     }
 
     /** 好看课程搜索 */
@@ -127,7 +128,7 @@ class VcourseController extends Controller {
         if (session('user_info')['id']) {
             $user_info = User::where('id', session('user_info')['id'])->first()->toArray();
         }
-        
+
         //课程详情  
         $vcourseDetail = Vcourse::whereStatus('2')
                 ->whereNotNull('vcourse.video_tran')
@@ -135,8 +136,8 @@ class VcourseController extends Controller {
                 ->whereNotNull('vcourse.bucket')
                 ->whereId($id)
                 ->first();
-                    
-        if (!$vcourseDetail){
+
+        if (!$vcourseDetail) {
             abort(404, '课程查找失败！');
         }
         //收藏情况
@@ -144,7 +145,7 @@ class VcourseController extends Controller {
         //作业&笔记
         $vcourseMarkListA = $this->get_mark_lists($user_info, $id, 1, '!=');
         $vcourseMarkListB = $this->get_mark_lists($user_info, $id);
-        
+
         //推荐课程
         $recommendVcourseList = Vcourse::whereStatus('2')
                         ->whereNotNull('vcourse.video_tran')
@@ -156,8 +157,7 @@ class VcourseController extends Controller {
         $vip_left_day = get_vip_left_day_number();
         $adImage = Ad::getRandomOne(Ad::AD_TYPE_IMAGE);
         $adVideo = Ad::getRandomOne(Ad::AD_THYP_VIDEO);
-        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 
-                'wx_js', 'vip_left_day','adImage','adVideo'));
+        return view('vcourse.detail', compact('vcourseDetail', 'vcourseMarkListA', 'vcourseMarkListB', 'recommendVcourseList', 'userFavor', 'user_info', 'wx_js', 'vip_left_day', 'adImage', 'adVideo'));
     }
 
     private function get_mark_lists($user_info, $vcourseId, $visible = -1, $user_id_equal = '=') {
@@ -177,10 +177,10 @@ class VcourseController extends Controller {
                 ->get();
 
         foreach ($parentMarkList as $k => $v) {
-            $vmarkKey = "vcourse_mark_list_". $v['id'];
+            $vmarkKey = "vcourse_mark_list_" . $v['id'];
             $sub = Cache::get($vmarkKey);
-            if(empty($sub)){
-                $sub =  VcourseMark::whereParentId($v['id'])->orderBy('vcourse_mark.created_at', 'asc')->get();
+            if (empty($sub)) {
+                $sub = VcourseMark::whereParentId($v['id'])->orderBy('vcourse_mark.created_at', 'asc')->get();
                 Cache::put($vmarkKey, $sub, 60);
             }
             $parentMarkList[$k]['subs'] = $sub;
@@ -280,9 +280,9 @@ class VcourseController extends Controller {
                 $vcourseMarkInfo->user->profileIcon = @url($vcourseMarkInfo->user->profileIcon);
 
                 if ($vcourseMark->parent_id > 0) {
-                    if(config('app.debug') === false){
+                    if (config('app.debug') === false) {
                         Event::fire(new MarkReplay($request->input('vcourse_title', ''), $request->input('parent_openid', ''), $vcourseMarkInfo->user->nickname, $request->input('mark_content')));
-                    }   
+                    }
                 }
 
                 return response()->json(['status' => true, 'vcourseMarkInfo' => $vcourseMarkInfo->toJson(),

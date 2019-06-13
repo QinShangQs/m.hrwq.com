@@ -4,7 +4,10 @@
 <div id="subject">
     <div id="main">
         <div class="good_looking">            
-
+            <div style="position: relative;background-image: url(/images/index/search.png);height: 2.6rem;background-size: 100%;background-color: #fff;background-repeat: no-repeat;">
+                <input type="text" placeholder="搜索课程" value="{{$search_key}}" id="vcourse-index-keyword" style="margin: .45rem 0 0 2rem;background-color: #f6f6f5;border: none;font-size: .88rem;width: 60%;height: 1.9rem;" />
+                <span id="vcourse-index-search-btn" style="height: 2.5rem;width: 18%;display: block;float: right;" onclick="search()">&nbsp;</span>
+            </div>
         @if(count($carouselList)>0)
             <div class="public_slide">
                 <div class="main_visual">
@@ -115,6 +118,10 @@
             	</div>
             </div>
            @endforeach
+           @if(count($vcourseList) === 0)
+                <div style="font-size: .88rem;text-align: center;margin: 1rem 0;">没有找到您想要的课程</div>
+           @endif
+           
            <div style="height:3rem;"></div>
             
         	@include('element.nav', ['selected_item' => 'nav2'])
