@@ -1,6 +1,10 @@
 ####
 test deploy
 
+###############2019-06-27#################
+alter table vip add column days int(4) DEFAULT 365 not null COMMENT '会员天数' after activated_vip;
+alter table vip add column allow_only tinyint(3) DEFAULT 2 not null COMMENT '仅限首次,1是2否' after activated_vip;
+
 ###############2019-05-14#################
 CREATE TABLE `vip_tv` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

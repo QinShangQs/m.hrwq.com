@@ -474,11 +474,17 @@ class VipController extends Controller
         } elseif ($data->is_activated == 2) {
             return response()->json(['code' => 2, 'message' => '此卡号已被激活!']);
         } else {
+            if($data->allow_only == Vip::ALLOW_ONLY_YES){
+                if(Vip::where(['allow_only' => Vip::ALLOW_ONLY_YES,'activated_vip' => $user->id])->first()){
+                    return response()->json(['code' => 3, 'message' => '激活失败!该卡号仅限首次使用。']);
+                }
+            }
+            
             $update = [];
             $update['is_activated']  = 2;
             $update['activated_vip'] = user_info('id');
 
-            $days = 365;
+            $days = $data->days;
             $left_days = get_new_vip_left_day($user->vip_left_day, $days);
             UserPointVip::add($user->id, $days, 2);
  
