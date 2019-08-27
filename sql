@@ -1,6 +1,13 @@
 ####
 test deploy
 
+###############2019-08-27#################
+create index idx_uf on user_favor (user_id, favor_id);
+create index idx_op on `user` (openid);
+create index idx_pid on `vcourse_mark` (parent_id);
+create index idx_up on `order` (user_id, pay_type);
+
+
 ###############2019-06-27#################
 alter table vip add column days int(4) DEFAULT 365 not null COMMENT '会员天数' after activated_vip;
 alter table vip add column allow_only tinyint(3) DEFAULT 2 not null COMMENT '仅限首次,1是2否' after activated_vip;

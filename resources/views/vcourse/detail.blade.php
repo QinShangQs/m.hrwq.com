@@ -450,7 +450,6 @@
     }
        
 </style>
-<script type="text/javascript" src="{{ url('/js/ueditor.parse.min.js') }}?r=1"></script>
 <script type="text/javascript" src="{{ url('/js/ad.js') }}?r=1"></script>
 <script type="text/javascript">
 function replace_china_char(str){
@@ -458,7 +457,6 @@ function replace_china_char(str){
 }
                 
 $(document).ready(function(){
-    uParse('article');
     wx.config(<?php echo $wx_js->config(array("onMenuShareAppMessage", "onMenuShareTimeline"),false) ?>);
     wx.ready(function(){
         wx.onMenuShareAppMessage({

@@ -134,7 +134,7 @@ if (!function_exists('get_score')) {
                 $scoreSources = config('constants.income_point_source');
                 if (isset($scoreSources[$type])) {
                     if (config('app.debug') === false) {
-                        try{
+                        try {
                             $notice = \Wechat::notice();
                             $notice->send([
                                 'touser' => $user->openid,
@@ -149,11 +149,10 @@ if (!function_exists('get_score')) {
                                     'keyword4' => $user->score,
                                     'remark' => '和贝可抵扣听课费，点击查看积分详情'
                                 ],
-                            ]); 
-                        }catch(\Exception $e){
+                            ]);
+                        } catch (\Exception $e) {
                             
                         }
-                        
                     }
                 }
                 return $score;
@@ -205,19 +204,19 @@ if (!function_exists('user_info')) {
         if ($key == 'id') {
             return session('user_info')['id'];
         } else {
-            try{
+            try {
                 $user = App\Models\User::find(session('user_info')['id']);
-                if(empty($user)){
+                if (empty($user)) {
                     return "";
                 }
-                
+
                 $user_info = $user->toArray();
 
                 $order = App\Models\Order::where('user_id', $user_info['id'])->where('pay_type', 6)->whereIn('order_type', [2, 4])->first();
                 $user_info['finish_order'] = $order;
 
                 return $key ? (isset($user_info[$key]) ? $user_info[$key] : '') : $user_info;
-            }catch(\Exception $ex){
+            } catch (\Exception $ex) {
                 return "";
             }
         }
@@ -441,22 +440,23 @@ if (!function_exists('computer_vip_left_day')) {
 
         return $left_day;
     }
+
 }
 
 /**
  * 获取当前登录用户是否vip
  * @return boolean true是
  */
-function get_is_vip (){
+function get_is_vip() {
     $user = user_info();
-    return $user['vip_forever'] == 2 || $user['vip_flg'] == 2 ;
+    return $user['vip_forever'] == 2 || $user['vip_flg'] == 2;
 }
 
 /**
  * 是否长期和会员
  * @return boolean true是
  */
-function get_is_vip_forever(){
+function get_is_vip_forever() {
     $user = user_info();
     return $user['vip_forever'] == 2;
 }
@@ -471,7 +471,7 @@ function get_vip_left_day_number() {
         return 9999999;
     }
     $left_day = computer_vip_left_day(user_info()['vip_left_day']);
-    if(is_string($left_day)){
+    if (is_string($left_day)) {
         return 100000;
     }
     return $left_day;
@@ -481,7 +481,7 @@ function get_vip_left_day_number() {
  * 获取当前登录用户的vip剩余天数，长期和会员返回“长期”
  * @return string
  */
-function get_vip_left_day_text(){
+function get_vip_left_day_text() {
     if (get_is_vip_forever()) {
         return '长期';
     }
@@ -550,7 +550,11 @@ function _get_telecast_link() {
     if (preg_match('/^win/i', PHP_OS)) {
         $data = file_get_contents('E:/sug_link.log');
     } else {
-        $data = file_get_contents('/mnt/sug_link.log');
+        if (is_dev()) {
+            $data = "";
+        } else {
+            $data = file_get_contents('/mnt/sug_link.log');
+        }
     }
 
     if (!empty($data)) {
@@ -685,9 +689,8 @@ function _qiniu_upload_img_thumb($filepath, $qu_dir, $oldName = null, $useOldNam
  */
 function _validateCard($isAbort = true) {
     $userInfo = user_info();
-    
-    if ($userInfo['role'] != 3 
-            && empty(\App\Models\UserPartnerWhites::where('user_id', $userInfo['id'])->select('user_id')->get()->toArray())) {
+
+    if ($userInfo['role'] != 3 && empty(\App\Models\UserPartnerWhites::where('user_id', $userInfo['id'])->select('user_id')->get()->toArray())) {
         if ($isAbort === true) {
             abort(403, '此功能仅对百万家庭幸福工程合伙人开放。');
         }
@@ -701,10 +704,10 @@ function _validateCard($isAbort = true) {
  * @param string $openidOrUid
  * @return boolean
  */
-function _in_paywhitelist($openidOrUid){
-    $whitelist = ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'];
+function _in_paywhitelist($openidOrUid) {
+    $whitelist = ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY', 'ot3XZt41_M-OX9ihvC0_w05DU68Q'];
     $idWhitelist = [4];
-    if(is_numeric($openidOrUid)){
+    if (is_numeric($openidOrUid)) {
         return in_array($openidOrUid, $idWhitelist);
     }
     return in_array($openidOrUid, $whitelist);
@@ -714,7 +717,7 @@ function _in_paywhitelist($openidOrUid){
  * 是否在节日期间
  * @return type
  */
-function _is_festival(){
+function _is_festival() {
 //    $userInfo = user_info();
 //    if(!is_array($userInfo)){
 //        $userInfo = ['openid' => ''];
@@ -723,20 +726,20 @@ function _is_festival(){
     return _is_festval_only($userInfo['openid']);
 }
 
-function _is_festval_only($openid = ''){
-    if(in_array($openid, ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY','ot3XZt41_M-OX9ihvC0_w05DU68Q'])){
+function _is_festval_only($openid = '') {
+    if (in_array($openid, ['ot3XZtyEcBJWjpXJxxyqAcpBCdGY', 'ot3XZt41_M-OX9ihvC0_w05DU68Q'])) {
         return true;
     }
     return strtotime("2018-11-11 23:59:59") > time() && time() > strtotime("2018-11-10 07:10:00");
 }
 
-function _festival_replace($old, $new){
-    if(_is_festival()){
+function _festival_replace($old, $new) {
+    if (_is_festival()) {
         return $new;
     }
     return $old;
 }
 
-function is_dev(){
+function is_dev() {
     return config('app.debug') === true;
 }
