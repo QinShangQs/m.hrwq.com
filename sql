@@ -1,6 +1,22 @@
 ####
 test deploy
 
+###############2019-06-27#################
+alter table vip add column days int(4) DEFAULT 365 not null COMMENT '会员天数' after activated_vip;
+alter table vip add column allow_only tinyint(3) DEFAULT 2 not null COMMENT '仅限首次,1是2否' after activated_vip;
+
+###############2019-05-14#################
+CREATE TABLE `vip_tv` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(500) DEFAULT NULL COMMENT '直播激活码',
+  `is_activated` tinyint(3) DEFAULT '1' COMMENT '是否被激活 1否 2是',
+  `activated_vip` int(11) DEFAULT NULL COMMENT '激活的和会员 用户id',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='直播激活码表';
+
 ###############2019-01-18#################
 CREATE TABLE `ad` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

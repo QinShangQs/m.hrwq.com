@@ -279,6 +279,7 @@ Route::group(['prefix'=>'vip','middleware' => ['FrontWechat']], function (){
     Route::get('/coupon', 'VipController@coupon')->name('vip.coupon');
     //和会员天数记录
     Route::get('/records', 'VipController@records')->name('vip.records');
+    Route::get('/tvcodes', 'VipController@tvcodes')->name('vip.tvcodes');
 });
 
 //文章

@@ -474,18 +474,22 @@ class VipController extends Controller
         } elseif ($data->is_activated == 2) {
             return response()->json(['code' => 2, 'message' => '此卡号已被激活!']);
         } else {
+            if($data->allow_only == Vip::ALLOW_ONLY_YES){
+                if(Vip::where(['allow_only' => Vip::ALLOW_ONLY_YES,'activated_vip' => $user->id])->first()){
+                    return response()->json(['code' => 3, 'message' => '激活失败!该卡号仅限首次使用。']);
+                }
+            }
+            
             $update = [];
             $update['is_activated']  = 2;
             $update['activated_vip'] = user_info('id');
 
-            
-            
-            $days = 365;
+            $days = $data->days;
             $left_days = get_new_vip_left_day($user->vip_left_day, $days);
             UserPointVip::add($user->id, $days, 2);
  
             $user_update = [];
-            $user_update['vip_flg'] = 2;
+            $user_update['vip_flg'] = 1;
             $user_update['vip_code'] = $code;
             $user_update['vip_left_day'] = $left_days;
             
@@ -502,6 +506,17 @@ class VipController extends Controller
                 $user->update($user_update);
 
                 DB::commit();
+                
+                //发送通知
+                $order = new Order();
+                $order->order_id = 0;
+                $order->user_id = $user->id;
+                $order->user = $user;
+                $order->pay_type = 6;
+                $order->pay_time = date("Y-m-d H:i:s");
+                $order->is_team = Order::IS_TEAM_NO;
+                Event::fire(new OrderPaid($order));
+                
                 return response()->json(['code' => 0, 'message' => '激活成功!','mobile'=>$user['mobile']]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -533,6 +548,10 @@ class VipController extends Controller
         if(user_info('vip_flg') == 2) {
             abort('403','当前已是和会员身份');
         }
+    }
+    
+    public function tvcodes(){
+        return view('vip.tv_codes', ['tvcodes' => \App\Models\VipTv::findAll(user_info('id'))]);
     }
    
 
