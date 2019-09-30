@@ -7,8 +7,8 @@
 
 <div style="position: relative;font-size: 0">
     <img src="/images/share/national-day.jpeg" style="width: 100%" />
-    <div id="share" style="background-color: red;width:100%;height: 8rem;position: absolute;z-index: 10;top:35rem"></div>
-    <div id="buy" style="background-color: blue;width:100%;height: 8rem;position: absolute;z-index: 10;top:50rem"></div>
+    <div id="share" style="width:100%;height: 8rem;position: absolute;z-index: 10;top:35rem"></div>
+    <div id="buy" style="width:100%;height: 8rem;position: absolute;z-index: 10;top:50rem"></div>
 </div>
 
 <div class="win-share" style="display: none;background:url(/images/vcourse/share-shadow.jpg);top:0px;opacity: 0.9;z-index:100;width:100%;height:100%;
