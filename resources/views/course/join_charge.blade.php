@@ -80,7 +80,7 @@
                             <input type="hidden" id="coupon_type" name="coupon_type" value="{{$coupon_type}}">
                             <input type="hidden" id="coupon_cutmoney" name="coupon_cutmoney" value="{{$coupon_cutmoney}}">
                             <input type="hidden" id="coupon_discount" name="coupon_discount" value="{{$coupon_discount}}">
-                            <li>
+                            <li style="display: none">
                                 <div class="glod_list_div">可用
                                     <span id="usable_point">{{$usable_point}}</span><input type="hidden" name="usable_point">和贝抵￥
                                     <span id="usable_money">{{$usable_money}}</span><input type="hidden" name="usable_money">

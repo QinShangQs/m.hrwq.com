@@ -743,3 +743,15 @@ function _festival_replace($old, $new) {
 function is_dev() {
     return config('app.debug') === true;
 }
+
+/**
+ * 国庆活动优惠券ID
+ * @return int
+ */
+function _national_day_coupon_id (){
+    if(is_dev()){
+        return 19;
+    }
+    
+    return 26;
+}

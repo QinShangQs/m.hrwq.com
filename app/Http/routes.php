@@ -301,4 +301,8 @@ Route::group(['prefix' => 'share', 'middleware' => ['FrontWechat']], function ()
     Route::get('/love_angle', 'ShareController@loveAngle')->name('share.angle');
     Route::get('/hot/{id}', 'ShareController@hot')->name('share.hot');
     Route::get('/audio', 'ShareController@audio')->name('share.audio');
+    Route::get('/active/national/day', 'ShareController@active_national_day')->name('share.active.national.day');
+    Route::any('/active/national/coupon', 'ShareController@active_receive_coupon')->name('share.active.national.receive_coupon');
+    Route::any('/active/national/vipday', 'ShareController@active_receive_vipday')->name('share.active.national.receive_vipday');
+    
 });

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\CouponUser;
+use App\Models\UserPointVip;
 use Log;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -27,10 +29,10 @@ class ShareController extends Controller {
         } else {
             $lovebg64 = $this->base64EncodeImage(public_path('images/share/love-bg.jpg'));
         }
-        $profileIcon = ltrim($user['profileIcon'],'/');
+        $profileIcon = ltrim($user['profileIcon'], '/');
         QrCode::errorCorrection('H');
         $qrcode64 = "data:image/png;base64," . base64_encode(QrCode::format('png')->size(1500)->margin(0)
-                                ->merge("/public/".$profileIcon, .2)
+                                ->merge("/public/" . $profileIcon, .2)
                                 ->generate(route('share.hot', ['id' => $user['id']])));
         return view('share.love_angle', ['data' => $user, 'qrcode64' => $qrcode64, 'lovebg64' => $lovebg64, 'name_color' => $name_color]);
     }
@@ -73,4 +75,42 @@ class ShareController extends Controller {
         return $base64_image;
     }
 
+    /**
+     * 国庆活动页面
+     */
+    public function active_national_day() {
+        return view('share.active.national_day', ['user_info' => user_info()]);
+    }
+
+    /**
+     * 领取活动优惠券
+     */
+    public function active_receive_coupon() {
+        $user = user_info();
+        $user_id = $user['id'];
+        $coupon_id = _national_day_coupon_id();
+        $result = CouponUser::receiveOne($coupon_id, $user_id);
+        return response()->json(['code' => $result->success ? 0 : 1, 'message' => $result->message, 'data' => $result]);
+    }
+    
+    /**
+     * 领取vip天数
+     */
+    public function active_receive_vipday(){
+        $user = user_info();
+        $user_id = $user['id'];
+        $days = 30;
+        $vip_point_source = 10;
+        
+        $oldPointVip = UserPointVip::where(['user_id' => $user_id, 'source' => $vip_point_source])->first();
+        if(!empty($oldPointVip)){
+            return response()->json(['code' =>  1, 'message' => '已经领取过了', 'data' => $oldPointVip]);
+        }
+        
+        $lover_left_days = get_new_vip_left_day($user['vip_left_day'], $days);
+	User::find($user_id)->update(['vip_left_day' => $lover_left_days]);
+        UserPointVip::add($user_id, $days, $vip_point_source);
+        return response()->json(['code' => 0, 'message' => '领取成功']);
+    }
+    
 }
