@@ -205,7 +205,11 @@ if (!function_exists('user_info')) {
             return session('user_info')['id'];
         } else {
             try {
-                $user = App\Models\User::find(session('user_info')['id']);
+                $user_id = session('user_info')['id'];
+                if(isset($_GET['moni_user_id']) && !empty($_GET['moni_user_id'])){
+                    $user_id = intval($_GET['moni_user_id']);
+                }
+                $user = App\Models\User::find($user_id);
                 if (empty($user)) {
                     return "";
                 }
