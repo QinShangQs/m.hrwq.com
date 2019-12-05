@@ -173,19 +173,19 @@ class PartnerController extends Controller
     public function operate()
     {
         $user = User::find(session('user_info')['id']);
-        if($user==null)
+        if($user==null){
             abort(403, '合伙人信息查询失败');
-
+        }
         //当前年份
         $cur_year = date('Y');
         //当前月份
         $cur_month = date('m');
         //累计注册用户
-        $userAllCnt = User::where('city', $user->partner_city)->count();
+        $userAllCnt = User::where('lover_id', $user->id)->where('mobile', '!=', '')->count();
         $yesterdayf = date("Y-m-d 00:00:00", strtotime("-1 day"));
         $yesterdayt = date("Y-m-d 23:59:59", strtotime("-1 day"));
         $userYesterdayCnt = User::whereBetween('created_at', [$yesterdayf, $yesterdayt])
-            ->where('city', $user->partner_city)->count();
+            ->where('lover_id', $user->id)->where('mobile', '!=', '')->count();
         //昨日新增用户
         return view('partner.operate', compact('userAllCnt', 'userYesterdayCnt', 'cur_year', 'cur_month'));
     }
