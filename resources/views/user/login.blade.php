@@ -229,7 +229,7 @@ $(document).ready(function () {
             return;
         }
         var mobile = $('input[name="login_phone"]').val();
-        if (!mobile.match(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(14[0-9]{1}))+\d{8})$/)) {
+        if (!mobile.match(/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(14[0-9]{1}))+\d{8})$/)) {
             Popup.init({
                 popHtml: '<p>请先输入正确的手机号码</p>',
                 popFlash: {
