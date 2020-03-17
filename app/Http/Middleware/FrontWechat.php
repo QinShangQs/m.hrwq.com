@@ -49,13 +49,17 @@ class FrontWechat
             }
             
             if (strpos($user_agent, 'MicroMessenger') !== false ) {             
-                if (empty($request->session()->get('wechat_user'))) {
+                if (empty($request->session()->get('wechat_user')) ) {
                     return redirect('/wechat/auth?url='.$request->getRequestUri());
                 }
                 
                 $wechat_user = $request->session()->get('wechat_user');
+                if(!isset($wechat_user['openid'])){
+                    $request->session()->forget('wechat_user');
+                    return redirect('/wechat/auth?url='.$request->getRequestUri());
+                }
+                
                 $user_info = User::whereOpenid($wechat_user['openid'])->first();
-               
                 if ($user_info && $user_info['id'] > 0 && $user_info['block']=='1') {
 
                     if ($request->session()->get('user_info')) {
